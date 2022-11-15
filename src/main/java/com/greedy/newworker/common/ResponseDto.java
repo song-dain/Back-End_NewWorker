@@ -1,4 +1,4 @@
-package com.greedy.template.common;
+package com.greedy.newworker.common;
 
 import org.springframework.http.HttpStatus;
 
