@@ -12,9 +12,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.greedy.newworker.calendar.dto.CalendarCategoryDto;
-import com.greedy.newworker.calendar.dto.DepDto;
-import com.greedy.newworker.calendar.dto.EmployeeDto;
-import com.greedy.newworker.message.entity.Employee;
+import com.greedy.newworker.employee.entity.Department;
+import com.greedy.newworker.employee.entity.Employee;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +41,7 @@ public class Calendar {
 	private Employee employee;
 	
 	@Column(name = "DEP_NO")
-	private Dep dep;
+	private Department dep;
 	
 	@Column(name = "SCHEDULE_TITLE")
 	private String scheduleTitle;

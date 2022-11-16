@@ -1,5 +1,7 @@
 package com.greedy.newworker.message.dto;
 
+import com.greedy.newworker.employee.dto.EmployeeDto;
+
 import lombok.Data;
 
 @Data

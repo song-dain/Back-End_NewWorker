@@ -1,5 +1,8 @@
 package com.greedy.newworker.calendar.dto;
 
+import com.greedy.newworker.employee.dto.DepartmentDto;
+import com.greedy.newworker.employee.dto.EmployeeDto;
+
 import lombok.Data;
 
 @Data
@@ -8,7 +11,7 @@ public class CalendarDto {
 	private Long calendarNo;
 	private CalendarCategoryDto calendarCategory;
 	private EmployeeDto employee;
-	private DepDto dep;
+	private DepartmentDto dep;
 	private String scheduleTitle;
 	private java.sql.Date startDate;
 	private java.sql.Date endDate;

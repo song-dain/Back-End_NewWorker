@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.greedy.newworker.employee.entity.Employee;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
