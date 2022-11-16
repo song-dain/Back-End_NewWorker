@@ -2,6 +2,9 @@ package com.greedy.newworker.employee.dto;
 
 import java.sql.Date;
 
+import lombok.Data;
+
+@Data
 public class EmployeeDto {
 
 	private Long employeeNo;

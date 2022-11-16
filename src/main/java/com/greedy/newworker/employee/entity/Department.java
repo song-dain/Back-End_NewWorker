@@ -20,7 +20,6 @@ public class Department {
 	@Column(name = "DEP_NO")
 	private Long depNo;
 	
-	@Id
 	@Column(name = "DEP_NAME")
 	private String depName;
 	

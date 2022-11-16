@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -12,9 +14,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.greedy.newworker.calendar.dto.CalendarCategoryDto;
-import com.greedy.newworker.calendar.dto.DepDto;
-import com.greedy.newworker.calendar.dto.EmployeeDto;
-import com.greedy.newworker.message.entity.Employee;
+import com.greedy.newworker.employee.entity.Department;
+import com.greedy.newworker.employee.entity.Employee;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,14 +36,17 @@ public class Calendar {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CALENDAR_SEQ_GENERATOR")
 	private Long calendarNo;
 	
-	@Column(name = "CALENDAR_CATEGORY_NO")
-	private CalendarCategoryDto calendarCategory;
+	@ManyToOne
+	@JoinColumn(name = "CALENDAR_CATEGORY_NO")
+	private CalendarCategory calendarCategory;
 	
-	@Column(name = "EMPLOYEE_NO")
+	@ManyToOne
+	@JoinColumn(name = "EMPLOYEE_NO")
 	private Employee employee;
 	
-	@Column(name = "DEP_NO")
-	private Dep dep;
+	@ManyToOne
+	@JoinColumn(name = "DEP_NO")
+	private Department dep;
 	
 	@Column(name = "SCHEDULE_TITLE")
 	private String scheduleTitle;
