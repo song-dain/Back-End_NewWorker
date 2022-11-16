@@ -1,4 +1,4 @@
-package com.greedy.newworker.entity;
+package com.greedy.newworker.att.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.greedy.newworker.employee.entity.Employee;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

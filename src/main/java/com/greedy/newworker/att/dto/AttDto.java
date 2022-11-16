@@ -1,4 +1,6 @@
-package com.greedy.newworker.dto;
+package com.greedy.newworker.att.dto;
+
+import com.greedy.newworker.employee.dto.EmployeeDto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

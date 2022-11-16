@@ -1,4 +1,4 @@
-package com.greedy.newworker.entity;
+package com.greedy.newworker.att.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
