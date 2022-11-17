@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -33,6 +34,14 @@ public class Message {
 	@Column(name = "MESSAGE_NO" )
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MESSAGE_SEQ_GENERATOR")
 	private Long messageNo;
+	
+	@OneToOne
+	@JoinColumn(name = "MESSAGE_NO")
+	private RecipientManagement recipientManagement;
+	
+	@OneToOne
+	@JoinColumn(name = "MESSAGE_NO")
+	private SenderManagement senderManagement;
 	
 	@Column(name = "MESSAGE_CONTENT")
 	private String messageContent;
