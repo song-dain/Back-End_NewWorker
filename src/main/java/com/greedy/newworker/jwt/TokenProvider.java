@@ -34,39 +34,38 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class TokenProvider {
-	/* --------------------------------------------------------- */
+	
 	private static final String AUTHORITIES_KEY = "auth";
-	/* --------------------------------------------------------- */
 	private static final String BEARER_TYPE = "bearer";
 	private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;	// 30분
 	private final Key key;
 	
-//	private final UserDetailsService userDetailsService;
+	private final UserDetailsService userDetailsService;
 	
-	public TokenProvider(@Value("${jwt.secret}") String secretKey/*, UserDetailsService userDetailsService*/) {
+	public TokenProvider(@Value("${jwt.secret}") String secretKey, UserDetailsService userDetailsService) {
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		this.key = Keys.hmacShaKeyFor(keyBytes);
-//		this.userDetailsService = userDetailsService;
+		this.userDetailsService = userDetailsService;
 	}
 	
 
 	public TokenDto generateTokenDto(EmployeeDto employee) {
 		
-		log.info("[TokenProvider] generateTokenDto Start =========================");
+		log.info("[TokenProvider] generateTokenDto 시작 =========================");
 		
-		/* ------------------------------------------------------------------ */
 		// 권한 가져오기
         List<String> roles =  Collections.singletonList(employee.getEmployeeRole());
-        /* --------------------------------------------------------------------- */
 		
 		// Claims라고 불리우는 JWT body(payload)에 정보 담기
 		Claims claims = Jwts
 				.claims()
 				.setSubject(employee.getEmployeeId());
 		
-		/* ------------------------------------------------------------------ */
+		
+		// 멤버 권한을 claim에 담기
 		claims.put(AUTHORITIES_KEY, roles);
-		/* --------------------------------------------------------------------- */
+
+		
 		
 		long now = (new Date()).getTime();
 		
@@ -106,11 +105,10 @@ public class TokenProvider {
 	public Authentication getAuthentication(String jwt) {
 		
 		Claims claims = parseClaims(jwt);
-		return null;
 		//UserDetail 객체를 만들어서 Authentication 리턴
-/*		UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
+		UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
 		
-		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities()); */
+		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 	}
 
 	private Claims parseClaims(String jwt) {
