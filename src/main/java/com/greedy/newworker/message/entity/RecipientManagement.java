@@ -1,12 +1,8 @@
 package com.greedy.newworker.message.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -23,12 +19,11 @@ import lombok.Setter;
 @Table(name = "TBL_RECIPIENT_MANAGEMENT")
 @DynamicInsert
 @DynamicUpdate
-public class RecipientManagement implements Serializable {
+public class RecipientManagement {
 	
 	@Id
-	@OneToOne
-	@JoinColumn(name = "MESSAGE_NO")
-	private Message message;
+	@Column(name = "MESSAGE_NO")
+	private Long messageNo;
 	
 	@Column(name = "RECEIVE_MESSAGE_CATEGORY")
 	private String receiveMessageCategory;
@@ -36,5 +31,6 @@ public class RecipientManagement implements Serializable {
 	@Column(name = "RECEIVE_MESSAGE_DELETE")
 	private String receiveMessageDelete;
 
+	
 
 }
