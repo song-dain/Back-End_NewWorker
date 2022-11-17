@@ -13,18 +13,30 @@ import com.greedy.newworker.employee.dto.EmployeeDto;
 import com.greedy.newworker.employee.entity.Employee;
 import com.greedy.newworker.employee.repository.EmployeeRepository;
 import com.greedy.newworker.message.dto.MessageDto;
+import com.greedy.newworker.message.dto.RecipientManagementDto;
+import com.greedy.newworker.message.dto.SenderManagementDto;
 import com.greedy.newworker.message.entity.Message;
+import com.greedy.newworker.message.entity.RecipientManagement;
+import com.greedy.newworker.message.entity.SenderManagement;
 import com.greedy.newworker.message.repository.MessageRepository;
+import com.greedy.newworker.message.repository.RecipientManagementRepository;
+import com.greedy.newworker.message.repository.SenderManagementRepository;
 
 @Service
 public class MessageService {
 	
 	private final MessageRepository messageRepository;
+	private final RecipientManagementRepository recipientManagementRepository;
+	private final SenderManagementRepository senderManagementRepository;
 	private final EmployeeRepository employeeRepository;
 	private final ModelMapper modelMappler;
 	
-	public MessageService(MessageRepository messageRepository, EmployeeRepository employeeRepository, ModelMapper modelMappler) {
+	public MessageService(MessageRepository messageRepository, RecipientManagementRepository recipientManagementRepository, SenderManagementRepository senderManagementRepository, 
+			EmployeeRepository employeeRepository, ModelMapper modelMappler) {
+		
 		this.messageRepository = messageRepository;
+		this.recipientManagementRepository = recipientManagementRepository;
+		this.senderManagementRepository = senderManagementRepository;
 		this.employeeRepository = employeeRepository;
 		this.modelMappler = modelMappler;
 	}
@@ -71,6 +83,20 @@ public class MessageService {
 	}
 	
 	
+	/* 받은 메시지 중요 메시지함 이동 */
+	public RecipientManagementDto receiveMessageToImpoMessage(Long messageNo) {
+		
+		RecipientManagement targetMessage = recipientManagementRepository.findById(messageNo).orElseThrow();
+		targetMessage.setReceiveMessageCategory("중요 메시지함");
+		
+		recipientManagementRepository.save(targetMessage);
+		
+		RecipientManagementDto statusModify = modelMappler.map(targetMessage, RecipientManagementDto.class);
+		
+		return statusModify;
+	}
+	
+	
 	/* 보낸 메시지함 */
 	public Page<MessageDto> sendMessages(int page, EmployeeDto sender){
 		
@@ -87,6 +113,20 @@ public class MessageService {
 	public MessageDto selectSendMessage(Long messageNo, EmployeeDto recipient){
 		
 		return  modelMappler.map(messageRepository.findSendMessageById(messageNo, recipient), MessageDto.class);
+	}
+	
+	
+	/* 보낸 메시지 휴지통 이동 */
+	public SenderManagementDto sendMessageToBinMessage(Long messageNo) {
+		
+		SenderManagement targetMessage = senderManagementRepository.findById(messageNo).orElseThrow();
+		targetMessage.setSendMessageDelete("Y");
+		
+		senderManagementRepository.save(targetMessage);
+		
+		SenderManagementDto statusModify = modelMappler.map(targetMessage, SenderManagementDto.class);
+		
+		return statusModify;
 	}
 	
 	
@@ -109,7 +149,35 @@ public class MessageService {
 	}
 	
 	
-	/* 휴지통(받은 메시지) */
+	/* 중요 메시지 받은 메시지 이동 */
+	public RecipientManagementDto impoMessageToreceiveMessage(Long messageNo) {
+		
+		RecipientManagement targetMessage = recipientManagementRepository.findById(messageNo).orElseThrow();
+		targetMessage.setReceiveMessageCategory("받은 메시지함");
+		
+		recipientManagementRepository.save(targetMessage);
+		
+		RecipientManagementDto statusModify = modelMappler.map(targetMessage, RecipientManagementDto.class);
+		
+		return statusModify;
+	}
+	
+	
+	/* 받은 메시지, 중요 메시지 휴지통 이동 */
+	public RecipientManagementDto receiveMessageToBinMessage(Long messageNo) {
+		
+		RecipientManagement targetMessage = recipientManagementRepository.findById(messageNo).orElseThrow();
+		targetMessage.setReceiveMessageDelete("Y");
+		
+		recipientManagementRepository.save(targetMessage);
+		
+		RecipientManagementDto statusModify = modelMappler.map(targetMessage, RecipientManagementDto.class);
+		
+		return statusModify;
+	}
+	
+	
+	/* 휴지통 받은 메시지 */
 	public Page<MessageDto> binReceiveMessages(int page, EmployeeDto recipient){
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("productCode").descending());
@@ -121,7 +189,24 @@ public class MessageService {
 	}
 	
 	
-	/* 휴지통(보낸 메시지) */
+	/* 휴지통 받은 메시지 영구 삭제 */
+	
+	
+	/* 휴지통 받은 메시지 복구 */
+	public RecipientManagementDto binMessageToreceiveMessage(Long messageNo) {
+		
+		RecipientManagement targetMessage = recipientManagementRepository.findById(messageNo).orElseThrow();
+		targetMessage.setReceiveMessageDelete("N");
+		
+		recipientManagementRepository.save(targetMessage);
+		
+		RecipientManagementDto statusModify = modelMappler.map(targetMessage, RecipientManagementDto.class);
+		
+		return statusModify;
+	}
+	
+	
+	/* 휴지통 보낸 메시지 */
 	public Page<MessageDto> binSendMessages(int page, EmployeeDto recipient){
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("productCode").descending());
@@ -130,6 +215,23 @@ public class MessageService {
 		Page<MessageDto> binSendMessageBox = binSendMessages.map(message -> modelMappler.map(message, MessageDto.class));
 		
 		return binSendMessageBox;
+	}
+	
+	
+	/* 휴지통 보낸 메시지 영구 삭제 */
+	
+	
+	/* 휴지통 보낸 메시지 복구 */
+	public SenderManagementDto binMessageToSendMessage(Long messageNo) {
+		
+		SenderManagement targetMessage = senderManagementRepository.findById(messageNo).orElseThrow();
+		targetMessage.setSendMessageDelete("N");
+		
+		senderManagementRepository.save(targetMessage);
+		
+		SenderManagementDto statusModify = modelMappler.map(targetMessage, SenderManagementDto.class);
+		
+		return statusModify;
 	}
 	
 

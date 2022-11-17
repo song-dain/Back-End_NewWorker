@@ -1,7 +1,5 @@
 package com.greedy.newworker.message.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -21,7 +19,7 @@ import lombok.Setter;
 @Table(name = "TBL_RECIPIENT_MANAGEMENT")
 @DynamicInsert
 @DynamicUpdate
-public class RecipientManagement implements Serializable {
+public class RecipientManagement {
 	
 	@Id
 	@Column(name = "MESSAGE_NO")
