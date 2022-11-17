@@ -26,9 +26,8 @@ import lombok.Setter;
 public class SenderManagement implements Serializable {
 	
 	@Id
-	@OneToOne
-	@JoinColumn(name = "MESSAGE_NO")
-	private Message message;
+	@Column(name = "MESSAGE_NO")
+	private Long messageNo;
 	
 	@Column(name = "SEND_MESSAGE_DELETE")
 	private String sendMessageDelete;
