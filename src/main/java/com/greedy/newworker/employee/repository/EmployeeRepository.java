@@ -8,6 +8,6 @@ import com.greedy.newworker.employee.entity.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
-	/* 발신, 수신 사원 찾기 */
+	/* [message] 발신, 수신 사원 찾기 */
 	Employee findByEmployeeNoAndEmployeeStatus(Employee employee, String status);
 }
