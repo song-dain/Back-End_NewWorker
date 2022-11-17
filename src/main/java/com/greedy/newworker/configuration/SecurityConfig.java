@@ -72,7 +72,7 @@ public class SecurityConfig {
 		              * 이 때 OPTIONS 메서드로 서버에 사전 요청을 보내 요청 권한이 있는지 확인 */
 		             .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 		             .antMatchers("/auth/**").permitAll()
-		             .antMatchers("/att/**").hasAnyRole("USER", "ADMIN")
+		             .antMatchers("/att/**").hasAnyRole("EMPLOYEE", "ADMIN")
 //		             .antMatchers("/api/**").hasAnyRole("USER", "ADMIN")  // 나머지 API 는 전부 인증 필요
 		         .and()
 		         	.cors()
