@@ -39,11 +39,11 @@ public class Modyinfo {
 
 	@ManyToOne
 	@JoinColumn(name = "EMPLOYEE_NO")
-	private EmployeeDto EmployeeNo;
+	private Employee EmployeeNo;
 	
 	@ManyToOne
 	@JoinColumn(name = "DEP_NO")
-	private PositionDto DepNo;
+	private Position DepNo;
 	
 	@Column(name = "MOD_DATE")
 	private Date ModDate;

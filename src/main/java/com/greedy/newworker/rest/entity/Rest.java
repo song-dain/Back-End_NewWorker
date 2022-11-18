@@ -15,8 +15,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.greedy.newworker.employee.dto.EmployeeDto;
-import com.greedy.newworker.rest.dto.RestCateDto;
+import com.greedy.newworker.employee.entity.Employee;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -67,11 +66,11 @@ public class Rest {
 	
 	@ManyToOne
 	@JoinColumn(name = "RESTCATE_TYPENO")
-	private RestCateDto RestCateTypeNo;
+	private RestCate RestCateTypeNo;
 
 	@ManyToOne
 	@JoinColumn(name = "EMPLOYEE_NO")
-	private EmployeeDto EmployeeNo;
+	private Employee EmployeeNo;
 
 	 
 	
