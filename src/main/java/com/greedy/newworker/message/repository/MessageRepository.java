@@ -8,19 +8,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.greedy.newworker.employee.dto.EmployeeDto;
 import com.greedy.newworker.employee.entity.Employee;
 import com.greedy.newworker.message.entity.Message;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
 	/* 받은 메시지함 조회 완!!!!!! */
-	@Query("select m from Message m where m.recipient = :recipient and m.recipientManagement.receiveMessageCategory = '받은 메시지함' and m.recipientManagement.receiveMessageDelete = 'N'")
+	@Query("select m from Message m where m.recipient = :recipient and m.recipientManagement.receiveMessageCategory = 'receiveMessageBox' and m.recipientManagement.receiveMessageDelete = 'N'")
 	Page<Message> findReceiveMessages(Pageable pageable, @Param("recipient")Employee recipient);
 	
 
 	/* 받은 메시지 조회 완!!!!!! */
-	@Query("select m from Message m where m.recipient =:recipient and m.messageNo = :messageNo and m.recipientManagement.receiveMessageCategory = '받은 메시지함' and m.recipientManagement.receiveMessageDelete = 'N'")
+	@Query("select m from Message m where m.recipient =:recipient and m.messageNo = :messageNo and m.recipientManagement.receiveMessageCategory = 'receiveMessageBox' and m.recipientManagement.receiveMessageDelete = 'N'")
 	Optional<Message> findReceiveMessageById(@Param("messageNo")Long messageNo, @Param("recipient")Employee recipient);
 	
 	/* 보낸 메시지함 조회 완!!!!!!!! */
@@ -33,23 +32,25 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 	Optional<Message> findSendMessageById(@Param("messageNo")Long messageNo, @Param("sender")Employee sender);
 	
 	
-	/* 중요 메시지함 조회 */
-	@Query("select m from Message m where m.recipient =:recipient and m.messageNo = :messageNo and m.recipientManagement.receiveMessageCategory = '중요 메시지함' and m.recipientManagement.receiveMessageDelete = 'N'")
+	/* 중요 메시지함 조회 완!!!!!! */
+	@Query("select m from Message m where m.recipient =:recipient and m.messageNo = :messageNo and m.recipientManagement.receiveMessageCategory = 'impoMessageBox' and m.recipientManagement.receiveMessageDelete = 'N'")
 	Page<Message> findImpoMessages(@Param("messageNo")Pageable pageable, @Param("recipient")Employee recipient);
 	
 	
-	/* 중요 메시지 조회 */
-	@Query("select m from Message m where m.recipient =:recipient and m.messageNo = :messageNo and m.recipientManagement.receiveMessageCategory = '중요 메시지함' and m.recipientManagement.receiveMessageDelete = 'N'")
+	/* 중요 메시지 조회 완!!!!!!!! */
+	@Query("select m from Message m where m.recipient =:recipient and m.messageNo = :messageNo and m.recipientManagement.receiveMessageCategory = 'impoMessageBox' and m.recipientManagement.receiveMessageDelete = 'N'")
 	Optional<Message> findImpoMessageById(@Param("messageNo")Long messageNo, @Param("recipient")Employee recipient);
 	
 	
 	/* 휴지통 받은 메시지 조회 */
 	@Query("select m from Message m where m.recipient =:recipient and m.recipientManagement.receiveMessageDelete = 'Y'")
-	Page<Message> findBinReceiveMessages(Pageable page,  @Param("recipient")EmployeeDto recipient);
+	Page<Message> findBinReceiveMessages(Pageable page,  @Param("recipient")Employee recipient);
 	
 	
 	/* 휴지통 보낸 메시지 조회 */
 	@Query("select m from Message m where m.sender =:sender and m.senderManagement.sendMessageDelete = 'Y'")
-	Page<Message> findBinSendMessages(Pageable page, @Param("sender")EmployeeDto sender);
+	Page<Message> findBinSendMessages(Pageable page, @Param("sender")Employee sender);
 
+	
+	/* 메시지 검색 */
 }

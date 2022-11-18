@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,8 +18,12 @@ import com.greedy.newworker.common.paging.PagingButtonInfo;
 import com.greedy.newworker.common.paging.ResponseDtoWithPaging;
 import com.greedy.newworker.employee.dto.EmployeeDto;
 import com.greedy.newworker.message.dto.MessageDto;
+import com.greedy.newworker.message.dto.RecipientManagementDto;
 import com.greedy.newworker.message.service.MessageService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/emp/message")
 public class MessageController {
@@ -51,14 +56,6 @@ public class MessageController {
 	public ResponseEntity<ResponseDto> selectReceiveMessage(@PathVariable Long messageNo, @AuthenticationPrincipal EmployeeDto recipient){
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "받은 메시지 조회 성공", messageService.selectReceiveMessage(messageNo, recipient)));
-	}
-	
-	
-	/* 받은 메시지 중요 메시지함 이동 보류 (휴지통 이동이랑 같이 해야 돼서)--------------------------------------- */
-	@PatchMapping("/receive/{messageNo}")
-	public ResponseEntity<ResponseDto> receiveMessageToImpoMessage(@PathVariable Long messageNo){
-		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "받은 메시지 중요 메시지함으로 이동 성공", messageService.receiveMessageToImpoMessage(messageNo)));
 	}
 	
 	
@@ -117,6 +114,60 @@ public class MessageController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "중요 메시지 조회 성공", messageService.selectImpoMessage(messageNo, recipient)));
 	}
 	
+	
+	/* 받은 메시지 중요 메시지함 이동 or 휴지통 이동 / 중요 메시지 받은 메시지함 or 휴지통 이동 완!!!!!! */
+	@PatchMapping("/receive/{messageNo}")
+	public ResponseEntity<ResponseDto> receiveMessageManagement(@PathVariable Long messageNo, @RequestBody RecipientManagementDto messageRequest){
+		log.info("[MessageController] messageNo : {}", messageNo);
+		log.info("[MessageController] messageRequest : {}", messageRequest);
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "받은 메시지 이동 성공", messageService.receiveMessageManagement(messageNo, messageRequest)));		
+	}
+	
+	
+	/* 휴지통 받은 메시지 조회 완!!!! */
+	@GetMapping("/bin/receive")
+	public ResponseEntity<ResponseDto> binReceiveMessages(@RequestParam(name="page", defaultValue="1")int page, @AuthenticationPrincipal EmployeeDto recipient){
+		
+		Page<MessageDto> binReceiveMessageList = messageService.binReceiveMessages(page, recipient);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(binReceiveMessageList);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(binReceiveMessageList.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴지통 받은 메시지함 조회 성공", responseDtoWithPaging));
+	}
+	
+	/* 휴지통 보낸 메시지 조회 완!!!!! */
+	@GetMapping("/bin/send")
+	public ResponseEntity<ResponseDto> binSendMessages(@RequestParam(name="page", defaultValue="1")int page, @AuthenticationPrincipal EmployeeDto sender){
+		
+		Page<MessageDto> binSendMessages = messageService.binSendMessages(page, sender);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(binSendMessages);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(binSendMessages.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴지통 보낸 메시지함 조회 성공", responseDtoWithPaging));
+	}
+	
+	/* 휴지통 받은 메시지 복구 완!!!!!! */
+	@PatchMapping("/bin/receive/{messageNo}")
+	public ResponseEntity<ResponseDto> binMessageToreceiveMessage(@PathVariable Long messageNo){
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴지통 받은 메시지 복구 성공", messageService.binMessageToreceiveMessage(messageNo)));
+	}
+	
+	/* 휴지통 보낸 메시지 복구 완!!!!!!! */
+	@PatchMapping("/bin/send/{messageNo}")
+	public ResponseEntity<ResponseDto> binMessageToSendMessage(@PathVariable Long messageNo){
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴지통 받은 메시지 복구 성공", messageService.binMessageToSendMessage(messageNo)));
+	}
 	
 
 }
