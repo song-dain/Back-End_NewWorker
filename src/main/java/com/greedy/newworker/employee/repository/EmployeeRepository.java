@@ -6,8 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.greedy.newworker.employee.entity.Employee;
 
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+
+public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 
 	/* [message] 발신, 수신 사원 찾기 */
 	Employee findByEmployeeNoAndEmployeeStatus(Employee employee, String status);
+
+
+	/* memberId로 조회 */
+	Optional<Employee> findByEmployeeId(String employeeId);
+
 }

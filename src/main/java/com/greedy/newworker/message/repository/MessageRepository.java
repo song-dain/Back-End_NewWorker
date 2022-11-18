@@ -22,7 +22,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 	@Query("select m from Message m where m.recipient =:recipient and m.messageNo = :messageNo and m.recipientManagement.receiveMessageCategory = '받은 메시지함' and m.recipientManagement.receiveMessageDelete = 'N'")
 	Optional<Message> findReceiveMessageById(@Param("messageNo")Long messageNo, @Param("recipient")EmployeeDto recipient);
 	
-	
 	/* 보낸 메시지함 조회 */
 	@Query("select m from Message m where m.sender =:sender and m.senderManagement.sendMessageDelete = 'N'")
 	Page<Message> findSendMessages(Pageable page, @Param("sender")EmployeeDto sender);
