@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +33,14 @@ public class MessageController {
 	
 	public MessageController(MessageService messageService) {
 		this.messageService = messageService;
+	}
+	
+	
+	/* 메시지 보내기 */
+	@PostMapping("/send")
+	public ResponseEntity<ResponseDto> newMessage(@RequestBody MessageDto newMessage, @AuthenticationPrincipal EmployeeDto sender, Long recipientNo){
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "메시지 전송 성공", messageService.newMessage(newMessage, sender, recipientNo)));
 	}
 	
 	
