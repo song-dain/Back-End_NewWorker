@@ -48,17 +48,14 @@ public class MessageService {
 	
 	
 	/* 새로운 메시지 보내기 */
-	public MessageDto newMessage(MessageDto messageDto) {
+	public MessageDto newMessage(MessageDto messageDto, EmployeeDto recipientDto, Long senderNo) {
 		
-		/* 수신자, 발신자 정보 */
-		Employee recipient = employeeRepository
-				.findByEmployeeNoAndEmployeeStatus(modelMappler.map(messageDto.getRecipient(), Employee.class), "Y");
-
+		/* 수신자 찾기 */
 		Employee sender = employeeRepository
 				.findByEmployeeNoAndEmployeeStatus(modelMappler.map(messageDto.getRecipient(), Employee.class), "Y");
 		
 		Message newMessage = new Message();
-		newMessage.setRecipient(recipient);
+		newMessage.setRecipient(modelMappler.map(recipientDto, Employee.class));
 		newMessage.setSender(sender);
 		newMessage.setMessageContent(messageDto.getMessageContent());
 		
@@ -66,7 +63,7 @@ public class MessageService {
 		
 		return messageDto;
 	}
-	
+
 	
 	/* 받은 메시지함 완!!!!!! */
 	public Page<MessageDto> receiveMessages(int page, EmployeeDto recipientDto){
