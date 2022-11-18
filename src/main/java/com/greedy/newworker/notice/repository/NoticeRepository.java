@@ -13,7 +13,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>{
 
 	Page<Notice> findByNotStatus(String notStatus, Pageable pageable);
 
-	Notice findByNotCodeAndNotStatus(Long notNo, String activeStatus);
+	Notice findByNotNoAndNotStatus(Long notNo, String activeStatus);
 
 	Notice findByNotNo(Long notNo);
 
