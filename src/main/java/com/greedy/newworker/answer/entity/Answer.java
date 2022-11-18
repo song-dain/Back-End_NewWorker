@@ -1,5 +1,6 @@
 package com.greedy.newworker.answer.entity;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.Column;
@@ -22,17 +23,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-//@Getter
-//@Setter
-//@NoArgsConstructor
-//@ToString
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 @Entity
 @Table(name = "TBL_ANSWER")
 //@SequenceGenerator(name = "NOT_SEQ_GENERATOR",
 //sequenceName = "SEQ_NOT_NO",
 //initialValue = 1, allocationSize = 1)
 @DynamicInsert
-public class Answer {
+public class Answer implements Serializable {
 	
 	@Id
 //	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "NOT_SEQ_GENERATOR")
