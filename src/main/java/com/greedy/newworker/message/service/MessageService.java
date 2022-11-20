@@ -114,6 +114,18 @@ public class MessageService {
 		return modelMappler.map(message, MessageDto.class);
 	}
 
+	
+	/* 받은 메시지 검색 */
+	public Page<MessageDto> searchReceiveMessage(int page, String keyword, EmployeeDto recipient){
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("messageNo").descending());
+		
+		Page<Message> findMessages = messageRepository.findByMessageContentContains(pageable, keyword, modelMappler.map(recipient, Employee.class));
+		Page<MessageDto> findMessageList = findMessages
+				.map(message -> modelMappler.map(message, MessageDto.class));
+	
+		return findMessageList;
+	}
 
 
 	/* 보낸 메시지함 완!!!!!!! */

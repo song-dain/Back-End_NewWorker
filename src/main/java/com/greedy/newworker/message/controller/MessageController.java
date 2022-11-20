@@ -80,7 +80,25 @@ public class MessageController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "받은 메시지 조회 성공",
 				messageService.selectReceiveMessage(messageNo, recipient)));
 	}
+	
+	
+	/* 받은 메시지 검색 */
+	@GetMapping("/receive/search/{keyword}")
+	public ResponseEntity<ResponseDto> searchReceiveMessage(@RequestParam(name = "page", defaultValue = "1") int page, 
+			@RequestParam(name="keyword") String keyword, @AuthenticationPrincipal EmployeeDto recipient){
+		
+		Page<MessageDto> searchReceiveMessage = messageService.searchReceiveMessage(page, keyword, recipient);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(searchReceiveMessage);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(searchReceiveMessage.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "받은 메시지 검색 성공", responseDtoWithPaging));
+	}
 
+	
 	/* 보낸 메시지함 완!!!!!!!!!! */
 	@GetMapping("/send")
 	public ResponseEntity<ResponseDto> sendMessages(@RequestParam(name = "page", defaultValue = "1") int page,
@@ -188,5 +206,6 @@ public class MessageController {
 	}
 	
 	
+
 
 }
