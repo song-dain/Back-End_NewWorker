@@ -17,6 +17,7 @@ import com.greedy.newworker.common.ResponseDto;
 import com.greedy.newworker.common.paging.Pagenation;
 import com.greedy.newworker.common.paging.PagingButtonInfo;
 import com.greedy.newworker.common.paging.ResponseDtoWithPaging;
+import com.greedy.newworker.employee.dto.DepartmentDto;
 import com.greedy.newworker.employee.dto.EmployeeDto;
 import com.greedy.newworker.message.dto.MessageDto;
 import com.greedy.newworker.message.dto.RecipientManagementDto;
@@ -35,14 +36,24 @@ public class MessageController {
 	public MessageController(MessageService messageService) {
 		this.messageService = messageService;
 	}
+	
+	
+	/* 부서별 직원 조회 */
+	@GetMapping("/send/findEmp")
+	public ResponseEntity<ResponseDto> findRecipient(@RequestBody DepartmentDto dep){
+		
+		log.info("[MessageController] messageNo : {}", dep);
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "부서별 직원 조회 성공", messageService.findRecipient(dep.getDepNo())));
+	}
 
 	/* 메시지 보내기 */
 	@PostMapping("/send")
 	public ResponseEntity<ResponseDto> newMessage(@RequestBody MessageDto newMessage,
-			@AuthenticationPrincipal EmployeeDto sender, Long recipientNo) {
+			@AuthenticationPrincipal EmployeeDto sender) {
 
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "메시지 전송 성공",
-				messageService.newMessage(newMessage, sender, recipientNo)));
+				messageService.newMessage(newMessage, sender)));
 	}
 
 	/* 받은 메시지함 완!!!!!! */
