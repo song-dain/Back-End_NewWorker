@@ -80,7 +80,25 @@ public class MessageController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "받은 메시지 조회 성공",
 				messageService.selectReceiveMessage(messageNo, recipient)));
 	}
+	
+	
+	/* 받은 메시지 검색 */
+	@GetMapping("/receive/search")
+	public ResponseEntity<ResponseDto> searchReceiveMessage(@RequestParam(name = "page", defaultValue = "1") int page, 
+			@RequestParam(name="keyword") String keyword, @AuthenticationPrincipal EmployeeDto recipient){
+		
+		Page<MessageDto> searchReceiveMessage = messageService.searchReceiveMessage(page, keyword, recipient);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(searchReceiveMessage);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(searchReceiveMessage.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "받은 메시지 검색 성공", responseDtoWithPaging));
+	}
 
+	
 	/* 보낸 메시지함 완!!!!!!!!!! */
 	@GetMapping("/send")
 	public ResponseEntity<ResponseDto> sendMessages(@RequestParam(name = "page", defaultValue = "1") int page,
@@ -104,6 +122,23 @@ public class MessageController {
 
 		return ResponseEntity.ok().body(
 				new ResponseDto(HttpStatus.OK, "보낸 메시지 조회 성공", messageService.selectSendMessage(messageNo, sender)));
+	}
+	
+	
+	/* 보낸 메시지 검색 */
+	@GetMapping("/send/search")
+	public ResponseEntity<ResponseDto> searchSendMessage(@RequestParam(name = "page", defaultValue = "1") int page, 
+			@RequestParam(name="keyword") String keyword, @AuthenticationPrincipal EmployeeDto sender){
+		
+		Page<MessageDto> searchSendMessage = messageService.searchSendMessage(page, keyword, sender);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(searchSendMessage);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(searchSendMessage.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "보낸 메시지 검색 성공", responseDtoWithPaging));
 	}
 
 
@@ -131,7 +166,25 @@ public class MessageController {
 		return ResponseEntity.ok().body(
 				new ResponseDto(HttpStatus.OK, "중요 메시지 조회 성공", messageService.selectImpoMessage(messageNo, recipient)));
 	}
+	
+	
+	/* 중요 메시지 검색 */
+	@GetMapping("/impo/search")
+	public ResponseEntity<ResponseDto> searchImpoMessage(@RequestParam(name = "page", defaultValue = "1") int page, 
+			@RequestParam(name="keyword") String keyword, @AuthenticationPrincipal EmployeeDto recipient){
+		
+		Page<MessageDto> searchImpoMessage = messageService.searchImpoMessage(page, keyword, recipient);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(searchImpoMessage);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(searchImpoMessage.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "중요 메시지 검색 성공", responseDtoWithPaging));
+	}
 
+	
 	/* 휴지통 받은 메시지 조회 완!!!! */
 	@GetMapping("/bin/receive")
 	public ResponseEntity<ResponseDto> binReceiveMessages(@RequestParam(name = "page", defaultValue = "1") int page,
@@ -188,5 +241,6 @@ public class MessageController {
 	}
 	
 	
+
 
 }
