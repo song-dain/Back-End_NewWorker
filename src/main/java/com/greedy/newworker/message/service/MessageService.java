@@ -120,7 +120,7 @@ public class MessageService {
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("messageNo").descending());
 		
-		Page<Message> findMessages = messageRepository.findByMessageContentContains(pageable, keyword, modelMappler.map(recipient, Employee.class));
+		Page<Message> findMessages = messageRepository.findByReceiveMessageContentContains(pageable, keyword, modelMappler.map(recipient, Employee.class));
 		Page<MessageDto> findMessageList = findMessages
 				.map(message -> modelMappler.map(message, MessageDto.class));
 	
@@ -147,6 +147,19 @@ public class MessageService {
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메시지입니다."));
 
 		return modelMappler.map(message, MessageDto.class);
+	}
+	
+	
+	/* 보낸 메시지 검색 */
+	public Page<MessageDto> searchSendMessage(int page, String keyword, EmployeeDto sender){
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("messageNo").descending());
+		
+		Page<Message> findMessages = messageRepository.findBySendMessageContentContains(pageable, keyword, modelMappler.map(sender, Employee.class));
+		Page<MessageDto> findMessageList = findMessages
+				.map(message -> modelMappler.map(message, MessageDto.class));
+	
+		return findMessageList;
 	}
 
 	
@@ -176,6 +189,19 @@ public class MessageService {
 		messageRepository.save(message);
 
 		return modelMappler.map(message, MessageDto.class);
+	}
+	
+	
+	/* 중요 메시지 검색 */
+	public Page<MessageDto> searchImpoMessage(int page, String keyword, EmployeeDto recipient){
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("messageNo").descending());
+		
+		Page<Message> findMessages = messageRepository.findByImpoMessageContentContains(pageable, keyword, modelMappler.map(recipient, Employee.class));
+		Page<MessageDto> findMessageList = findMessages
+				.map(message -> modelMappler.map(message, MessageDto.class));
+	
+		return findMessageList;
 	}
 
 	

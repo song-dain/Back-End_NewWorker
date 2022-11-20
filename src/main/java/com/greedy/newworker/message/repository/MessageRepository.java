@@ -55,6 +55,14 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
 	/* 받은 메시지 검색 */
 	@Query("select m from Message m where m.recipient =:recipient and m.recipientManagement.receiveMessageCategory = 'receiveMessageBox' and m.recipientManagement.receiveMessageDelete = 'N' and m.messageContent like %:keyword%")
-	Page<Message> findByMessageContentContains(Pageable page, @Param("keyword")String keyword, @Param("recipient")Employee recipient);
+	Page<Message> findByReceiveMessageContentContains(Pageable page, @Param("keyword")String keyword, @Param("recipient")Employee recipient);
 
+	
+	/* 보낸 메시지 검색 */
+	@Query("select m from Message m where m.sender =:sender and m.senderManagement.sendMessageDelete = 'N' and m.messageContent like %:keyword%")
+	Page<Message> findBySendMessageContentContains(Pageable page, @Param("keyword")String keyword, @Param("sender")Employee sender);
+	
+	/* 중요 메시지 검색 */
+	@Query("select m from Message m where m.recipient =:recipient and m.recipientManagement.receiveMessageCategory = 'impoMessageBox' and m.recipientManagement.receiveMessageDelete = 'N' and m.messageContent like %:keyword%")
+	Page<Message> findByImpoMessageContentContains(Pageable page, @Param("keyword")String keyword, @Param("recipient")Employee recipient);
 }
