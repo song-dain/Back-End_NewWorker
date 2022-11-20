@@ -21,3 +21,7 @@ spring:
     properties:
       hibernate:
         '[format_sql]': true   
+
+        
+jwt:
+  secret: rmNdxF4HeCNvC70Z6JEN8uUMBzCBxgIQ/aOcLN9/qKp5ZxhWzyGcmfY5T09Xgx18ibWU9qW3/sYZwWH+fCNv2w==
