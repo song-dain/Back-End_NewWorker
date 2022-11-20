@@ -31,6 +31,9 @@ public class RecipientManagement {
 	@Column(name = "RECEIVE_MESSAGE_DELETE")
 	private String receiveMessageDelete;
 
-	
+	public RecipientManagement(Long messageNo) {
+		super();
+		this.messageNo = messageNo;
+	}
 
 }

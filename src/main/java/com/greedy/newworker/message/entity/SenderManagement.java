@@ -28,4 +28,9 @@ public class SenderManagement {
 	@Column(name = "SEND_MESSAGE_DELETE")
 	private String sendMessageDelete;
 
+	public SenderManagement(Long messageNo) {
+		super();
+		this.messageNo = messageNo;
+	}
+
 }
