@@ -1,5 +1,11 @@
 package com.greedy.newworker.att.dto;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
 import com.greedy.newworker.employee.dto.EmployeeDto;
 
 import lombok.Getter;
@@ -17,5 +23,22 @@ public class AttDto {
 	private java.util.Date attStart;
 	private java.util.Date attEnd;
 	private java.util.Date attDate;
+	
+	public void setAttStart(LocalDateTime now) {
+
+        Instant instant = now.atZone(ZoneId.systemDefault()).toInstant();
+        Date date = Date.from(instant);
+        
+        this.attStart = date;
+        		
+	}
+	
+	public void setAttEnd(LocalDateTime now) {
+		
+		Instant instant = now.atZone(ZoneId.systemDefault()).toInstant();
+        Date date = Date.from(instant);
+        
+        this.attEnd = date;
+	}
 
 }
