@@ -51,13 +51,13 @@ public class AttController {
 	}
 	
 	
-	//@PutMapping("/end")
-	@RequestMapping(value="/end", method={RequestMethod.PUT, RequestMethod.POST})
+	@PutMapping("/end")
+	//@RequestMapping(value="/end", method={RequestMethod.PUT, RequestMethod.POST})
 	public ResponseEntity<ResponseDto> insertEnd(@RequestBody AttDto attDto, @AuthenticationPrincipal EmployeeDto employee) {
 		
-//		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = LocalDateTime.now();
 		attDto.setEmployee(employee);
-//		attDto.setAttEnd(now);
+		attDto.setAttEnd(now);
 		
 //		log.info("[ AttController ] 퇴근 등록 시간 : {}", now);
 		

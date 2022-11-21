@@ -20,6 +20,7 @@ public class AttService {
 	private final AttRepository attRepository;
 	private final ModelMapper modelMapper;
 	
+	
 	private Date date;
     private SimpleDateFormat simpl;
     
@@ -76,6 +77,7 @@ public class AttService {
         
         LocalDateTime now = LocalDateTime.now();
 		attDto.setAttStart(now);
+		attDto.setAttDate(now);
         
         String str = sim.format(attDto.getAttStart());
         log.info("[AttService] 현재 시각 : {}", str);
@@ -102,19 +104,21 @@ public class AttService {
             log.info("[AttService] 정시출근");
             
         }
+        /*
+        SimpleDateFormat work = new SimpleDateFormat("yyyy/MM/dd");
+        LocalDateTime nowDay = LocalDateTime.now();
+		attDto.setAttStart(nowDay);
         
+        String str = work.format(attDto.getAttStart());
+        */
 		attRepository.save(modelMapper.map(attDto, Att.class));
 		
 		return attDto;
 	}
 	
-	/* 퇴근 등록 
-	 * 퇴근 등록까지는 되는데 행이 새로 생김 - 출근+퇴근 행이 불가능 */
+	/* 퇴근 등록 */
 	@Transactional
 	public Object insertAttEnd(AttDto attDto) {
-		
-		Att foundAtt = attRepository.findById(attDto.getAttNo())
-				.orElseThrow(() -> new RuntimeException("존재하지 않는 근태번호입니다."));
 		
 		AttTypeDto attCheck = new AttTypeDto();
 		Date date = new Date();
@@ -122,9 +126,7 @@ public class AttService {
         
         LocalDateTime now = LocalDateTime.now();
 		attDto.setAttEnd(now);
-        
         String str = sim.format(attDto.getAttEnd());
-        log.info("[AttService] 현재 시각 : {}", str);
         
         int hour = Integer.parseInt(str.substring(0, 2));
         int minute = Integer.parseInt(str.substring(3, 5));
@@ -148,8 +150,52 @@ public class AttService {
             log.info("[AttService] 정상출근");
         }
         
+		/* spring : [AttService] 현재 시각 : 15시24분22초 / [AttService] 조퇴
+		 * postman : "attType": {
+            						"attTypeNo": 3,
+            						"attType": null
+        						}
+        다 찍히는데 DB에는 처음 등록된 지각이 변하지 않음
+        
+		AttType attType = new AttType();
+		attRepository.save(modelMapper.map(attDto.setAttType(attCheck), AttType.class));
+		*/
+        
+        
+        SimpleDateFormat work = new SimpleDateFormat("HH시mm분ss초");
+        String start = work.format(attDto.getAttStart());
+        
+        /*
+        int workStartHour = Integer.parseInt(start.substring(0, 2));
+        int workStartMinute = Integer.parseInt(start.substring(3, 5));
+        log.info("[AttService] 근무시간 : {}", workStartHour-hour);
+        */
+        
+        Date startDate = null;
+		try {
+			startDate = new SimpleDateFormat("HH시mm분ss초").parse(start);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        Date endDate = null;
+		try {
+			endDate = new SimpleDateFormat("HH시mm분ss초").parse(str);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        long diffSec = (endDate.getTime() - startDate.getTime()) / 1000; //초 차이
+        log.info("[AttService] 근무 시간 : {}", diffSec);
+        Date attWorkTime = new Date(diffSec);
+        attDto.setAttWorkTime(attWorkTime);
+        
+		Att foundAtt = attRepository.findById(attDto.getAttNo())
+				.orElseThrow(() -> new RuntimeException("존재하지 않는 근태번호입니다."));
 		foundAtt.updateEnd(now);
 		attRepository.save(foundAtt);
+		attRepository.save(modelMapper.map(attDto, Att.class));
 		
 		return attDto;
 	}

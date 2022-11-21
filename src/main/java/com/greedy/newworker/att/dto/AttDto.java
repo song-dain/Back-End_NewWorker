@@ -23,6 +23,7 @@ public class AttDto {
 	private java.util.Date attStart;
 	private java.util.Date attEnd;
 	private java.util.Date attDate;
+	private java.util.Date attWorkTime;
 	
 	public void setAttStart(LocalDateTime now) {
 
@@ -30,6 +31,15 @@ public class AttDto {
         Date date = Date.from(instant);
         
         this.attStart = date;
+        		
+	}
+	
+	public void setAttDate(LocalDateTime now) {
+
+        Instant instant = now.atZone(ZoneId.systemDefault()).toInstant();
+        Date date = Date.from(instant);
+        
+        this.attDate = date;
         		
 	}
 	
