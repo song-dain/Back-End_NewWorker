@@ -1,4 +1,5 @@
 package com.greedy.newworker.att.service;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -186,7 +187,7 @@ public class AttService {
 			e.printStackTrace();
 		}
         
-        long diffSec = (endDate.getTime() - startDate.getTime()) / 1000; //초 차이
+        Integer diffSec = (int) ((endDate.getTime() - startDate.getTime()) / 1000); //초 차이
         log.info("[AttService] 근무 시간 : {}", diffSec);
         Date attWorkTime = new Date(diffSec);
         attDto.setAttWorkTime(attWorkTime);
@@ -196,6 +197,51 @@ public class AttService {
 		foundAtt.updateEnd(now);
 		attRepository.save(foundAtt);
 		attRepository.save(modelMapper.map(attDto, Att.class));
+		
+		/* 근무시간 초단위 Integer diffsec -> xx분xx초 로 변환 */
+        DecimalFormat df = new DecimalFormat("00");
+        
+        int remain = diffSec.intValue();
+        
+        String dayStr = "일 ";
+        String hourStr = "시간 ";
+        String minStr = "분 ";
+        String secStr = "초";
+        
+        int day = remain / 86400;
+        remain %= 86400;
+ 
+        StringBuilder sb = new StringBuilder();
+        if (day > 0)
+        {
+            sb.append(df.format(day));
+            sb.append(dayStr);
+        }
+ 
+        int whour = remain / 3600;
+        remain %= 3600;
+        if (whour > 0)
+        {
+            sb.append(df.format(whour));
+            sb.append(hourStr);
+        }
+ 
+        int wminute = remain / 60;
+        remain %= 60;
+        if (wminute > 0)
+        {
+            sb.append(df.format(wminute));
+            sb.append(minStr);
+        }
+ 
+        int wsecond = remain;
+        if (wsecond > 0)
+        {
+            sb.append(df.format(wsecond));
+            sb.append(secStr);
+        }
+        
+        log.info("[AttService] 근무 시간 변환 : {}",sb.toString());
 		
 		return attDto;
 	}
