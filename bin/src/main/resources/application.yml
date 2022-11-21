@@ -1,0 +1,27 @@
+server:
+  port: 8001
+  
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: C##NEWWORKER
+    password: NEWWORKER
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+      
+# jpa config
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    database: oracle
+    properties:
+      hibernate:
+        '[format_sql]': true   
+
+        
+jwt:
+  secret: rmNdxF4HeCNvC70Z6JEN8uUMBzCBxgIQ/aOcLN9/qKp5ZxhWzyGcmfY5T09Xgx18ibWU9qW3/sYZwWH+fCNv2w==
