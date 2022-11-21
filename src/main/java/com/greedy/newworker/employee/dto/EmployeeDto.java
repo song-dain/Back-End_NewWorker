@@ -18,6 +18,7 @@ public class EmployeeDto implements UserDetails {
 	private String employeeName;
 	private String employeeEmail;
 	private String employeePhone;
+	private String employeeAddress;
 	private String employeeStatus;
 	private String employeeRole;
 	private PositionDto position;
