@@ -64,8 +64,8 @@ public class Employee {
 	@Column(name = "EMPLOYEE_REST_DAY")
 	private Long employeeRestDay;
 	
-	@Column(name = "EMPLOYEE_IMAGE")
-	private String employeeImage;
+	@Column(name = "EMPLOYEE_IMAGE_URL")
+	private String employeeImageUrl;
 	
 	@Column(name = "EMPLOYEE_HIRE_DATE")
 	private Date employeeHireDate;

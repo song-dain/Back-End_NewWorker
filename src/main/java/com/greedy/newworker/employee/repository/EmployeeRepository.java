@@ -12,11 +12,28 @@ import com.greedy.newworker.employee.entity.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 
+	/* [message] 발신, 수신 사원 찾기 */
+	Employee findByEmployeeNoAndEmployeeStatus(Employee employee, String status);
+
+
+
+	Optional<Employee> findByEmployeeId(String employeeId);
+
+	
+
+
+
+	Optional<Employee> findByEmployeeNameAndEmployeeEmail(String employeeName, String employeeEmail);
+
+
 	/* memberId로 조회 */
 	Optional<Employee> findByEmployeeId(String employeeId);
 
 
 	/* [message] 부서별 직원 리스트 */
 	List<Employee> findByDep(Department dep);
+
+
+
 
 }
