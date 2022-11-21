@@ -31,6 +31,15 @@ public class AuthController {
 		
 	}
 	
+	
+	
+	/* 아이디 찾기 */
+	@PostMapping("/idInquiry")
+	public ResponseEntity<ResponseDto> idInquiry(@RequestBody EmployeeDto employeeDto) {
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "아이디 조회에 성공했습니다.", authService.idInquiry(employeeDto)));
+	}
+	
 
 	
 	

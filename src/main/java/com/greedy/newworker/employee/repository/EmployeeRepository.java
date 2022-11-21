@@ -13,7 +13,16 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 	Employee findByEmployeeNoAndEmployeeStatus(Employee employee, String status);
 
 
-	/* memberId로 조회 */
+
 	Optional<Employee> findByEmployeeId(String employeeId);
+
+	
+
+
+
+	Optional<Employee> findByEmployeeNameAndEmployeeEmail(String employeeName, String employeeEmail);
+	
+
+
 
 }
