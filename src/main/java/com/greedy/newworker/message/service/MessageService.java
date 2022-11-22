@@ -236,11 +236,11 @@ public class MessageService {
 	
 	
 	/* 받은 메시지(받은 메시지함, 중요 메시지, 휴지통 받은 메시지) 관리 */
-	public RecipientManagementDto receiveMessageManagement(Long messageNo, RecipientManagementDto messageRequest) {
+	public RecipientManagementDto receiveMessageManagement(RecipientManagementDto messageRequest) {
 
 		log.info("[MessageService] messageRequest : {}", messageRequest);
 
-		RecipientManagement targetMessage = recipientManagementRepository.findById(messageNo)
+		RecipientManagement targetMessage = recipientManagementRepository.findById(messageRequest.getMessage().getMessageNo())
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메시지입니다."));
 
 		if (messageRequest.getReceiveMessageCategory() != null) {

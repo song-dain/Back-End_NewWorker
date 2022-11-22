@@ -219,14 +219,12 @@ public class MessageController {
 	
 
 	/* 받은 메시지(빋은 메시지함, 중요 메시지, 휴지통 받은 메시지) 관리 */
-	@PatchMapping("/receive/{messageNo}")
-	public ResponseEntity<ResponseDto> receiveMessageManagement(@PathVariable Long messageNo,
+	@PatchMapping("/receive")
+	public ResponseEntity<ResponseDto> receiveMessageManagement(
 			@RequestBody RecipientManagementDto messageRequest) {
-		log.info("[MessageController] messageNo : {}", messageNo);
-		log.info("[MessageController] messageRequest : {}", messageRequest);
 
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "받은 메시지 이동 성공",
-				messageService.receiveMessageManagement(messageNo, messageRequest)));
+				messageService.receiveMessageManagement(messageRequest)));
 	}
 	
 	
