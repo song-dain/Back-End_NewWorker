@@ -48,20 +48,20 @@ public class ListService {
 	}
 
 
-//	public Object selectEmployeeForAdmin(Long employeeNo) {
-//		
-//		log.info("[ListService] selectEmployeeForAdmin Start ===================================");
-//        log.info("[ListService] employeeNo : " + employeeNo);
-//        
-//        Employee employee = listRepository.findByEmployeeNo(employeeNo)
-//        		.orElseThrow(() -> new IllegalArgumentException("해당 상품이 없습니다. employeeNo=" + employeeNo));
-//        EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
-//        
-//        log.info("[ListService] employeeDto : " + employeeDto);
-//        
-//        log.info("[ListService] selectEmployeeForAdmin End ===================================");
-//        
-//        return employeeDto;
-//	}
+	public EmployeeDto selectEmployeeForAdmin(Long employeeNo) {
+		
+		log.info("[ListService] selectEmployeeForAdmin Start ===================================");
+        log.info("[ListService] employeeNo : " + employeeNo);
+        
+        Employee employee = listRepository.findByEmployeeNo(employeeNo)
+        		.orElseThrow(() -> new IllegalArgumentException("해당 상품이 없습니다. employeeNo=" + employeeNo));
+        EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
+        
+        log.info("[ListService] employeeDto : " + employeeDto);
+        
+        log.info("[ListService] selectEmployeeForAdmin End ===================================");
+        
+        return employeeDto;
+	}
 
 }

@@ -20,6 +20,9 @@ public interface ListRepository extends JpaRepository<Employee, Long> {
 //	/* 상세조회(관리자)*/
 //	@Query("SELECT e " +
 //			 "FROM Employee e" +
-//			"WHERE e.employeeNo = :employeeNo ")
+//			"WHERE e.employeeNo = :employeeNo "
+//			 )
 //	Optional<Employee> findByEmployeeNo(@Param("employeeNo") Long employeeNo);
+
+	Optional<Employee> findByEmployeeNo(Long employeeNo);
 }
