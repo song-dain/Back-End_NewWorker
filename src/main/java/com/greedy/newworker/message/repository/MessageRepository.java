@@ -34,7 +34,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 	
 	
 	/* 중요 메시지함 조회 완!!!!!! */
-	@Query("select m from Message m where m.recipient =:recipient and m.messageNo = :messageNo and m.recipientManagement.receiveMessageCategory = 'impoMessageBox' and m.recipientManagement.receiveMessageDelete = 'N'")
+	@Query("select m from Message m where m.recipient =:recipient and m.recipientManagement.receiveMessageCategory = 'impoMessageBox' and m.recipientManagement.receiveMessageDelete = 'N'")
 	Page<Message> findImpoMessages(@Param("messageNo")Pageable pageable, @Param("recipient")Employee recipient);
 	
 	
