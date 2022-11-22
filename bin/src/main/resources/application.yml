@@ -13,6 +13,11 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
       
+# 정적 리소스 경로 설정
+  web:
+    resources:
+      static-locations: classpath:/employeeimgs/ #리소스 경로 더 추가하고 싶을 경우 , 찍어서 추가하세요
+      
 # jpa config
   jpa:
     generate-ddl: false
@@ -22,6 +27,35 @@ spring:
       hibernate:
         '[format_sql]': true   
 
-        
+# email config
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: newworker9999@gmail.com
+    password: zkrqzwizpivyrygh
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# 이미지 저장할 위치와 응답 시 이미지 주소 설정
+image:
+
+  add-resource-locations: classpath:/static/employeeimgs, classpath:/static/surveyimgs
+  add-resource-handler: /employeeimgs/**, /surveyimgs/**
+
+  image-dir: src/main/resource/static #Service에서 자기 이미지 담을 하위 경로를 가공하세요!
+  image-url: http://localhost:8001 #이하 동일입니다!
+
+          
+          
+         
 jwt:
   secret: rmNdxF4HeCNvC70Z6JEN8uUMBzCBxgIQ/aOcLN9/qKp5ZxhWzyGcmfY5T09Xgx18ibWU9qW3/sYZwWH+fCNv2w==
+ 
+
+  
+  
