@@ -14,6 +14,7 @@ import com.greedy.newworker.notice.entity.Notice;
 import com.greedy.newworker.notice.repository.NoticeRepository;
 
 import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @Service
 @Transactional
@@ -30,52 +31,67 @@ public class NoticeService {
 		this.noticeRepository = noticeRepository;
 		this.modelMapper = modelMapper;
 	}
-
-	public Page<NoticeDto> selectNoticeList(int page) {
-
-		Pageable pageable = PageRequest.of(page - 1, TEXT_PAGE_SIZE, Sort.by(SORT_BY).descending());
-		Page<Notice> noticeList = noticeRepository.findByNotStatus(ACTIVE_STATUS, pageable);
-		
-		log.info("noticeList : {}", noticeList.getContent());
-		
-		return noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
-	}
-
-	public void noticeRegist(NoticeDto notice) {
-
-		noticeRepository.save(modelMapper.map(notice, Notice.class));
-		
-	}
-
-	public NoticeDto findNoticeByNo(Long notNo) {
-
-		Notice notice = noticeRepository.findById(notNo).get();
-		
-		
-		return modelMapper.map(notice, NoticeDto.class);
-	}
 	
-	public NoticeDto seleNoticeDetail(Long notNo) {
+	/* 1. 상품별 리뷰 목록 조회 (페이징) */
+
+	public Page<NoticeDto> selectNoticeListWithPaging(int page) {
+		log.info("[NoticeService] getNoticeList Start ==============================");
+		 
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("notNo").descending());
 		
-		Notice notice = noticeRepository.findByNotNo(notNo);
+		Page<Notice> noticeList = noticeRepository.findAll(pageable);
+		Page<NoticeDto> noticeDtoList = noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
 		
-		return modelMapper.map(notice, NoticeDto.class);
+		 log.info("noticeList : {}", noticeList.getContent());
+		
+		return noticeDtoList;
 	}
 
-	public void modifyEmployee(NoticeDto noticeModify) {
-		
-		Notice savedNotice = noticeRepository.findByNotNo(noticeModify.getNotNo());
-		savedNotice.setNotTitle(noticeModify.getNotTitle());
-		savedNotice.setNotContent(noticeModify.getNotContent());
-	}
-
-
-	public void deleteNot(Long notNo) {
-		
-		Notice notice = noticeRepository.findByNotNo(notNo);
-		
-		notice.setNotStatus("N");
-		
-	}
+//	public Page<NoticeDto> selectNoticeList(int page) {
+//
+//		Pageable pageable = PageRequest.of(page - 1, TEXT_PAGE_SIZE, Sort.by(SORT_BY).descending());
+//		Page<Notice> noticeList = noticeRepository.findByNotStatus(ACTIVE_STATUS, pageable);
+//		
+//		log.info("noticeList : {}", noticeList.getContent());
+//		
+//		return noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
+//	}
+//
+//	public void noticeRegist(NoticeDto notice) {
+//
+//		noticeRepository.save(modelMapper.map(notice, Notice.class));
+//		
+//	}
+//
+//	public NoticeDto findNoticeByNo(Long notNo) {
+//
+//		Notice notice = noticeRepository.findById(notNo).get();
+//		
+//		
+//		return modelMapper.map(notice, NoticeDto.class);
+//	}
+//	
+//	public NoticeDto seleNoticeDetail(Long notNo) {
+//		
+//		Notice notice = noticeRepository.findByNotNo(notNo);
+//		
+//		return modelMapper.map(notice, NoticeDto.class);
+//	}
+//
+//	public void modifyEmployee(NoticeDto noticeModify) {
+//		
+//		Notice savedNotice = noticeRepository.findByNotNo(noticeModify.getNotNo());
+//		savedNotice.setNotTitle(noticeModify.getNotTitle());
+//		savedNotice.setNotContent(noticeModify.getNotContent());
+//	}
+//
+//
+//	public void deleteNot(Long notNo) {
+//		
+//		Notice notice = noticeRepository.findByNotNo(notNo);
+//		
+//		notice.setNotStatus("N");
+//		
+//	}
 	
 }
