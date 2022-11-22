@@ -42,6 +42,7 @@ public class AttController {
 		
 		attDto.setEmployee(employee);
 		attDto.setAttStart(now);
+		
 		log.info("[ AttController ] 출근 등록 시간 : {}", now);
 		
 		return ResponseEntity
@@ -58,8 +59,8 @@ public class AttController {
 		LocalDateTime now = LocalDateTime.now();
 		attDto.setEmployee(employee);
 		attDto.setAttEnd(now);
-		
-//		log.info("[ AttController ] 퇴근 등록 시간 : {}", now);
+		attDto.setAttDate(now);
+		log.info("[ AttController ] 퇴근 등록 시간 : {}", now);
 		
 		return ResponseEntity
 				.ok()

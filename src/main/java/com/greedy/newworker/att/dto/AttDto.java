@@ -23,7 +23,7 @@ public class AttDto {
 	private java.util.Date attStart;
 	private java.util.Date attEnd;
 	private java.util.Date attDate;
-	private java.util.Date attWorkTime;
+	private int attWorkTime;
 	
 	public void setAttStart(LocalDateTime now) {
 

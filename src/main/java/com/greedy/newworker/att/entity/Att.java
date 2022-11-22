@@ -55,7 +55,7 @@ public class Att {
 	private java.util.Date attDate;
 	
 	@Column(name="ATT_WORKTIME")
-	private java.util.Date attWorkTime;
+	private int attWorkTime;
 
 	public void updateEnd(LocalDateTime now) {
 		
