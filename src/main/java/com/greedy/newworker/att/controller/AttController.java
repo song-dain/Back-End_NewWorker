@@ -36,6 +36,7 @@ public class AttController {
 		this.attService = attService;
 	}
 	
+	/* 출근 등록 */
 	@PostMapping("/start")											 
 	public ResponseEntity<ResponseDto> insertStart(@AuthenticationPrincipal EmployeeDto employee) throws ParseException {
 		
@@ -54,7 +55,7 @@ public class AttController {
 		
 	}
 	
-	
+	/* 퇴근 등록 */
 	@PutMapping("/end")
 	//@RequestMapping(value="/end", method={RequestMethod.PUT, RequestMethod.POST})
 	public ResponseEntity<ResponseDto> insertEnd(@RequestBody AttDto attDto, @AuthenticationPrincipal EmployeeDto employee) {
@@ -89,16 +90,17 @@ public class AttController {
 		
 		return ResponseEntity
 				.ok()
-				.body(new ResponseDto(HttpStatus.OK, "일일 근태 조회", attService.selectAttDay(attNo)));
+				.body(new ResponseDto(HttpStatus.OK, "일일 근태 조회", attService.selectAttDay(attNo , employee.getEmployeeNo())));
 	}
 	
+	/* 전부 다 조회 가능한 관리자용 근태번호로 조회 */
 	@GetMapping("/admin/days")
 	public ResponseEntity<ResponseDto> selectTodayAttAdmin(Long attNo) {
 		
 		log.info("[ AttController ] 근태 번호 : {}", attNo);
 		return ResponseEntity
 				.ok()
-				.body(new ResponseDto(HttpStatus.OK, "일일 근태 조회", attService.selectAttDay(attNo)));
+				.body(new ResponseDto(HttpStatus.OK, "일일 근태 조회", attService.selectAttDayAdmin(attNo)));
 	}
 	
 	/* 한달 조회 */

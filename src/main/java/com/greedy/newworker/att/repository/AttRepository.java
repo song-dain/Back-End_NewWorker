@@ -13,15 +13,17 @@ import com.greedy.newworker.employee.dto.EmployeeDto;
 
 public interface AttRepository extends JpaRepository<Att, Long>{
 
-	@Query(value = "SELECT * " +
-		             "FROM tbl_att " +
-			        "WHERE ATT_NO = :attNo", nativeQuery = true)
-	Optional<Att> findByAttNoAndEmployeeNo(@Param("attNo") Long attNo);
+	@Query("SELECT a " +
+		             "FROM Att a " +
+			        "WHERE a.attNo = :attNo " +
+		             "AND a.employee.employeeNo = :employeeNo")
+	Optional<Att> findByAttNoAndEmployeeNo(@Param("attNo") Long attNo, @Param("employeeNo") Long employeeNo);
 
 	Page<Att> findByAttMonthContainsAndEmployee(Pageable pageable, String attMonth, EmployeeDto employee);
 
 	/*
-	 * + "AND employee.employeeNo =:employee.employeeNo"
+	 * + "AND employee.employeeNo = :employee.employeeNo"
+	 * + "AND EMPLOYEE.EMPLOYEENO = :EMPLOYEE.EMPLOYEENO"
 	 * */
 	
 }
