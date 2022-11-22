@@ -33,5 +33,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 
 
 
+	Employee findByEmployeeIdAndEmployeeNameAndEmployeeEmail(String employeeId, String employeeName,
+			String employeeEmail);
+
+
+
 
 }

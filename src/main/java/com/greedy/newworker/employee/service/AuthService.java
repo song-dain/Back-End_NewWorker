@@ -1,5 +1,7 @@
 package com.greedy.newworker.employee.service;
 
+import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import com.greedy.newworker.employee.entity.Employee;
 import com.greedy.newworker.employee.exception.LoginFailedException;
 import com.greedy.newworker.employee.repository.EmployeeRepository;
 import com.greedy.newworker.jwt.TokenProvider;
+import com.greedy.newworker.util.RedisUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,14 +24,22 @@ public class AuthService {
 	private final PasswordEncoder passwordEncoder;
 	private final ModelMapper modelMapper;
 	private final TokenProvider tokenProvider;
+	private final RegistCodeMailService registCodeMailService;
+	private final FindPwdMailService findPwdMailService;
+	private final RedisUtil redisUtil;
 	
 	
 	public AuthService(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder, 
-			ModelMapper modelMapper, TokenProvider tokenProvider) {
+						ModelMapper modelMapper, TokenProvider tokenProvider, RegistCodeMailService registCodeMailService, 
+						FindPwdMailService findPwdMailService, RedisUtil redisUtil) {
 		this.employeeRepository = employeeRepository;
 		this.passwordEncoder = passwordEncoder; 
 		this.modelMapper = modelMapper;
 		this.tokenProvider = tokenProvider;
+		this.registCodeMailService = registCodeMailService;
+		this.findPwdMailService = findPwdMailService;
+		this.redisUtil = redisUtil;
+		
 	}
 
 	
@@ -80,7 +91,57 @@ public class AuthService {
 		
 		return employee.getEmployeeId();
 	}
+	
+	
+	/* 비밀번호 찾기(1) - 이메일 인증 */	
+	public Object findPwd(EmployeeDto employeeDto) throws Exception {
+		
+		Employee employee = employeeRepository.findByEmployeeIdAndEmployeeNameAndEmployeeEmail(employeeDto.getEmployeeId(), employeeDto.getEmployeeName(), employeeDto.getEmployeeEmail());
+		
+		log.info("findPwd employee : {}", employee);
+		
+		String code = registCodeMailService.sendSimpleMessage(employee.getEmployeeEmail());
+		
+		log.info("findPwd code : {}", code);
+		return code;
+	}
 
+
+
+	/* 비밀번호 찾기(2) - 임시 비밀번호 */	
+	@Transactional
+	public Object pwdInquiry(EmployeeDto employeeDto) throws Exception {
+		
+
+		Employee employee = employeeRepository.findByEmployeeIdAndEmployeeNameAndEmployeeEmail(employeeDto.getEmployeeId(), employeeDto.getEmployeeName(), employeeDto.getEmployeeEmail());
+		
+		log.info("아이디 : {}", employeeDto.getEmployeeId());
+		log.info("이름 : {}", employeeDto.getEmployeeName());
+		log.info("이메일 : {}", employeeDto.getEmployeeEmail());
+		
+		
+		String email = redisUtil.getData(employeeDto.getCode());
+		
+		log.info("Redis 이메일 확인 : {}", email);
+		if(employeeDto.getEmployeeEmail().equals(email)) {
+
+			String tempPwd = passwordEncoder.encode(findPwdMailService.sendSimpleMessage(employee.getEmployeeEmail()));
+			log.info("tempPwd : {}", tempPwd);
+			log.info("tempPwd 발송용 이메일 : {}", employee.getEmployeeEmail());
+			employee.setEmployeePwd(tempPwd);
+
+			employeeRepository.save(employee);
+			
+			return tempPwd;
+			
+		}
+
+		
+		return null;
+	}
+	
+
+	
 	
 	
 }
