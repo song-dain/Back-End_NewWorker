@@ -18,5 +18,4 @@ public class NoticeDto {
 	private Long notCount;
 	private Date notUpdate;
 	private EmployeeDto employee;
-
 }

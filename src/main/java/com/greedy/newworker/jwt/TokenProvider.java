@@ -37,7 +37,7 @@ public class TokenProvider {
 	
 	private static final String AUTHORITIES_KEY = "auth";
 	private static final String BEARER_TYPE = "bearer";
-	private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;	// 30분
+	private static final long ACCESS_TOKEN_EXPIRE_TIME = 3000 * 60 * 30;	// 다들 원하셔서 넉넉히 잡아드렸습니다 (1000 * 60 * 30) 
 	private final Key key;
 	
 	private final UserDetailsService userDetailsService;
