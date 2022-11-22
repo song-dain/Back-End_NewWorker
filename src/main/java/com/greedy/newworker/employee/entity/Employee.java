@@ -13,6 +13,10 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.greedy.newworker.employee.dto.DepartmentDto;
+import com.greedy.newworker.employee.dto.PositionDto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -75,5 +79,26 @@ public class Employee {
 	
 	@Column(name = "EMPLOYEE_ENT_DATE")
 	private Date employeeEntDate;
+	
+	
+	/* 수정 */	
+//	public void update(String employeeId2, String employeePwd2, String employeeName2, String employeeEmail2,
+//			String employeePhone2, String employeeAddress2, String employeeStatus2, String employeeRole2,
+//			String employeeImageUrl2, PositionDto position2, DepartmentDto dep2, Long employeeRestDay2,
+//			MultipartFile employeeImage, Date employeeHireDate2, Date employeeEntDate2) {
+//		
+//		
+//		
+//		
+//	}
+
+
+	
+
+
+
+	
+
+	
 	
 }

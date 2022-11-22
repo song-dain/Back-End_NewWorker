@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,5 +45,20 @@ public class EmployeeController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 등록 성공", null));
 		
 	}
+	
+	/* 직원수정 */
+//	@PutMapping("/employee/register")
+//	public ResponseEntity<ResponseDto> updateProduct(@ModelAttribute EmployeeDto employeeDto) {
+//		
+//		employeeDto.setEmployeePwd(passwordEncoder.encode(employeeDto.getEmployeePwd()));
+//		
+//		employeeService.updateEmployee(employeeDto);
+//		
+//		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 수정 성공", null));
+//	
+//	
+//}
+	
+	
 	
 }
