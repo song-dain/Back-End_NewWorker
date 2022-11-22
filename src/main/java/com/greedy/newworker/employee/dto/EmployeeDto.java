@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 
@@ -17,12 +18,16 @@ public class EmployeeDto implements UserDetails {
 	private String employeeName;
 	private String employeeEmail;
 	private String employeePhone;
+	private String employeeAddress;
 	private String employeeStatus;
 	private String employeeRole;
 	private PositionDto position;
 	private DepartmentDto dep;
 	private Long employeeRestDay;
-	private String employeeImage;
+	
+	private MultipartFile employeeImage;
+	
+	private String employeeImageUrl;
 	private Date employeeHireDate;
 	private Date employeeEntDate;
 	

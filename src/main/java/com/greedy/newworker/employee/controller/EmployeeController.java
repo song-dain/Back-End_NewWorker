@@ -2,22 +2,28 @@ package com.greedy.newworker.employee.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greedy.newworker.common.ResponseDto;
+import com.greedy.newworker.employee.dto.EmployeeDto;
 import com.greedy.newworker.employee.service.EmployeeService;
 
 @RestController
-@RequestMapping("/api/m1")
+@RequestMapping("/emp")
 public class EmployeeController {
 
 	private final EmployeeService employeeService;
+	private final PasswordEncoder passwordEncoder;
 	
-	public EmployeeController(EmployeeService employeeService) {
+	public EmployeeController(EmployeeService employeeService, PasswordEncoder passwordEncoder) {
 		this.employeeService = employeeService;
+		this.passwordEncoder = passwordEncoder;
 	}
 	
 	@GetMapping("/employee/{memberId}")
@@ -25,4 +31,18 @@ public class EmployeeController {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", employeeService.selectMyInfo(memberId)));
 	}
+	
+	
+	/* 사원 등록 - 정혜연 */
+	@PostMapping("/employee/register")
+	public ResponseEntity<ResponseDto> insertProduct(@ModelAttribute EmployeeDto employeeDto) {
+		
+		employeeDto.setEmployeePwd(passwordEncoder.encode(employeeDto.getEmployeePwd()));
+		
+		employeeService.insertEmployee(employeeDto);
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 등록 성공", null));
+		
+	}
+	
 }

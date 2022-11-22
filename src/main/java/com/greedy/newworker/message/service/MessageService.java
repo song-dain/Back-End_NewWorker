@@ -1,5 +1,7 @@
 package com.greedy.newworker.message.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -8,10 +10,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.greedy.newworker.employee.dto.EmployeeDto;
+import com.greedy.newworker.employee.entity.Department;
 import com.greedy.newworker.employee.entity.Employee;
+import com.greedy.newworker.employee.repository.DepartmentRepository;
 import com.greedy.newworker.employee.repository.EmployeeRepository;
 import com.greedy.newworker.message.dto.MessageDto;
 import com.greedy.newworker.message.dto.RecipientManagementDto;
@@ -29,229 +32,248 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional
 public class MessageService {
-	
+
 	private final MessageRepository messageRepository;
 	private final RecipientManagementRepository recipientManagementRepository;
 	private final SenderManagementRepository senderManagementRepository;
 	private final EmployeeRepository employeeRepository;
+	private final DepartmentRepository departmentRepository;
 	private final ModelMapper modelMappler;
-	
-	public MessageService(MessageRepository messageRepository, RecipientManagementRepository recipientManagementRepository, SenderManagementRepository senderManagementRepository, 
-			EmployeeRepository employeeRepository, ModelMapper modelMappler) {
-		
+
+	public MessageService(MessageRepository messageRepository,
+			RecipientManagementRepository recipientManagementRepository,
+			SenderManagementRepository senderManagementRepository, 
+			EmployeeRepository employeeRepository,
+			DepartmentRepository departmentRepository,
+			ModelMapper modelMappler) {
+
 		this.messageRepository = messageRepository;
 		this.recipientManagementRepository = recipientManagementRepository;
 		this.senderManagementRepository = senderManagementRepository;
 		this.employeeRepository = employeeRepository;
+		this.departmentRepository = departmentRepository;
 		this.modelMappler = modelMappler;
 	}
 	
 	
-	/* 새로운 메시지 보내기 */
-	public MessageDto newMessage(MessageDto messageDto) {
+	/* 부서별 직원 조회 */
+	public List<EmployeeDto> findRecipient(Long depNo) {
 		
-		/* 수신자, 발신자 정보 */
-		Employee recipient = employeeRepository
-				.findByEmployeeNoAndEmployeeStatus(modelMappler.map(messageDto.getRecipient(), Employee.class), "Y");
+		Department dep = departmentRepository.findById(depNo)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 부서입니다."));
+		
+		List<Employee> empList = employeeRepository.findByDep(dep);
 
-		Employee sender = employeeRepository
-				.findByEmployeeNoAndEmployeeStatus(modelMappler.map(messageDto.getRecipient(), Employee.class), "Y");
+		return empList.stream().map(emp -> modelMappler.map(emp, EmployeeDto.class)).toList();
+	}
+
+	
+	/* 새로운 메시지 보내기 */
+	public MessageDto newMessage(MessageDto messageDto, EmployeeDto senderDto) {
+
+		/* 수신자 정보 */
+		Employee recipient = employeeRepository.findById(messageDto.getRecipient().getEmployeeNo())
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사원입니다."));
 		
 		Message newMessage = new Message();
 		newMessage.setRecipient(recipient);
-		newMessage.setSender(sender);
+		newMessage.setSender(modelMappler.map(senderDto, Employee.class));
 		newMessage.setMessageContent(messageDto.getMessageContent());
-		
 		messageRepository.save(newMessage);
 		
-		return messageDto;
+		RecipientManagement newRmanagement = new RecipientManagement(newMessage.getMessageNo());
+		recipientManagementRepository.save(newRmanagement);
+		
+		SenderManagement newSmanagement = new SenderManagement(newMessage.getMessageNo());
+		senderManagementRepository.save(newSmanagement);
+
+		return modelMappler.map(newMessage, MessageDto.class);
 	}
-	
+
 	
 	/* 받은 메시지함 완!!!!!! */
-	public Page<MessageDto> receiveMessages(int page, EmployeeDto recipientDto){
-		
-		Employee recipient = modelMappler.map(recipientDto, Employee.class);
-		
+	public Page<MessageDto> receiveMessages(int page, EmployeeDto recipientDto) {
+
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("messageNo").descending());
-		
-		Page<Message> receiveMessages = messageRepository.findReceiveMessages(pageable, recipient);
-		Page<MessageDto> receiveMessageBox = receiveMessages.map(message -> modelMappler.map(message, MessageDto.class));
-		
+
+		Page<Message> receiveMessages = messageRepository.findReceiveMessages(pageable, modelMappler.map(recipientDto, Employee.class));
+		Page<MessageDto> receiveMessageBox = receiveMessages
+				.map(message -> modelMappler.map(message, MessageDto.class));
+
 		return receiveMessageBox;
 	}
-	
-	
-	/* 받은 메시지 조회 완!!!!!! */
-	public MessageDto selectReceiveMessage(Long messageNo, EmployeeDto recipientDto){
-		
-		Employee recipient = modelMappler.map(recipientDto, Employee.class);
-		
-		Message message = messageRepository.findReceiveMessageById(messageNo, recipient)
-				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메시지입니다."));
-		
-		message.setMessageStatus("read");
-		
-		return  modelMappler.map(message, MessageDto.class);
-	}
-	
-	
-	/* 받은 메시지 중요 메시지함 이동 or 휴지통 이동 / 중요 메시지 받은 메시지함 or 휴지통 이동 완!!!!!! */
-	public RecipientManagementDto receiveMessageManagement(Long messageNo, RecipientManagementDto messageRequest) {
 
-		log.info("[MessageService] messageRequest : {}", messageRequest);
-		
-		 RecipientManagement targetMessage = recipientManagementRepository.findById(messageNo)
-				 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메시지입니다."));
-		 
-		 if(messageRequest.getReceiveMessageCategory() != null) {
-			 targetMessage.setReceiveMessageCategory(messageRequest.getReceiveMessageCategory());
-		 }
-		 
-		 if(messageRequest.getReceiveMessageDelete() != null) {
-			 targetMessage.setReceiveMessageDelete(messageRequest.getReceiveMessageDelete());
-		 }
-	
-		recipientManagementRepository.save(targetMessage);
-		
-		RecipientManagementDto statusModify = modelMappler.map(targetMessage, RecipientManagementDto.class);
-		
-		return statusModify;
+	/* 받은 메시지 조회 완!!!!!! */
+	public MessageDto selectReceiveMessage(Long messageNo, EmployeeDto recipientDto) {
+
+		Message message = messageRepository.findReceiveMessageById(messageNo, modelMappler.map(recipientDto, Employee.class))
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메시지입니다."));
+
+		message.setMessageStatus("read");
+
+		return modelMappler.map(message, MessageDto.class);
 	}
+
 	
-	
-	/* 보낸 메시지함 완!!!!!!! */
-	public Page<MessageDto> sendMessages(int page, EmployeeDto senderDto){
-		
-		Employee sender = modelMappler.map(senderDto, Employee.class);
+	/* 받은 메시지 검색 */
+	public Page<MessageDto> searchReceiveMessage(int page, String keyword, EmployeeDto recipient){
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("messageNo").descending());
 		
-		Page<Message> sendMessages = messageRepository.findSendMessages(pageable, sender);
-		Page<MessageDto> sendMessageBox = sendMessages.map(message -> modelMappler.map(message, MessageDto.class));
-		
-		return sendMessageBox;	
-	}
+		Page<Message> findMessages = messageRepository.findByReceiveMessageContentContains(pageable, keyword, modelMappler.map(recipient, Employee.class));
+		Page<MessageDto> findMessageList = findMessages
+				.map(message -> modelMappler.map(message, MessageDto.class));
 	
+		return findMessageList;
+	}
+
+
+	/* 보낸 메시지함 완!!!!!!! */
+	public Page<MessageDto> sendMessages(int page, EmployeeDto senderDto) {
+
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("messageNo").descending());
+
+		Page<Message> sendMessages = messageRepository.findSendMessages(pageable, modelMappler.map(senderDto, Employee.class));
+		Page<MessageDto> sendMessageBox = sendMessages.map(message -> modelMappler.map(message, MessageDto.class));
+
+		return sendMessageBox;
+	}
+
 	
 	/* 보낸 메시지 조회 완!!!!!!!!!!!! */
-	public MessageDto selectSendMessage(Long messageNo, EmployeeDto senderDto){
-		
-		Employee sender = modelMappler.map(senderDto, Employee.class);
-		
-		Message message = messageRepository.findSendMessageById(messageNo, sender)
+	public MessageDto selectSendMessage(Long messageNo, EmployeeDto senderDto) {
+
+		Message message = messageRepository.findSendMessageById(messageNo, modelMappler.map(senderDto, Employee.class))
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메시지입니다."));
-		
+
 		return modelMappler.map(message, MessageDto.class);
 	}
 	
 	
-	/* 보낸 메시지 휴지통 이동 완!!!!!!!!!! */
-	public SenderManagementDto sendMessageToBinMessage(Long messageNo) {
+	/* 보낸 메시지 검색 */
+	public Page<MessageDto> searchSendMessage(int page, String keyword, EmployeeDto sender){
 		
-		SenderManagement targetMessage = senderManagementRepository.findById(messageNo).orElseThrow();
-		targetMessage.setSendMessageDelete("Y");
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("messageNo").descending());
 		
-		senderManagementRepository.save(targetMessage);
-		
-		SenderManagementDto statusModify = modelMappler.map(targetMessage, SenderManagementDto.class);
-		
-		return statusModify;
-	}
+		Page<Message> findMessages = messageRepository.findBySendMessageContentContains(pageable, keyword, modelMappler.map(sender, Employee.class));
+		Page<MessageDto> findMessageList = findMessages
+				.map(message -> modelMappler.map(message, MessageDto.class));
 	
+		return findMessageList;
+	}
+
 	
 	/* 중요 메시지함 완!!!!! */
-	public Page<MessageDto> impoMessages(int page, EmployeeDto recipientDto){
-		
+	public Page<MessageDto> impoMessages(int page, EmployeeDto recipientDto) {
+
 		Employee recipient = modelMappler.map(recipientDto, Employee.class);
-		
+
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("messageNo").descending());
-		
+
 		Page<Message> impoMessages = messageRepository.findImpoMessages(pageable, recipient);
 		Page<MessageDto> impoMessageBox = impoMessages.map(message -> modelMappler.map(message, MessageDto.class));
-		
+
 		return impoMessageBox;
 	}
-	
-	
+
 	/* 중요 메시지 조회 완!!!!!! */
-	public MessageDto selectImpoMessage(Long messageNo, EmployeeDto recipientDto){
-		
+	public MessageDto selectImpoMessage(Long messageNo, EmployeeDto recipientDto) {
+
 		Employee recipient = modelMappler.map(recipientDto, Employee.class);
-		
+
 		Message message = messageRepository.findImpoMessageById(messageNo, recipient)
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메시지입니다."));
-		
+
 		message.setMessageStatus("read");
-		
+
 		messageRepository.save(message);
-		
+
 		return modelMappler.map(message, MessageDto.class);
 	}
 	
 	
-	/* 휴지통 받은 메시지 완!!!!!!!! */
-	public Page<MessageDto> binReceiveMessages(int page, EmployeeDto recipientDto){
-		
-		Employee recipient = modelMappler.map(recipientDto, Employee.class);
+	/* 중요 메시지 검색 */
+	public Page<MessageDto> searchImpoMessage(int page, String keyword, EmployeeDto recipient){
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("messageNo").descending());
 		
+		Page<Message> findMessages = messageRepository.findByImpoMessageContentContains(pageable, keyword, modelMappler.map(recipient, Employee.class));
+		Page<MessageDto> findMessageList = findMessages
+				.map(message -> modelMappler.map(message, MessageDto.class));
+	
+		return findMessageList;
+	}
+
+	
+	/* 휴지통 받은 메시지 완!!!!!!!! */
+	public Page<MessageDto> binReceiveMessages(int page, EmployeeDto recipientDto) {
+
+		Employee recipient = modelMappler.map(recipientDto, Employee.class);
+
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("messageNo").descending());
+
 		Page<Message> binReceiveMessages = messageRepository.findBinReceiveMessages(pageable, recipient);
-		Page<MessageDto> binReceiveMessageBox = binReceiveMessages.map(message -> modelMappler.map(message, MessageDto.class));
-		
+		Page<MessageDto> binReceiveMessageBox = binReceiveMessages
+				.map(message -> modelMappler.map(message, MessageDto.class));
+
 		return binReceiveMessageBox;
 	}
-	
-	
-	/* 휴지통 받은 메시지 영구 삭제 */
-	
-	
-	/* 휴지통 받은 메시지 복구 */
-	public RecipientManagementDto binMessageToreceiveMessage(Long messageNo) {
-		
-		RecipientManagement targetMessage = recipientManagementRepository.findById(messageNo).orElseThrow();
-		targetMessage.setReceiveMessageDelete("N");
-		
-		recipientManagementRepository.save(targetMessage);
-		
-		RecipientManagementDto statusModify = modelMappler.map(targetMessage, RecipientManagementDto.class);
-		
-		return statusModify;
-	}
-	
+
 	
 	/* 휴지통 보낸 메시지 완!!!!! */
-	public Page<MessageDto> binSendMessages(int page, EmployeeDto senderDto){
-		
+	public Page<MessageDto> binSendMessages(int page, EmployeeDto senderDto) {
+
 		Employee sender = modelMappler.map(senderDto, Employee.class);
-		
+
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("messageNo").descending());
-		
+
 		Page<Message> binSendMessages = messageRepository.findBinSendMessages(pageable, sender);
-		Page<MessageDto> binSendMessageBox = binSendMessages.map(message -> modelMappler.map(message, MessageDto.class));
-		
+		Page<MessageDto> binSendMessageBox = binSendMessages
+				.map(message -> modelMappler.map(message, MessageDto.class));
+
 		return binSendMessageBox;
 	}
 	
 	
-	/* 휴지통 보낸 메시지 영구 삭제 */
-	
-	
-	/* 휴지통 보낸 메시지 복구 */
-	public SenderManagementDto binMessageToSendMessage(Long messageNo) {
+	/* 받은 메시지(받은 메시지함, 중요 메시지, 휴지통 받은 메시지) 관리 */
+	public RecipientManagementDto receiveMessageManagement(Long messageNo, RecipientManagementDto messageRequest) {
+
+		log.info("[MessageService] messageRequest : {}", messageRequest);
+
+		RecipientManagement targetMessage = recipientManagementRepository.findById(messageNo)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메시지입니다."));
+
+		if (messageRequest.getReceiveMessageCategory() != null) {
+			targetMessage.setReceiveMessageCategory(messageRequest.getReceiveMessageCategory());
+		}
+
+		if (messageRequest.getReceiveMessageDelete() != null) {
+			targetMessage.setReceiveMessageDelete(messageRequest.getReceiveMessageDelete());
+		}
+
+		recipientManagementRepository.save(targetMessage);
+
+		return modelMappler.map(targetMessage, RecipientManagementDto.class);
+	}
+
+
+	/* 보낸 메시지(받은 메시지함, 휴지통 보낸 메시지) 관리 */
+	public Object sendMessageManagement(Long messageNo, SenderManagementDto messageRequest) {
+
+		log.info("[MessageService] messageRequest : {}", messageRequest);
 		
-		SenderManagement targetMessage = senderManagementRepository.findById(messageNo).orElseThrow();
-		targetMessage.setSendMessageDelete("N");
+		SenderManagement targetMessage = senderManagementRepository.findById(messageNo)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메시지입니다."));
+
+		targetMessage.setSendMessageDelete(messageRequest.getSendMessageDelete());
 		
 		senderManagementRepository.save(targetMessage);
 		
-		SenderManagementDto statusModify = modelMappler.map(targetMessage, SenderManagementDto.class);
 		
-		return statusModify;
+		return modelMappler.map(targetMessage, SenderManagementDto.class);
 	}
-	
+
 
 	
-
+	
 }

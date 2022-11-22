@@ -1,5 +1,10 @@
 package com.greedy.newworker.att.entity;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.greedy.newworker.att.dto.AttTypeDto;
 import com.greedy.newworker.employee.entity.Employee;
 
 import lombok.Getter;
@@ -49,6 +55,16 @@ public class Att {
 	private java.util.Date attDate;
 	
 	@Column(name="ATT_WORKTIME")
-	private java.util.Date attWorkTime;
+	private int attWorkTime;
+
+	public void updateEnd(LocalDateTime now) {
+		
+		Instant instant = now.atZone(ZoneId.systemDefault()).toInstant();
+        Date date = Date.from(instant);
+        
+		this.attEnd = date;
+		
+	}
+
 
 }
