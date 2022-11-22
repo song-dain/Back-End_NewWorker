@@ -147,7 +147,7 @@ public class MessageController {
 	public ResponseEntity<ResponseDto> impoMessages(@RequestParam(name = "page", defaultValue = "1") int page,
 			@AuthenticationPrincipal EmployeeDto recipient) {
 
-		Page<MessageDto> impoMessageList = messageService.receiveMessages(page, recipient);
+		Page<MessageDto> impoMessageList = messageService.impoMessages(page, recipient);
 
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(impoMessageList);
 
