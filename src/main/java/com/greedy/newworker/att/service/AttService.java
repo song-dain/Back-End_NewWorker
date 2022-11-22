@@ -1,4 +1,5 @@
 package com.greedy.newworker.att.service;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -77,8 +78,6 @@ public class AttService {
         
         LocalDateTime now = LocalDateTime.now();
 		attDto.setAttStart(now);
-		attDto.setAttDate(now);
-        
         String str = sim.format(attDto.getAttStart());
         log.info("[AttService] 현재 시각 : {}", str);
         
@@ -126,6 +125,7 @@ public class AttService {
         
         LocalDateTime now = LocalDateTime.now();
 		attDto.setAttEnd(now);
+		attDto.setAttDate(now);
         String str = sim.format(attDto.getAttEnd());
         
         int hour = Integer.parseInt(str.substring(0, 2));
@@ -186,17 +186,66 @@ public class AttService {
 			e.printStackTrace();
 		}
         
-        long diffSec = (endDate.getTime() - startDate.getTime()) / 1000; //초 차이
+        Integer diffSec = (int) ((endDate.getTime() - startDate.getTime()) / 1000); //초 차이
         log.info("[AttService] 근무 시간 : {}", diffSec);
+        
+        /* attWorkTime Date타입에서 Long타입으로 전환함
         Date attWorkTime = new Date(diffSec);
         attDto.setAttWorkTime(attWorkTime);
+        */
         
-		Att foundAtt = attRepository.findById(attDto.getAttNo())
+		/* 근무시간 초단위 Integer diffsec -> xx분xx초 로 변환 */
+        DecimalFormat df = new DecimalFormat("00");
+        
+        int remain = diffSec.intValue();
+        attDto.setAttWorkTime(remain);
+        
+        String dayStr = "일 ";
+        String hourStr = "시간 ";
+        String minStr = "분 ";
+        String secStr = "초";
+        
+        int day = remain / 86400;
+        remain %= 86400;
+ 
+        StringBuilder sb = new StringBuilder();
+        if (day > 0)
+        {
+            sb.append(df.format(day));
+            sb.append(dayStr);
+        }
+ 
+        int whour = remain / 3600;
+        remain %= 3600;
+        if (whour > 0)
+        {
+            sb.append(df.format(whour));
+            sb.append(hourStr);
+        }
+ 
+        int wminute = remain / 60;
+        remain %= 60;
+        if (wminute > 0)
+        {
+            sb.append(df.format(wminute));
+            sb.append(minStr);
+        }
+ 
+        int wsecond = remain;
+        if (wsecond > 0)
+        {
+            sb.append(df.format(wsecond));
+            sb.append(secStr);
+        }
+        
+        log.info("[AttService] 근무 시간 변환 : {}", sb.toString());
+		
+        Att foundAtt = attRepository.findById(attDto.getAttNo())
 				.orElseThrow(() -> new RuntimeException("존재하지 않는 근태번호입니다."));
 		foundAtt.updateEnd(now);
 		attRepository.save(foundAtt);
 		attRepository.save(modelMapper.map(attDto, Att.class));
-		
+        
 		return attDto;
 	}
 }
