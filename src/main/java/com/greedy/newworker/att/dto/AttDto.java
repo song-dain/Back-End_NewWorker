@@ -24,6 +24,7 @@ public class AttDto {
 	private java.util.Date attEnd;
 	private java.util.Date attDate;
 	private int attWorkTime;
+	private String attMonth;
 	
 	public void setAttStart(LocalDateTime now) {
 

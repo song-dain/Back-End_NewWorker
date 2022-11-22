@@ -3,16 +3,23 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
+
 import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import com.greedy.newworker.att.dto.AttDto;
 import com.greedy.newworker.att.dto.AttTypeDto;
 import com.greedy.newworker.att.entity.Att;
-import com.greedy.newworker.att.entity.AttType;
 import com.greedy.newworker.att.repository.AttRepository;
+import com.greedy.newworker.employee.dto.EmployeeDto;
+
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
@@ -78,8 +85,8 @@ public class AttService {
         
         LocalDateTime now = LocalDateTime.now();
 		attDto.setAttStart(now);
+		
         String str = sim.format(attDto.getAttStart());
-        log.info("[AttService] 현재 시각 : {}", str);
         
         int hour = Integer.parseInt(str.substring(0, 2));
         int minute = Integer.parseInt(str.substring(3, 5));
@@ -103,6 +110,7 @@ public class AttService {
             log.info("[AttService] 정시출근");
             
         }
+        
         /*
         SimpleDateFormat work = new SimpleDateFormat("yyyy/MM/dd");
         LocalDateTime nowDay = LocalDateTime.now();
@@ -110,14 +118,31 @@ public class AttService {
         
         String str = work.format(attDto.getAttStart());
         */
-		attRepository.save(modelMapper.map(attDto, Att.class));
+        
+        
 		
+        /*
+        long attNo = attDto.getAttNo();
+		attDto = modelMapper.map(attRepository.findByAttNo(attNo)
+				.orElseThrow(() -> new RuntimeException("attNo is null")), AttDto.class);
+		
+        Long attNo = null;
+        
+        attDto = modelMapper.map(attRepository.findByAttNo(attNo)
+				.orElseThrow(() -> new RuntimeException("attNo is null")), AttDto.class);
+        */
+        Att att = attRepository.save(modelMapper.map(attDto, Att.class));
+        log.info("[AttService] 출근 등록 시 생성되는 att.getAttNo() : {}", att.getAttNo());
+        
+        attDto = modelMapper.map(att, AttDto.class);
+        
+        log.info("[AttService] 출근 등록 시 생성되는 attDto.getAttNo() : {}", attDto.getAttNo());
 		return attDto;
 	}
 	
 	/* 퇴근 등록 */
 	@Transactional
-	public Object insertAttEnd(AttDto attDto) {
+	public AttDto insertAttEnd(AttDto attDto) {
 		
 		AttTypeDto attCheck = new AttTypeDto();
 		Date date = new Date();
@@ -164,6 +189,10 @@ public class AttService {
         
         SimpleDateFormat work = new SimpleDateFormat("HH시mm분ss초");
         String start = work.format(attDto.getAttStart());
+        
+        SimpleDateFormat mon = new SimpleDateFormat("yyyy/MM");
+        String attMon = mon.format(attDto.getAttStart());
+        attDto.setAttMonth(attMon);
         
         /*
         int workStartHour = Integer.parseInt(start.substring(0, 2));
@@ -247,5 +276,42 @@ public class AttService {
 		attRepository.save(modelMapper.map(attDto, Att.class));
         
 		return attDto;
+	}
+	
+	/* 근태번호로 직원 근태 조회 */
+	public AttDto selectAttDay(Long attNo) {
+		
+		Att att = attRepository.findByAttNoAndEmployeeNo(attNo)
+				.orElseThrow(() -> new IllegalArgumentException("근태번호에 해당하는 자료가 없습니다. attNo=" + attNo));
+		AttDto attDto = modelMapper.map(att, AttDto.class);
+		log.info("[AttService] 근태 번호 : {}", attNo);
+		return attDto;
+	}
+	
+	/* 날짜(월)로 직원 근태 조회 
+	public List<AttDto> selectMonthList(String month) {
+		
+		log.info("[AttService] month : {}", month);
+		
+		Att att = attRepository.findByMonth(month)
+				.orElseThrow(() -> new RuntimeException("존재하지 않는 날짜입니다."));
+		
+		List<AttDto> attList = attRepository
+				
+		return attList;
+	}
+	*/
+	
+	/* 날짜(월), page처리 */
+	public Page<AttDto> selectAttListByMonthAndEmployee(int page, String attMonth, EmployeeDto employee) {
+		
+		log.info("[AttService] month : {}", attMonth);
+		log.info("[AttService] employee : {}", employee);
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("attNo").descending());
+		Page<Att> attList = attRepository.findByAttMonthContainsAndEmployee(pageable, attMonth, employee);
+		Page<AttDto> attDtoList = attList.map(att -> modelMapper.map(att, AttDto.class));
+		
+		return attDtoList;
 	}
 }

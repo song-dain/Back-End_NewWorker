@@ -56,6 +56,9 @@ public class Att {
 	
 	@Column(name="ATT_WORKTIME")
 	private int attWorkTime;
+	
+	@Column(name="ATT_MONTH")
+	private String attMonth;
 
 	public void updateEnd(LocalDateTime now) {
 		
