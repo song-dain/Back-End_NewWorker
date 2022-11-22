@@ -25,6 +25,8 @@ public class EmployeeDto implements UserDetails {
 	private DepartmentDto dep;
 	private Long employeeRestDay;
 	
+	private String code;
+	
 	private MultipartFile employeeImage;
 	
 	private String employeeImageUrl;

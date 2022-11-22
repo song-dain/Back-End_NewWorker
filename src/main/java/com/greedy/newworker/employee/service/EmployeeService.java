@@ -23,20 +23,22 @@ public class EmployeeService {
 
 	private final EmployeeRepository employeeRepository;
 	private final ModelMapper modelMapper;
+	private final RegistCodeMailService registCodeMailService;
 
 	@Value("${image.image-dir}" + "/employeeimgs")
 	private String IMAGE_DIR;
 	@Value("${image.image-url}" + "/employeeimgs/")
 	private String IMAGE_URL;
 	
-	public EmployeeService(EmployeeRepository employeeRepository, ModelMapper modelMapper) {
+	public EmployeeService(EmployeeRepository employeeRepository, ModelMapper modelMapper, RegistCodeMailService registCodeMailService) {
 		this.employeeRepository = employeeRepository;
 		this.modelMapper = modelMapper;
+		this.registCodeMailService = registCodeMailService;
 	}
 	
 	
 	
-/* 회원 정보 조회*/
+	/* 회원 정보 조회*/
 	public Object selectMyInfo(String memberId) {
 
 		Employee employee = employeeRepository.findByEmployeeId(memberId)
@@ -82,9 +84,24 @@ public class EmployeeService {
 		
 		
 	}
+
+
+	
+
+
+
 	
 	
 	
-	
+//	public Object selectMyInfo(String memberId) {
+//
+//		Employee employee = employeeRepository.findByEmployeeId(memberId)
+//				.orElseThrow(() -> new UserNotFoundException(memberId + "를 찾을 수 없습니다."));
+//		
+//		
+//		
+//		return modelMapper.map(employee, EmployeeDto.class);
+//	}
+
 	
 }
