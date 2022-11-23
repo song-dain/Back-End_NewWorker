@@ -39,12 +39,12 @@ public class MessageController {
 	
 	
 	/* 부서별 직원 조회 */
-	@GetMapping("/send/findEmp")
-	public ResponseEntity<ResponseDto> findRecipient(@RequestBody DepartmentDto dep){
+	@GetMapping("/send/findEmp/{depNo}")
+	public ResponseEntity<ResponseDto> findRecipient(@PathVariable Long depNo){
 		
-		log.info("[MessageController] messageNo : {}", dep);
+		log.info("[MessageController] messageNo : {}", depNo);
 		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "부서별 직원 조회 성공", messageService.findRecipient(dep.getDepNo())));
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "부서별 직원 조회 성공", messageService.findRecipient(depNo)));
 	}
 
 	/* 메시지 보내기 */
@@ -115,7 +115,7 @@ public class MessageController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "보낸 메시지함 조회 성공", responseDtoWithPaging));
 	}
 
-	/* 보낸 메시지 상세 조회 완!!!!!!!!!!! */
+	/* 보낸 메시지 상세 조회 ------------------------------------------------------ 사용 안 함!!!!!!!!!!!!!!! */
 	@GetMapping("/send/{messageNo}/read")
 	public ResponseEntity<ResponseDto> selectSendMessage(@PathVariable Long messageNo,
 			@AuthenticationPrincipal EmployeeDto sender) {
@@ -158,7 +158,7 @@ public class MessageController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "중요 메시지함 조회 성공", responseDtoWithPaging));
 	}
 
-	/* 중요 메시지 상세 조회 완!!!!!!!! */
+	/* 중요 메시지 상세 조회---------------------------------------------------- 사용 안 함!!!!!!!!!!!!!!!!!!!!!!!! */
 	@PatchMapping("/impo/{messageNo}/read")
 	public ResponseEntity<ResponseDto> selectImpoMessage(@PathVariable Long messageNo,
 			@AuthenticationPrincipal EmployeeDto recipient) {
