@@ -258,11 +258,11 @@ public class MessageService {
 
 
 	/* 보낸 메시지(받은 메시지함, 휴지통 보낸 메시지) 관리 */
-	public Object sendMessageManagement(Long messageNo, SenderManagementDto messageRequest) {
+	public Object sendMessageManagement(SenderManagementDto messageRequest) {
 
 		log.info("[MessageService] messageRequest : {}", messageRequest);
 		
-		SenderManagement targetMessage = senderManagementRepository.findById(messageNo)
+		SenderManagement targetMessage = senderManagementRepository.findById(messageRequest.getMessage().getMessageNo())
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메시지입니다."));
 
 		targetMessage.setSendMessageDelete(messageRequest.getSendMessageDelete());

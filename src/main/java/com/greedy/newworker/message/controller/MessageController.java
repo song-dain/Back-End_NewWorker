@@ -220,8 +220,7 @@ public class MessageController {
 
 	/* 받은 메시지(빋은 메시지함, 중요 메시지, 휴지통 받은 메시지) 관리 */
 	@PatchMapping("/receive")
-	public ResponseEntity<ResponseDto> receiveMessageManagement(
-			@RequestBody RecipientManagementDto messageRequest) {
+	public ResponseEntity<ResponseDto> receiveMessageManagement(@RequestBody RecipientManagementDto messageRequest) {
 
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "받은 메시지 이동 성공",
 				messageService.receiveMessageManagement(messageRequest)));
@@ -230,11 +229,10 @@ public class MessageController {
 	
 	/* 보낸 메시지(보낸 메시지함, 휴지통 관리) */
 	@PatchMapping("/send/{messageNo}")
-	public ResponseEntity<ResponseDto> sendMessageManagement(@PathVariable Long messageNo, 
-			@RequestBody SenderManagementDto messageRequest) {
+	public ResponseEntity<ResponseDto> sendMessageManagement(@RequestBody SenderManagementDto messageRequest) {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "보낸 메시지 이동 성공",
-				messageService.sendMessageManagement(messageNo, messageRequest)));
+				messageService.sendMessageManagement(messageRequest)));
 		
 	}
 	
