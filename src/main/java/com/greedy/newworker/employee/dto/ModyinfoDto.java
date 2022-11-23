@@ -7,9 +7,9 @@ import lombok.Data;
 @Data
 public class ModyinfoDto {
 
-	private Date ModDate;
-	private EmployeeDto EmployeeNo;
-	private PositionDto DepNo;
-	private Long ModNo;
+	private Date modDate;
+	private EmployeeDto employeeNo;
+	private PositionDto depNo;
+	private Long modNo;
 	
 }

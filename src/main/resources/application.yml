@@ -49,7 +49,7 @@ image:
   add-resource-locations: classpath:/static/employeeimgs, classpath:/static/surveyimgs
   add-resource-handler: /employeeimgs/**, /surveyimgs/**
 
-  image-dir: src/main/resource/static #Service에서 자기 이미지 담을 하위 경로를 가공하세요!
+  image-dir: src/main/resources/static #Service에서 자기 이미지 담을 하위 경로를 가공하세요!
   image-url: http://localhost:8001 #이하 동일입니다!
 
           

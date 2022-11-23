@@ -2,6 +2,7 @@ package com.greedy.newworker.employee.entity;
 
 import java.sql.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -60,11 +61,11 @@ public class Employee {
 	@Column(name = "EMPLOYEE_ROLE")
 	private String employeeRole;
 	
-	@ManyToOne
+	@ManyToOne/*(cascade = CascadeType.PERSIST)*/
 	@JoinColumn(name = "POSITION_NO")
 	private Position position;
 	
-	@ManyToOne
+	@ManyToOne/*(cascade = CascadeType.PERSIST)*/
 	@JoinColumn(name = "DEP_NO")
 	private Department dep;
 	
@@ -79,18 +80,63 @@ public class Employee {
 	
 	@Column(name = "EMPLOYEE_ENT_DATE")
 	private Date employeeEntDate;
+
+	public void update(String employeePwd, String employeeName, String employeeEmail, String employeePhone,
+			String employeeAddress, String employeeStatus, String employeeRole, Position position, Department dep,
+			Long employeeRestDay, String employeeImageUrl, Date employeeHireDate, Date employeeEntDate) {
+					
+			
+			this.employeePwd = employeePwd;
+			this.employeeName = employeeName;
+			this.employeeEmail = employeeEmail;
+			this.employeePhone = employeePhone;
+			this.employeeAddress = employeeAddress;
+			this.employeeStatus = employeeStatus;
+			this.employeeRole = employeeRole;
+			this.position = position;
+			this.dep = dep;
+			this.employeeRestDay = employeeRestDay;
+			this.employeeImageUrl = employeeImageUrl;
+			this.employeeHireDate = employeeHireDate;
+			this.employeeEntDate = employeeEntDate;
+		
+	}
+
+	
+	
 	
 	
 	/* 수정 */	
-//	public void update(String employeeId2, String employeePwd2, String employeeName2, String employeeEmail2,
-//			String employeePhone2, String employeeAddress2, String employeeStatus2, String employeeRole2,
-//			String employeeImageUrl2, PositionDto position2, DepartmentDto dep2, Long employeeRestDay2,
-//			MultipartFile employeeImage, Date employeeHireDate2, Date employeeEntDate2) {
+//	public void update(String employeePwd, String employeeName, String employeeEmail,
+//			String employeePhone, String employeeAddress, String employeeStatus, String employeeRole, Long positionNo,
+//			Long depNo, Long employeeRestDay, String employeeImageUrl, Date employeeHireDate,
+//			Date employeeEntDate) {
+//
 //		
-//		
-//		
-//		
-//	}
+//		this.employeePwd = employeePwd;
+//		this.employeeName = employeeName;
+//		this.employeeEmail = employeeEmail;
+//		this.employeePhone = employeePhone;
+//		this.employeeAddress = employeeAddress;
+//		this.employeeStatus = employeeStatus;
+//		this.employeeRole = employeeRole;		
+//		this.position.setPositionNo(positionNo); 
+//		this.dep.setDepNo(depNo);
+//		this.employeeRestDay = employeeRestDay;
+//		this.employeeImageUrl = employeeImageUrl;
+//		this.employeeHireDate = employeeHireDate;
+//		this.employeeEntDate = employeeEntDate;
+//}
+
+	
+	
+	
+	
+
+
+	
+
+	
 
 
 	

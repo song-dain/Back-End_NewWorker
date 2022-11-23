@@ -35,18 +35,18 @@ public class Modyinfo {
 	@Id
 	@Column(name = "MOD_NO" )
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MODYINFO_SEQ_GENERATOR")
-	private Long ModNo;
+	private Long modNo;
 
 	@ManyToOne
 	@JoinColumn(name = "EMPLOYEE_NO")
-	private Employee EmployeeNo;
+	private Employee employeeNo;
 	
 	@ManyToOne
 	@JoinColumn(name = "DEP_NO")
-	private Position DepNo;
+	private Position depNo;
 	
 	@Column(name = "MOD_DATE")
-	private Date ModDate;
+	private Date modDate;
 
 	
 	
