@@ -279,12 +279,25 @@ public class AttService {
 	}
 	
 	/* 근태번호로 직원 근태 조회 */
-	public AttDto selectAttDay(Long attNo) {
+	public AttDto selectAttDay(Long attNo, Long employeeNo ) {
 		
-		Att att = attRepository.findByAttNoAndEmployeeNo(attNo)
-				.orElseThrow(() -> new IllegalArgumentException("근태번호에 해당하는 자료가 없습니다. attNo=" + attNo));
+		Att att = attRepository.findByAttNoAndEmployeeNo(attNo, employeeNo)
+				.orElseThrow(() -> new IllegalArgumentException("근태 번호 또는 회원 번호가 틀립니다"));
 		AttDto attDto = modelMapper.map(att, AttDto.class);
+		
+		log.info("[AttService] 접속자 번호 : {}", attDto.getEmployee().getEmployeeNo());
 		log.info("[AttService] 근태 번호 : {}", attNo);
+		return attDto;
+	}
+	
+	public AttDto selectAttDayAdmin(Long attNo) {
+		
+		Att att = attRepository.findById(attNo)
+				.orElseThrow(() -> new IllegalArgumentException("근태 번호 또는 회원 번호가 틀립니다"));
+		AttDto attDto = modelMapper.map(att, AttDto.class);
+		
+		log.info("[AttService] 접속자 번호 admin : {}", attDto.getEmployee().getEmployeeNo());
+		log.info("[AttService] 근태 번호 admin : {}", attNo);
 		return attDto;
 	}
 	
@@ -313,5 +326,7 @@ public class AttService {
 		Page<AttDto> attDtoList = attList.map(att -> modelMapper.map(att, AttDto.class));
 		
 		return attDtoList;
+	
 	}
+
 }
