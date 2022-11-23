@@ -79,8 +79,24 @@ public class AuthService {
 
 
 	
+//	/* 아이디 찾기 */
+//	public Object idInquiry(EmployeeDto employeeDto) {
+//		log.info("[AuthService] 아이디 찾기 시작 =======================");
+//		log.info("[AuthService] employeeDto : {}", employeeDto);
+//		
+//		// 1. 이메일 조회
+//		Employee employee = employeeRepository.findByEmployeeNameAndEmployeeEmail(employeeDto.getEmployeeName(), employeeDto.getEmployeeEmail())
+//				.orElseThrow(() -> new LoginFailedException("잘못 된 이름 또는 이메일입니다."));
+//		
+//		if(employee == null) {
+//			return null;
+//		}
+//		
+//		return employee.getEmployeeId();
+//	}
+	
 	/* 아이디 찾기 */
-	public Object idInquiry(EmployeeDto employeeDto) {
+	public EmployeeDto idInquiry(EmployeeDto employeeDto) {
 		log.info("[AuthService] 아이디 찾기 시작 =======================");
 		log.info("[AuthService] employeeDto : {}", employeeDto);
 		
@@ -92,9 +108,8 @@ public class AuthService {
 			return null;
 		}
 		
-		return employee.getEmployeeId();
+		return modelMapper.map(employee, EmployeeDto.class);
 	}
-	
 	
 	/* 비밀번호 찾기/변경 - 이메일 인증 */	
 	public Object findPwd(EmployeeDto employeeDto) throws Exception {
