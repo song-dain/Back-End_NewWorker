@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.greedy.newworker.att.dto.AttDto;
 import com.greedy.newworker.att.dto.AttTypeDto;
@@ -59,26 +60,6 @@ public class AttService {
 	@Transactional
 	public AttDto insertAttStart(AttDto attDto) throws ParseException {
 		
-		/*
-	    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-	    Date empStart = attDto.getAttStart();
-	    Date deadLine = sdf.parse("09:00:00");
-	   
-	    AttTypeDto attCheck = new AttTypeDto();
-	   
-	    if (empStart.compareTo(deadLine) > 0) {
-	        log.info("[ AttService ] 지각, 출근시간 : {}", empStart);
-	        attCheck.setAttTypeNo((long) 1);
-	        attDto.setAttType(attCheck);
-	       
-	    } else if(empStart.compareTo(deadLine) < 0) {
-	    	log.info("[ AttService ] 정상, 출근시간 : {}", empStart);
-	    	attCheck.setAttTypeNo((long) 2);
-	        attDto.setAttType(attCheck);
-	    	
-	    }
-	    */
-		
 		AttTypeDto attCheck = new AttTypeDto();
 		Date date = new Date();
         SimpleDateFormat sim = new SimpleDateFormat("HH시mm분ss초");
@@ -111,26 +92,6 @@ public class AttService {
             
         }
         
-        /*
-        SimpleDateFormat work = new SimpleDateFormat("yyyy/MM/dd");
-        LocalDateTime nowDay = LocalDateTime.now();
-		attDto.setAttStart(nowDay);
-        
-        String str = work.format(attDto.getAttStart());
-        */
-        
-        
-		
-        /*
-        long attNo = attDto.getAttNo();
-		attDto = modelMapper.map(attRepository.findByAttNo(attNo)
-				.orElseThrow(() -> new RuntimeException("attNo is null")), AttDto.class);
-		
-        Long attNo = null;
-        
-        attDto = modelMapper.map(attRepository.findByAttNo(attNo)
-				.orElseThrow(() -> new RuntimeException("attNo is null")), AttDto.class);
-        */
         Att att = attRepository.save(modelMapper.map(attDto, Att.class));
         log.info("[AttService] 출근 등록 시 생성되는 att.getAttNo() : {}", att.getAttNo());
         
@@ -175,53 +136,28 @@ public class AttService {
             log.info("[AttService] 정상출근");
         }
         
-		/* spring : [AttService] 현재 시각 : 15시24분22초 / [AttService] 조퇴
-		 * postman : "attType": {
-            						"attTypeNo": 3,
-            						"attType": null
-        						}
-        다 찍히는데 DB에는 처음 등록된 지각이 변하지 않음
-        
-		AttType attType = new AttType();
-		attRepository.save(modelMapper.map(attDto.setAttType(attCheck), AttType.class));
-		*/
-        
-        
         SimpleDateFormat work = new SimpleDateFormat("HH시mm분ss초");
         String start = work.format(attDto.getAttStart());
         
-        SimpleDateFormat mon = new SimpleDateFormat("yyyy/MM");
+        SimpleDateFormat mon = new SimpleDateFormat("yyyy-MM");
         String attMon = mon.format(attDto.getAttStart());
         attDto.setAttMonth(attMon);
-        
-        /*
-        int workStartHour = Integer.parseInt(start.substring(0, 2));
-        int workStartMinute = Integer.parseInt(start.substring(3, 5));
-        log.info("[AttService] 근무시간 : {}", workStartHour-hour);
-        */
         
         Date startDate = null;
 		try {
 			startDate = new SimpleDateFormat("HH시mm분ss초").parse(start);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         Date endDate = null;
 		try {
 			endDate = new SimpleDateFormat("HH시mm분ss초").parse(str);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         
         Integer diffSec = (int) ((endDate.getTime() - startDate.getTime()) / 1000); //초 차이
         log.info("[AttService] 근무 시간 : {}", diffSec);
-        
-        /* attWorkTime Date타입에서 Long타입으로 전환함
-        Date attWorkTime = new Date(diffSec);
-        attDto.setAttWorkTime(attWorkTime);
-        */
         
 		/* 근무시간 초단위 Integer diffsec -> xx분xx초 로 변환 */
         DecimalFormat df = new DecimalFormat("00");
@@ -278,7 +214,7 @@ public class AttService {
 		return attDto;
 	}
 	
-	/* 근태번호로 직원 근태 조회 */
+	/* 근태번호로 직원 근태 검색 -> 접속한 직원 본인의 근태 외 조회 불가능 */
 	public AttDto selectAttDay(Long attNo, Long employeeNo ) {
 		
 		Att att = attRepository.findByAttNoAndEmployeeNo(attNo, employeeNo)
@@ -290,6 +226,7 @@ public class AttService {
 		return attDto;
 	}
 	
+	/* 근태번호로 직원 검색 -> 관리자용이며 모든 직원 근태 조회 가능 */
 	public AttDto selectAttDayAdmin(Long attNo) {
 		
 		Att att = attRepository.findById(attNo)
@@ -301,28 +238,14 @@ public class AttService {
 		return attDto;
 	}
 	
-	/* 날짜(월)로 직원 근태 조회 
-	public List<AttDto> selectMonthList(String month) {
-		
-		log.info("[AttService] month : {}", month);
-		
-		Att att = attRepository.findByMonth(month)
-				.orElseThrow(() -> new RuntimeException("존재하지 않는 날짜입니다."));
-		
-		List<AttDto> attList = attRepository
-				
-		return attList;
-	}
-	*/
-	
 	/* 날짜(월), page처리 */
-	public Page<AttDto> selectAttListByMonthAndEmployee(int page, String attMonth, EmployeeDto employee) {
+	public Page<AttDto> selectAttListByMonthAndEmployeeNo(int page, String attMonth, Long employeeNo) {
 		
 		log.info("[AttService] month : {}", attMonth);
-		log.info("[AttService] employee : {}", employee);
+		log.info("[AttService] employeeNo : {}", employeeNo);
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("attNo").descending());
-		Page<Att> attList = attRepository.findByAttMonthContainsAndEmployee(pageable, attMonth, employee);
+		Page<Att> attList = attRepository.findByAttMonthAndEmployeeNo(pageable, attMonth, employeeNo);
 		Page<AttDto> attDtoList = attList.map(att -> modelMapper.map(att, AttDto.class));
 		
 		return attDtoList;

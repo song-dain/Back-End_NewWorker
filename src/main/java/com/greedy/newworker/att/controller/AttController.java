@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greedy.newworker.att.dto.AttDto;
@@ -57,7 +58,6 @@ public class AttController {
 	
 	/* 퇴근 등록 */
 	@PutMapping("/end")
-	//@RequestMapping(value="/end", method={RequestMethod.PUT, RequestMethod.POST})
 	public ResponseEntity<ResponseDto> insertEnd(@RequestBody AttDto attDto, @AuthenticationPrincipal EmployeeDto employee) {
 		
 		LocalDateTime now = LocalDateTime.now();
@@ -71,22 +71,11 @@ public class AttController {
 				.body(new ResponseDto(HttpStatus.OK, "퇴근 등록 성공", attService.insertAttEnd(attDto)));
 	}
 	
-	/* 날짜(하루)로 직원 개인 근태 검색 
-	   22/11/21 09:36:28 의 yyyy/MM/dd 를 처리할 방법을 모르겠음
-	@GetMapping("/days")
-	public ResponseEntity<ResponseDto> selectTodayEmployee(java.util.Date attStart, @AuthenticationPrincipal EmployeeDto employee) {
-		
-		return ResponseEntity
-				.ok()
-				.body(new ResponseDto(HttpStatus.OK, "일일 근태 조회", attService.selectAttDay(attStart)));
-	}
-	*/
-	
 	/* -> 날짜로 찾는거 못하겠어서 근태번호로 검색 */
 	@GetMapping("/days")
 	public ResponseEntity<ResponseDto> selectTodayAttEmployee(Long attNo, @AuthenticationPrincipal EmployeeDto employee) {
 		
-		log.info("[ AttController ] 근태 번호 : {}", attNo);
+		log.info("[ AttController ] 직원용 - 근태 번호 : {}", attNo);
 		
 		return ResponseEntity
 				.ok()
@@ -97,17 +86,47 @@ public class AttController {
 	@GetMapping("/admin/days")
 	public ResponseEntity<ResponseDto> selectTodayAttAdmin(Long attNo) {
 		
-		log.info("[ AttController ] 근태 번호 : {}", attNo);
+		log.info("[ AttController ] 관리자용 - 근태 번호 : {}", attNo);
 		return ResponseEntity
 				.ok()
 				.body(new ResponseDto(HttpStatus.OK, "일일 근태 조회", attService.selectAttDayAdmin(attNo)));
 	}
 	
-	/* 한달 조회 */
+	/* 날짜(월)로 검색 - 직원용 */
 	@GetMapping("/months")
-	public ResponseEntity<ResponseDto> selectMonthAttListEmployee(int page, String attMonth, @AuthenticationPrincipal EmployeeDto employee) {
+	public ResponseEntity<ResponseDto> selectMonthAttListEmployee(
+			@RequestParam(name="page", defaultValue="1") int page, 
+			String attMonth, @AuthenticationPrincipal EmployeeDto employee) {
 		
-		Page<AttDto> attDtoList = attService.selectAttListByMonthAndEmployee(page, attMonth, employee);
+		log.info("[ AttController ] 직원용 - 입력받은 attMonth : {}", attMonth);
+		
+		Long employeeNo = employee.getEmployeeNo();
+		log.info("[ AttController ] 직원용 - 입력받은 employeeNo : {}", employeeNo);
+		
+		Page<AttDto> attDtoList = attService.selectAttListByMonthAndEmployeeNo(page, attMonth, employeeNo);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(attDtoList);
+		log.info("[ AttController ] pageInfo : {}", pageInfo);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(attDtoList.getContent());
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDto(HttpStatus.OK, "리스트 조회 완료", responseDtoWithPaging));
+	}
+	
+	/* 날짜(월)로 검색 - 관리자용 */
+	@GetMapping("/months/admin")
+	public ResponseEntity<ResponseDto> selectMonthAttListAdmin(
+			@RequestParam(name="page", defaultValue="1") int page, 
+			String attMonth, Long employeeNo) {
+		
+		log.info("[ AttController ] 관리자용 - 입력받은 attMonth : {}", attMonth);
+		log.info("[ AttController ] 관리자용 - 입력받은 employeeNo : {}", employeeNo);
+		
+		Page<AttDto> attDtoList = attService.selectAttListByMonthAndEmployeeNo(page, attMonth, employeeNo);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(attDtoList);
 		log.info("[ AttController ] pageInfo : {}", pageInfo);
