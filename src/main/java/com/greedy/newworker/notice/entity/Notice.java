@@ -60,4 +60,20 @@ public class Notice {
 	@JoinColumn(name = "EMPLOYEE_NO")
 	private Employee employee;
 	
+	@Column(name = "NOT_IMAGE_URL")
+	private String noticeImageUrl;
+	
+	/* Product 수정 용도의 메소드 정의 */
+
+	public void update(String notTitle2, String notContent2, Date notDate2, Date notUpdate2, String notStatus2,
+			Long notNo2, String noticeImageUrl2) {
+		
+		this.notTitle = notTitle2;
+		this.notContent = notContent2;
+		this.notDate = notDate2;
+		this.notNo = notNo2;
+		this.notUpdate = notUpdate2;
+		this.noticeImageUrl = noticeImageUrl2;
+		this.notStatus = notStatus2;
+	}
 }

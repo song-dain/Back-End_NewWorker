@@ -7,6 +7,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -27,6 +29,7 @@ public class EmployeeDto implements UserDetails {
 	
 	private String code;
 	
+	@JsonIgnore
 	private MultipartFile employeeImage;
 	
 	private String employeeImageUrl;
