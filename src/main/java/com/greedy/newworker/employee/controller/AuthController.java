@@ -53,7 +53,7 @@ public class AuthController {
 	}
 	
 	
-	/* 비밀번호 찾기(1) - 이메일 인증 */
+	/* 비밀번호 찾기/변경 - 이메일 인증 */
 	@PostMapping("/mailConfirm")
 	public ResponseEntity<ResponseDto> mailConfirm(@RequestBody EmployeeDto employeeDto) throws Exception{
 		
@@ -64,13 +64,20 @@ public class AuthController {
 	}
 	
 	
-	/* 비밀번호 찾기(2) - 임시 비밀번호 발송 */
+	/* 비밀번호 찾기 - 임시 비밀번호 발송 */
 	@PostMapping("/pwdInquiry")
 	public ResponseEntity<ResponseDto> pwdInquiry(@RequestBody EmployeeDto employeeDto) throws Exception {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "임시 비밀번호 발송 성공", authService.pwdInquiry(employeeDto)));
 	}
-
+	
+	
+	/* 비밀번호 변경 */
+	@PostMapping("/pwdUpdate")
+	public ResponseEntity<ResponseDto> pwdUpdate(@RequestBody EmployeeDto employeeDto) throws Exception {
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "비밀번호 변경 성공", authService.pwdUpdate(employeeDto)));
+	}
 
 	
 	

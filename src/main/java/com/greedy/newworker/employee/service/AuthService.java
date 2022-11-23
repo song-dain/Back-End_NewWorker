@@ -59,9 +59,12 @@ public class AuthService {
 		// matches 메소드로 매칭을 검증한다.
 		if(!passwordEncoder.matches(employeeDto.getEmployeePwd(), employee.getEmployeePwd())) {
 			log.info("[AuthService] 비밀번호 예외처리 확인 ==================");
+			log.info("예외 employeeDto.getEmployeePwd() : {}", employeeDto.getEmployeePwd());
+			log.info("예외 employee.getEmployeePwd() : {}", employee.getEmployeePwd());
 			throw new LoginFailedException("잘못 된 아이디 또는 비밀번호입니다.");
 		}
-		
+		log.info("통과 employeeDto.getEmployeePwd() : {}", employeeDto.getEmployeePwd());
+		log.info("통과 employee.getEmployeePwd() : {}", employee.getEmployeePwd());
 		
 		// 3. 토큰 발급
 		TokenDto tokenDto = tokenProvider.generateTokenDto(modelMapper.map(employee, EmployeeDto.class));
@@ -93,7 +96,7 @@ public class AuthService {
 	}
 	
 	
-	/* 비밀번호 찾기(1) - 이메일 인증 */	
+	/* 비밀번호 찾기/변경 - 이메일 인증 */	
 	public Object findPwd(EmployeeDto employeeDto) throws Exception {
 		
 		Employee employee = employeeRepository.findByEmployeeIdAndEmployeeNameAndEmployeeEmail(employeeDto.getEmployeeId(), employeeDto.getEmployeeName(), employeeDto.getEmployeeEmail());
@@ -108,7 +111,7 @@ public class AuthService {
 
 
 
-	/* 비밀번호 찾기(2) - 임시 비밀번호 */	
+	/* 비밀번호 찾기 - 임시 비밀번호 */	
 	@Transactional
 	public Object pwdInquiry(EmployeeDto employeeDto) throws Exception {
 		
@@ -135,10 +138,34 @@ public class AuthService {
 			return tempPwd;
 			
 		}
-
-		
+	
 		return null;
 	}
+
+
+	
+	/* 비밀번호 변경 */
+	@Transactional
+	public Object pwdUpdate(EmployeeDto employeeDto) throws Exception {
+		
+		Employee employee = employeeRepository.findByEmployeeIdAndEmployeeNameAndEmployeeEmail(employeeDto.getEmployeeId(), employeeDto.getEmployeeName(), employeeDto.getEmployeeEmail());
+		
+		String email = redisUtil.getData(employeeDto.getCode());
+
+		log.info("Redis 이메일 확인 : {}", email);
+		log.info("rawPassword : {}", employeeDto.getEmployeePwd());
+		if(employeeDto.getEmployeeEmail().equals(email)) {
+			
+			employee.setEmployeePwd(passwordEncoder.encode(employeeDto.getEmployeePwd()));
+			
+			log.info("변경 비밀번호 확인 : {}", employee.getEmployeePwd());
+			employeeRepository.save(employee);
+		}
+		
+		return employee.getEmployeePwd();
+	}
+	
+	
 	
 
 	
