@@ -47,17 +47,20 @@ public class EmployeeController {
 	}
 	
 	/* 직원수정 */
-//	@PutMapping("/employee/register")
-//	public ResponseEntity<ResponseDto> updateProduct(@ModelAttribute EmployeeDto employeeDto) {
-//		
-//		employeeDto.setEmployeePwd(passwordEncoder.encode(employeeDto.getEmployeePwd()));
-//		
-//		employeeService.updateEmployee(employeeDto);
-//		
-//		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 수정 성공", null));
-//	
-//	
-//}
+	@PutMapping("/employee/{employeeNo}")
+	public ResponseEntity<ResponseDto> updateEmployee(@ModelAttribute EmployeeDto employeeDto, @PathVariable Long employeeNo) {
+		employeeDto.setEmployeeNo(employeeNo);
+		
+		employeeDto.setEmployeePwd(passwordEncoder.encode(employeeDto.getEmployeePwd()));
+		
+		employeeService.updateEmployee(employeeDto);
+		
+		
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 수정 성공", null));
+	
+	
+}
 	
 	
 	
