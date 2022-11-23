@@ -22,7 +22,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
 	/* 받은 메시지 조회 완!!!!!! */
 	@EntityGraph(attributePaths= {"recipient", "sender"})
-	@Query("select m from Message m where m.recipient =:recipient and m.messageNo = :messageNo and m.recipientManagement.receiveMessageCategory = 'receiveMessageBox' and m.recipientManagement.receiveMessageDelete = 'N'")
+	@Query("select m from Message m where m.recipient =:recipient and m.messageNo = :messageNo and m.recipientManagement.receiveMessageDelete = 'N'")
 	Optional<Message> findReceiveMessageById(@Param("messageNo")Long messageNo, @Param("recipient")Employee recipient);
 	
 	/* 보낸 메시지함 조회 완!!!!!!!! */
