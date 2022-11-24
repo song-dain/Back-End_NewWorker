@@ -75,7 +75,10 @@ public class NoticeController {
 	
 	/* 3. 공지 등록 */
     @PostMapping("/notices/register")
-    public ResponseEntity<ResponseDto> insertNotice(@ModelAttribute NoticeDto noticeDto) {
+    public ResponseEntity<ResponseDto> insertNotice(@ModelAttribute NoticeDto noticeDto,
+    		@AuthenticationPrincipal EmployeeDto employee) {
+    	
+    	noticeDto.setEmployee(employee);
     	
     	return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "공지 등록 성공", noticeService.insertNotice(noticeDto)));
     	
