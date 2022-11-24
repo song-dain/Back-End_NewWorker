@@ -13,7 +13,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.greedy.newworker.calendar.dto.CalendarCategoryDto;
 import com.greedy.newworker.employee.entity.Department;
 import com.greedy.newworker.employee.entity.Employee;
 
