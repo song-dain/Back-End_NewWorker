@@ -29,9 +29,9 @@ public class CalendarController {
 	
 	/* 일정 조회 */
 	@GetMapping("/schedule")
-	public ResponseEntity<ResponseDto> officeCalendar(@AuthenticationPrincipal EmployeeDto employee, @RequestBody Criteria checkCategory){
+	public ResponseEntity<ResponseDto> officeCalendar(@AuthenticationPrincipal EmployeeDto employee, @RequestBody Criteria criteria){
 		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "일정 조회 완료", calendarService.officeCalendar(employee, checkCategory)));
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "일정 조회 완료", calendarService.officeCalendar(employee, criteria)));
 	}
 	
 	/* 일정 추가 */
@@ -55,7 +55,6 @@ public class CalendarController {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"일정 삭제 완료", calendarService.deleteSchedule(employee, calendarNo)));
 	}
-	
 	
 
 }
