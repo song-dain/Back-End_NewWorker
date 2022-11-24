@@ -17,4 +17,6 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long>, JpaSp
 	@Query("select c from Calendar c where c.calendarNo =:calendarNo and c.employee.employeeNo =:employeeNo ")
 	Optional<Calendar> findByCalendarNoAndEmployee(@Param("calendarNo")Long calendarNo, @Param("employeeNo")Long employeeNo);
 
+	Optional<Calendar> findByScheduleTitle(String string);
+
 }
