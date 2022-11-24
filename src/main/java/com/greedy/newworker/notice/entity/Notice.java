@@ -57,7 +57,7 @@ public class Notice {
 	private Date notUpdate;
 	
 	@ManyToOne
-	@JoinColumn(name = "EMPLOYEE_NO")
+	@JoinColumn(name = "EMPLOYEE_No")
 	private Employee employee;
 	
 	@Column(name = "NOT_IMAGE_URL")
