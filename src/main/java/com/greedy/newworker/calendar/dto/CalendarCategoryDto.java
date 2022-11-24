@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CalendarCategoryDto {
 	
-	private String calendarCategoryNo;
-	private String categoryNo;
+	private Long calendarCategoryNo;
+	private String calendarCategoryName;
 
 }

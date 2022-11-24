@@ -21,7 +21,7 @@ public class CalendarCategory {
 	private Long calendarCategoryNo;
 	
 	@Column(name = "CATEGORY_NAME")
-	private String categoryName;
+	private String calendarCategoryName;
 	
 
 }
