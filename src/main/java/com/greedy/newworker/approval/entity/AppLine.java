@@ -1,5 +1,6 @@
 package com.greedy.newworker.approval.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -32,7 +33,7 @@ public class AppLine {
 	@Column(name = "APP_LINE_TURN")
 	private Long appLineTurn;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "APP_NO")
 	private Approval app;
 	

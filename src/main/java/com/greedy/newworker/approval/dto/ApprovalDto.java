@@ -30,7 +30,11 @@ public class ApprovalDto {
 	private Date appEndDate;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date appUpdateDate;
-	
-
+//	
+//	List<결제선>
+//	
+//	List<첨부파일>
+//	
+//	List<MultipartFile>
 	
 }

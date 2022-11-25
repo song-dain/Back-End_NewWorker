@@ -27,10 +27,10 @@ public class EmployeeService {
 	private final ModelMapper modelMapper;
 	private final RegistCodeMailService registCodeMailService;
 
-	@Value("${image.image-dir}" + "/employeeimgs")
-	private String IMAGE_DIR;
-	@Value("${image.image-url}" + "/employeeimgs/")
-	private String IMAGE_URL;
+	@Value("${file.file-dir}" + "/employeeimgs")
+	private String FILE_DIR;
+	@Value("${file.file-url}" + "/employeeimgs/")
+	private String FILE_URL;
 	
 	public EmployeeService(EmployeeRepository employeeRepository, ModelMapper modelMapper, RegistCodeMailService registCodeMailService) {
 		this.employeeRepository = employeeRepository;
@@ -63,7 +63,7 @@ public class EmployeeService {
 		String replaceFileName = null;
 		
 		try {
-			replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, employeeDto.getEmployeeImage());
+			replaceFileName = FileUploadUtils.saveFile(FILE_DIR, imageName, employeeDto.getEmployeeImage());
 			employeeDto.setEmployeeImageUrl(replaceFileName);
 			
 			log.info("[EmployeeService] replaceFileName : {}", replaceFileName);
@@ -74,7 +74,7 @@ public class EmployeeService {
 			e.printStackTrace();
 			
 			try {
-				FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
+				FileUploadUtils.deleteFile(FILE_DIR, replaceFileName);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -109,13 +109,13 @@ public class EmployeeService {
 					
 				/* 새로 입력 된 이미지 저장 */
 				String imageName = UUID.randomUUID().toString().replace("-", "");
-				replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, employeeDto.getEmployeeImage());
+				replaceFileName = FileUploadUtils.saveFile(FILE_DIR, imageName, employeeDto.getEmployeeImage());
 				employeeDto.setEmployeeImageUrl(replaceFileName);
 				
-				log.info("{} {}",IMAGE_DIR, oriImage);
+				log.info("{} {}",FILE_DIR, oriImage);
 				
 				/* 기존에 저장 된 이미지 삭제*/
-				FileUploadUtils.deleteFile(IMAGE_DIR, oriImage);
+				FileUploadUtils.deleteFile(FILE_DIR, oriImage);
 
 			} else { 
 				/* 이미지를 변경하지 않는 경우 */
@@ -145,7 +145,7 @@ public class EmployeeService {
 		} catch (IOException e) {
 			e.printStackTrace();
 			try {
-				FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
+				FileUploadUtils.deleteFile(FILE_DIR, replaceFileName);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
