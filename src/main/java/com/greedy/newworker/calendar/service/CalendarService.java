@@ -45,17 +45,17 @@ public class CalendarService {
 	/* 일정 조회 */
 	public Map<String, List<Object>> officeCalendar(EmployeeDto employee, Criteria criteria) {
 		
+		log.info("[cs]criteria : {}", criteria);
+		
 		Map calendarMap = new HashMap();
 		
 //		List<Calendar> scheduleList = calendarRepositoryCustom.scheduleFilter(criteria, modelMapper.map(employee, Employee.class));
-//		log.info("[cs] scheduleList : {}", scheduleList);
 //		calendarMap.put("scheduleList", scheduleList.stream().map(schedule -> modelMapper.map(schedule, CalendarDto.class)).toList());
 		
-		if(criteria.getDayOff() != null) {
+		if(criteria.getDayOff().equals("dayOff")) {
 			List<Rest> dayOffList = restRepository.findByEmployeeNoAndRestOk(modelMapper.map(employee, Employee.class), "Y");
-			log.info("[cs] dayoffList : {}", dayOffList);
 			
-			if(dayOffList != null) {
+			if(dayOffList.size() != 0) {
 				calendarMap.put("dayOffList", dayOffList.stream().map(dayOff -> modelMapper.map(dayOff, Rest.class)).toList());
 			}
 		}
@@ -65,6 +65,14 @@ public class CalendarService {
 		return calendarMap;
 //		return null;
 
+	}
+	
+	public CalendarDto scheduleDetail(Long scheduleNo, EmployeeDto employee) {
+		
+		Calendar findSchedule = calendarRepository.findByCalendarNoAndEmployee(scheduleNo, employee.getEmployeeNo())
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 일정입니다."));
+		
+		return modelMapper.map(findSchedule, CalendarDto.class);
 	}
 
 	/* 일정 추가 */
