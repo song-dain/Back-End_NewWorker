@@ -9,8 +9,6 @@ import com.greedy.newworker.employee.entity.Employee;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Repository
 public class CalendarRepositorySupport implements CalendarRepositoryCustom {
 
