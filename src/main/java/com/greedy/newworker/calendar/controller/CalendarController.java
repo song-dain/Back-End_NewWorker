@@ -28,10 +28,17 @@ public class CalendarController {
 	}
 	
 	/* 일정 조회 */
-	@GetMapping("/schedule")
+	@PostMapping("/schedule")
 	public ResponseEntity<ResponseDto> selectOfficeCalendar(@AuthenticationPrincipal EmployeeDto employee, @RequestBody Criteria criteria){
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "일정 조회 완료", calendarService.officeCalendar(employee, criteria)));
+	}
+	
+	/* 일정 상세 조회 */
+	@GetMapping("/schedule/{scheduleNo}")
+	public ResponseEntity<ResponseDto> scheduleDetail(@PathVariable Long scheduleNo, @AuthenticationPrincipal EmployeeDto employee){
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "일정 상세 조회 완료", calendarService.scheduleDetail(scheduleNo, employee)));
 	}
 	
 	/* 일정 추가 */

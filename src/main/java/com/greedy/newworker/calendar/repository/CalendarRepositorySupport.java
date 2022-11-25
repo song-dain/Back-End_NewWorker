@@ -45,7 +45,6 @@ public class CalendarRepositorySupport implements CalendarRepositoryCustom {
 //		 List<Calendar> fetch = queryFactory
 //				 .selectFrom(calendar)
 //				 .where(builder)
-//				 
 //				 .fetch();
 //		return fetch;
 		
