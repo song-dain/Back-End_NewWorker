@@ -1,8 +1,8 @@
 package com.greedy.newworker.calendar.repository;
 
 import java.util.List;
-import org.springframework.stereotype.Repository;
 import static com.greedy.newworker.calendar.entity.QCalendar.calendar;
+import org.springframework.stereotype.Repository;
 import com.greedy.newworker.calendar.dto.Criteria;
 import com.greedy.newworker.calendar.entity.Calendar;
 import com.greedy.newworker.employee.entity.Employee;
@@ -11,7 +11,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Repository
 public class CalendarRepositorySupport implements CalendarRepositoryCustom {
 
@@ -26,35 +25,33 @@ public class CalendarRepositorySupport implements CalendarRepositoryCustom {
 
 		BooleanBuilder builder = new BooleanBuilder();
 
-		 /* 내 일정 */ 
-		if(criteria.getMySchedule() != null && criteria.getMySchedule().equals("mySchedule")) {
-			builder.and(calendar.calendarCategory.calendarCategoryName.eq(criteria.getMySchedule()));
+//		 연차 체크, 연차나 내 일정이 체크되어 있으면 본인 확인 (안 씀)
+//		 if(criteria.getDayOff() != null) {
+//			 builder.and(calendar.calendarCategory.calendarCategoryName.eq(criteria.getDayOff()));
+//		 } 
+//		 if(criteria.getMySchedule() != null || criteria.getDayOff() != null ) {
+//			builder.and(calendar.employee.eq(employee));
+//		 }
+
+		if(criteria.getMySchedule() != null) {
+			builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getMySchedule()));
 			builder.and(calendar.employee.eq(employee));
 		}
-		
-		 /*연차*/ 
-		 if(criteria.getDayOff() != null && criteria.getDayOff().equals("dayOff")) {
-			 builder.and(calendar.calendarCategory.calendarCategoryName.eq(criteria.getDayOff()));
-			 builder.and(calendar.employee.eq(employee));
-		 }
-		 
-		 /* 부서 일정 */
-		 if(criteria.getDeptSchedule() != null && criteria.getDeptSchedule().equals("deptSchedule")) {
-			 builder.and(calendar.calendarCategory.calendarCategoryName.eq(criteria.getDeptSchedule()));
+		 if(criteria.getDeptSchedule() != null) {
+			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getDeptSchedule()));
 			 builder.and(calendar.dep.eq(employee.getDep()));
 		 }
-		 
-		 /* 전사 일정 */
-		 if(criteria.getComSchedule() != null && criteria.getComSchedule().equals("comSchedule")) {
-			 builder.and(calendar.calendarCategory.calendarCategoryName.eq(criteria.getDeptSchedule()));
+		 if(criteria.getComSchedule() != null) {
+			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getComSchedule()));
 		 }
-		 
 		 List<Calendar> fetch = queryFactory
 				 .selectFrom(calendar)
 				 .where(builder)
+				 
 				 .fetch();
-
 		return fetch;
+		
+//		return null;
 	}
 
 }
