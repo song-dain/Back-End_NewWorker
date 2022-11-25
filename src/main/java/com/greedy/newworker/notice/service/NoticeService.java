@@ -29,10 +29,10 @@ public class NoticeService {
 //	public static final String SORT_BY = "notNo";
 //	public static final String ACTIVE_STATUS = "Y";
 	
-	@Value("${image.image-dir}" + "/noticeimgs")
-	private String IMAGE_DIR;
-	@Value("${image.image-url}" + "/noticeimgs/")
-	private String IMAGE_URL;
+	@Value("${file.file-dir}" + "/noticeimgs")
+	private String FILE_DIR;
+	@Value("${file.file-url}" + "/noticeimgs/")
+	private String FILE_URL;
 	
 	private final NoticeRepository noticeRepository;
 	public final ModelMapper modelMapper;
@@ -86,7 +86,7 @@ public class NoticeService {
 		String replaceFileName = null;
 		
 		try {
-			replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, noticeDto.getNoticeImage());
+			replaceFileName = FileUploadUtils.saveFile(FILE_DIR, imageName, noticeDto.getNoticeImage());
 			noticeDto.setNoticeImageUrl(replaceFileName);
 			
 			log.info("[NoticeService] replaceFileName : {}", replaceFileName);
@@ -96,7 +96,7 @@ public class NoticeService {
 		} catch (IOException e) {
 			e.printStackTrace();
 			try {
-				FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
+				FileUploadUtils.deleteFile(FILE_DIR, replaceFileName);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
