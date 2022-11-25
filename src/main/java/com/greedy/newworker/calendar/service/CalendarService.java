@@ -1,6 +1,8 @@
 package com.greedy.newworker.calendar.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -15,6 +17,8 @@ import com.greedy.newworker.calendar.repository.CalendarRepositoryCustom;
 import com.greedy.newworker.employee.dto.EmployeeDto;
 import com.greedy.newworker.employee.entity.Employee;
 import com.greedy.newworker.employee.repository.EmployeeRepository;
+import com.greedy.newworker.rest.entity.Rest;
+import com.greedy.newworker.rest.repository.RestRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,24 +30,37 @@ public class CalendarService {
 	private final CalendarRepository calendarRepository;
 	private final CalendarRepositoryCustom calendarRepositoryCustom;
 	private final EmployeeRepository employeeRepository;
+	private final RestRepository restRepository;
 	private final ModelMapper modelMapper;
 
 	public CalendarService(CalendarRepository calendarRepository, CalendarRepositoryCustom calendarRepositoryCustom,
-			EmployeeRepository employeeRepository, ModelMapper modelMapper) {
+			EmployeeRepository employeeRepository, RestRepository restRepository, ModelMapper modelMapper) {
 		this.calendarRepository = calendarRepository;
 		this.calendarRepositoryCustom = calendarRepositoryCustom;
 		this.employeeRepository = employeeRepository;
+		this.restRepository = restRepository;
 		this.modelMapper = modelMapper;
 	}
 
 	/* 일정 조회 */
-	public List<CalendarDto> officeCalendar(EmployeeDto employee, Criteria criteria) {
+	public Map<String, List<Object>> officeCalendar(EmployeeDto employee, Criteria criteria) {
+		
 		
 		List<Calendar> scheduleList = calendarRepositoryCustom.scheduleFilter(criteria, modelMapper.map(employee, Employee.class));
-		
 		log.info("[cs] scheduleList : {}", scheduleList);
 		
-		return scheduleList.stream().map(schedule -> modelMapper.map(schedule, CalendarDto.class)).toList();
+		List<Rest> dayoffList = restRepository.findByEmployeeNo(modelMapper.map(employee, Employee.class));
+		log.info("[cs] dayoffList : {}", dayoffList);
+		
+		Map calendarMap = new HashMap();
+		
+		calendarMap.put("scheduleList", scheduleList.stream().map(schedule -> modelMapper.map(schedule, CalendarDto.class)).toList());
+		calendarMap.put("dayOffList", dayoffList.stream().map(dayOff -> modelMapper.map(dayOff, Rest.class)).toList());
+
+		log.info("[cs] calendarMap : {}", calendarMap);
+		
+		return calendarMap;
+//		return null;
 
 	}
 
