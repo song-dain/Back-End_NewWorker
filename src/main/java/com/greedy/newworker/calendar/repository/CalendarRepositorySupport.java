@@ -31,25 +31,26 @@ public class CalendarRepositorySupport implements CalendarRepositoryCustom {
 //			builder.and(calendar.employee.eq(employee));
 //		 }
 
-		if(criteria.getMySchedule() != null) {
-			builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getMySchedule()));
-			builder.and(calendar.employee.eq(employee));
-		}
-		 if(criteria.getDeptSchedule() != null) {
-			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getDeptSchedule()));
-			 builder.and(calendar.dep.eq(employee.getDep()));
-		 }
-		 if(criteria.getComSchedule() != null) {
-			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getComSchedule()));
-		 }
-		 List<Calendar> fetch = queryFactory
-				 .selectFrom(calendar)
-				 .where(builder)
-				 
-				 .fetch();
-		return fetch;
+//		if(criteria.getMySchedule() != null) {
+//			builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getMySchedule()));
+//			builder.and(calendar.employee.eq(employee));
+//		}
+//		 if(criteria.getDeptSchedule() != null) {
+//			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getDeptSchedule()));
+//			 builder.and(calendar.dep.eq(employee.getDep()));
+//		 }
+//		 if(criteria.getComSchedule() != null) {
+//			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getComSchedule()));
+//		 }
+//		 List<Calendar> fetch = queryFactory
+//				 .selectFrom(calendar)
+//				 .where(builder)
+//				 
+//				 .fetch();
+//		return fetch;
 		
-//		return null;
+		return null;
+		
 	}
 
 }
