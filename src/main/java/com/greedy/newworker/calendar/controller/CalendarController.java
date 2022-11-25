@@ -29,7 +29,7 @@ public class CalendarController {
 	
 	/* 일정 조회 */
 	@GetMapping("/schedule")
-	public ResponseEntity<ResponseDto> officeCalendar(@AuthenticationPrincipal EmployeeDto employee, @RequestBody Criteria criteria){
+	public ResponseEntity<ResponseDto> selectOfficeCalendar(@AuthenticationPrincipal EmployeeDto employee, @RequestBody Criteria criteria){
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "일정 조회 완료", calendarService.officeCalendar(employee, criteria)));
 	}

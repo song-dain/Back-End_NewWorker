@@ -23,7 +23,7 @@ public interface RestRepository extends JpaRepository<Rest, Long>{
 	@EntityGraph(attributePaths= {"restNo"})
 	Page<Rest> findByRestOk(Pageable pageable, String restOk);
 	
-	/* [calendar] 사원별 연차 정보 */
-	List<Rest> findByEmployeeNo(Employee employeeNo);
+	/* [calendar] 사원별 승인 연차 정보 */
+	List<Rest> findByEmployeeNoAndRestOk(Employee employeeNo, String restOk);
 	
 }

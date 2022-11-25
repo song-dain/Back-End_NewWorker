@@ -45,18 +45,21 @@ public class CalendarService {
 	/* 일정 조회 */
 	public Map<String, List<Object>> officeCalendar(EmployeeDto employee, Criteria criteria) {
 		
-		
-		List<Calendar> scheduleList = calendarRepositoryCustom.scheduleFilter(criteria, modelMapper.map(employee, Employee.class));
-		log.info("[cs] scheduleList : {}", scheduleList);
-		
-		List<Rest> dayoffList = restRepository.findByEmployeeNo(modelMapper.map(employee, Employee.class));
-		log.info("[cs] dayoffList : {}", dayoffList);
-		
 		Map calendarMap = new HashMap();
 		
-		calendarMap.put("scheduleList", scheduleList.stream().map(schedule -> modelMapper.map(schedule, CalendarDto.class)).toList());
-		calendarMap.put("dayOffList", dayoffList.stream().map(dayOff -> modelMapper.map(dayOff, Rest.class)).toList());
-
+//		List<Calendar> scheduleList = calendarRepositoryCustom.scheduleFilter(criteria, modelMapper.map(employee, Employee.class));
+//		log.info("[cs] scheduleList : {}", scheduleList);
+//		calendarMap.put("scheduleList", scheduleList.stream().map(schedule -> modelMapper.map(schedule, CalendarDto.class)).toList());
+		
+		if(criteria.getDayOff() != null) {
+			List<Rest> dayOffList = restRepository.findByEmployeeNoAndRestOk(modelMapper.map(employee, Employee.class), "Y");
+			log.info("[cs] dayoffList : {}", dayOffList);
+			
+			if(dayOffList != null) {
+				calendarMap.put("dayOffList", dayOffList.stream().map(dayOff -> modelMapper.map(dayOff, Rest.class)).toList());
+			}
+		}
+		
 		log.info("[cs] calendarMap : {}", calendarMap);
 		
 		return calendarMap;
