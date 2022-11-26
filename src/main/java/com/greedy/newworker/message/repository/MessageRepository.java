@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.greedy.newworker.employee.dto.EmployeeDto;
 import com.greedy.newworker.employee.entity.Employee;
 import com.greedy.newworker.message.entity.Message;
 
@@ -76,4 +77,9 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 	@EntityGraph(attributePaths= {"recipient", "sender"})
 	@Query("select m from Message m where m.recipient =:recipient and m.recipientManagement.receiveMessageCategory = 'impoMessageBox' and m.recipientManagement.receiveMessageDelete = 'N' and m.messageContent like %:keyword%")
 	Page<Message> findByImpoMessageContentContains(Pageable page, @Param("keyword")String keyword, @Param("recipient")Employee recipient);
+
+
+	@Query("select count(messageStatus) from Message m where messageStatus = 'send' and recipient =:employee")
+	Long countUnreadMessage(@Param("employee")Employee emp);
+	
 }
