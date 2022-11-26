@@ -91,7 +91,7 @@ public class MessageService {
 	}
 
 	
-	/* 받은 메시지함 완!!!!!! */
+	/* 받은 메시지함 */
 	public Page<MessageDto> receiveMessages(int page, EmployeeDto recipientDto) {
 
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("messageNo").descending());
@@ -103,7 +103,7 @@ public class MessageService {
 		return receiveMessageBox;
 	}
 
-	/* 받은 메시지 조회 완!!!!!! */
+	/* 받은 메시지 조회 완 */
 	public MessageDto selectReceiveMessage(Long messageNo, EmployeeDto recipientDto) {
 
 		Message message = messageRepository.findReceiveMessageById(messageNo, modelMappler.map(recipientDto, Employee.class))
@@ -128,7 +128,7 @@ public class MessageService {
 	}
 
 
-	/* 보낸 메시지함 완!!!!!!! */
+	/* 보낸 메시지함 완 */
 	public Page<MessageDto> sendMessages(int page, EmployeeDto senderDto) {
 
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("messageNo").descending());
@@ -140,7 +140,7 @@ public class MessageService {
 	}
 
 	
-	/* 보낸 메시지 조회 완!!!!!!!!!!!! */
+	/* 보낸 메시지 조회 완 */
 	public MessageDto selectSendMessage(Long messageNo, EmployeeDto senderDto) {
 
 		Message message = messageRepository.findSendMessageById(messageNo, modelMappler.map(senderDto, Employee.class))
@@ -163,7 +163,7 @@ public class MessageService {
 	}
 
 	
-	/* 중요 메시지함 완!!!!! */
+	/* 중요 메시지함 완 */
 	public Page<MessageDto> impoMessages(int page, EmployeeDto recipientDto) {
 
 		Employee recipient = modelMappler.map(recipientDto, Employee.class);
@@ -176,7 +176,7 @@ public class MessageService {
 		return impoMessageBox;
 	}
 
-	/* 중요 메시지 조회 완!!!!!! */
+	/* 중요 메시지 조회 완 */
 	public MessageDto selectImpoMessage(Long messageNo, EmployeeDto recipientDto) {
 
 		Employee recipient = modelMappler.map(recipientDto, Employee.class);
@@ -205,7 +205,7 @@ public class MessageService {
 	}
 
 	
-	/* 휴지통 받은 메시지 완!!!!!!!! */
+	/* 휴지통 받은 메시지 완 */
 	public Page<MessageDto> binReceiveMessages(int page, EmployeeDto recipientDto) {
 
 		Employee recipient = modelMappler.map(recipientDto, Employee.class);
@@ -220,7 +220,7 @@ public class MessageService {
 	}
 
 	
-	/* 휴지통 보낸 메시지 완!!!!! */
+	/* 휴지통 보낸 메시지 완 */
 	public Page<MessageDto> binSendMessages(int page, EmployeeDto senderDto) {
 
 		Employee sender = modelMappler.map(senderDto, Employee.class);
@@ -258,7 +258,7 @@ public class MessageService {
 
 
 	/* 보낸 메시지(받은 메시지함, 휴지통 보낸 메시지) 관리 */
-	public Object sendMessageManagement(SenderManagementDto messageRequest) {
+	public SenderManagementDto sendMessageManagement(SenderManagementDto messageRequest) {
 
 		log.info("[MessageService] messageRequest : {}", messageRequest);
 		
@@ -271,6 +271,18 @@ public class MessageService {
 		
 		
 		return modelMappler.map(targetMessage, SenderManagementDto.class);
+	}
+
+
+	/* [main] 안 읽은 메시지 */
+	public MessageDto unreadMessage(EmployeeDto emp) {
+		
+		Long unreadMessage = messageRepository.countUnreadMessage(modelMappler.map(emp, Employee.class));
+		
+		MessageDto count = new MessageDto();
+		count.setUnreadMessage(unreadMessage);
+		
+		return count;
 	}
 
 

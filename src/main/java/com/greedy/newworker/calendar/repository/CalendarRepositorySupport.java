@@ -1,7 +1,7 @@
 package com.greedy.newworker.calendar.repository;
 
 import java.util.List;
-//import static com.greedy.newworker.calendar.entity.QCalendar.calendar;
+import static com.greedy.newworker.calendar.entity.QCalendar.calendar;
 import org.springframework.stereotype.Repository;
 import com.greedy.newworker.calendar.dto.Criteria;
 import com.greedy.newworker.calendar.entity.Calendar;
@@ -31,24 +31,24 @@ public class CalendarRepositorySupport implements CalendarRepositoryCustom {
 //			builder.and(calendar.employee.eq(employee));
 //		 }
 
-//		if(criteria.getMySchedule() != null) {
-//			builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getMySchedule()));
-//			builder.and(calendar.employee.eq(employee));
-//		}
-//		 if(criteria.getDeptSchedule() != null) {
-//			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getDeptSchedule()));
-//			 builder.and(calendar.dep.eq(employee.getDep()));
-//		 }
-//		 if(criteria.getComSchedule() != null) {
-//			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getComSchedule()));
-//		 }
-//		 List<Calendar> fetch = queryFactory
-//				 .selectFrom(calendar)
-//				 .where(builder)
-//				 .fetch();
-//		return fetch;
+		if(criteria.getMySchedule() != null) {
+			builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getMySchedule()));
+			builder.and(calendar.employee.eq(employee));
+		}
+		 if(criteria.getDeptSchedule() != null) {
+			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getDeptSchedule()));
+			 builder.and(calendar.dep.eq(employee.getDep()));
+		 }
+		 if(criteria.getComSchedule() != null) {
+			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getComSchedule()));
+		 }
+		 List<Calendar> fetch = queryFactory
+				 .selectFrom(calendar)
+				 .where(builder)
+				 .fetch();
+		return fetch;
 		
-		return null;
+//		return null;
 		
 	}
 

@@ -17,5 +17,6 @@ public class MessageDto {
 	private EmployeeDto recipient;
 	private EmployeeDto sender;
 	private String messageStatus;
+	private Long unreadMessage;
 
 }
