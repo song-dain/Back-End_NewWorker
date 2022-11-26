@@ -1,7 +1,7 @@
 package com.greedy.newworker.calendar.repository;
 
 import java.util.List;
-import static com.greedy.newworker.calendar.entity.QCalendar.calendar;
+//import static com.greedy.newworker.calendar.entity.QCalendar.calendar;
 import org.springframework.stereotype.Repository;
 import com.greedy.newworker.calendar.dto.Criteria;
 import com.greedy.newworker.calendar.entity.Calendar;
