@@ -17,6 +17,9 @@ import com.greedy.newworker.calendar.service.CalendarService;
 import com.greedy.newworker.common.ResponseDto;
 import com.greedy.newworker.employee.dto.EmployeeDto;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/emp/calendar")
 public class CalendarController {
@@ -57,10 +60,12 @@ public class CalendarController {
 	}
 	
 	/* 일정 삭제 */
-	@PatchMapping("/schedule/delete/{calendarNo}")
-	public ResponseEntity<ResponseDto> deleteSchedule (@AuthenticationPrincipal EmployeeDto employee, @PathVariable Long calendarNo){
+	@PatchMapping("/schedule/delete/{scheduleNo}")
+	public ResponseEntity<ResponseDto> deleteSchedule (@AuthenticationPrincipal EmployeeDto employee, @PathVariable Long scheduleNo){
 		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"일정 삭제 완료", calendarService.deleteSchedule(employee, calendarNo)));
+		log.info("[cc] scheduleNo : {}", scheduleNo);
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"일정 삭제 완료", calendarService.deleteSchedule(employee, scheduleNo)));
 	}
 	
 
