@@ -42,7 +42,7 @@ public class NoticeService {
 		this.modelMapper = modelMapper;
 	}
 	
-	/* 1. 상품별 공지 목록 조회 (페이징) */
+	/* 1. 공지 목록 조회 (페이징) */
 
 	public Page<NoticeDto> selectNoticeListWithPaging(int page) {
 		log.info("[NoticeService] getNoticeList Start ==============================");
