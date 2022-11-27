@@ -9,9 +9,12 @@ import javax.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.greedy.newworker.calendar.dto.CalendarCategoryDto;
 import com.greedy.newworker.calendar.dto.CalendarDto;
 import com.greedy.newworker.calendar.dto.Criteria;
 import com.greedy.newworker.calendar.entity.Calendar;
+import com.greedy.newworker.calendar.entity.CalendarCategory;
+import com.greedy.newworker.calendar.repository.CalendarCategoryRepository;
 import com.greedy.newworker.calendar.repository.CalendarRepository;
 import com.greedy.newworker.calendar.repository.CalendarRepositoryCustom;
 import com.greedy.newworker.employee.dto.EmployeeDto;
@@ -28,14 +31,18 @@ import lombok.extern.slf4j.Slf4j;
 public class CalendarService {
 
 	private final CalendarRepository calendarRepository;
+	private final CalendarCategoryRepository categoryRepository;
 	private final CalendarRepositoryCustom calendarRepositoryCustom;
 	private final EmployeeRepository employeeRepository;
 	private final RestRepository restRepository;
 	private final ModelMapper modelMapper;
 
-	public CalendarService(CalendarRepository calendarRepository, CalendarRepositoryCustom calendarRepositoryCustom,
+	public CalendarService(CalendarRepository calendarRepository, CalendarCategoryRepository categoryRepository, 
+			CalendarRepositoryCustom calendarRepositoryCustom, 
 			EmployeeRepository employeeRepository, RestRepository restRepository, ModelMapper modelMapper) {
+		
 		this.calendarRepository = calendarRepository;
+		this.categoryRepository = categoryRepository;
 		this.calendarRepositoryCustom = calendarRepositoryCustom;
 		this.employeeRepository = employeeRepository;
 		this.restRepository = restRepository;
@@ -67,6 +74,7 @@ public class CalendarService {
 
 	}
 	
+	/* 일정 상세 조회 */
 	public CalendarDto scheduleDetail(Long scheduleNo, EmployeeDto employee) {
 		
 		Calendar findSchedule = calendarRepository.findByCalendarNoAndEmployee(scheduleNo, employee.getEmployeeNo())
@@ -75,14 +83,19 @@ public class CalendarService {
 		return modelMapper.map(findSchedule, CalendarDto.class);
 	}
 
+	
 	/* 일정 추가 */
 	public CalendarDto addSchedule(EmployeeDto employee, CalendarDto schedule) {
+		
+		CalendarCategory category = categoryRepository.findByCalendarCategoryName(schedule.getCalendarCategory().getCalendarCategoryName());
 
 		Employee emp = employeeRepository.findById(employee.getEmployeeNo())
 				.orElseThrow(() -> new IllegalArgumentException("일치하는 회원이 없습니다."));
 
 		EmployeeDto empDto = modelMapper.map(emp, EmployeeDto.class);
-
+		
+		
+		schedule.setCalendarCategory(modelMapper.map(category, CalendarCategoryDto.class));
 		schedule.setEmployee(empDto);
 		schedule.setDep(empDto.getDep());
 
@@ -96,11 +109,13 @@ public class CalendarService {
 
 		Calendar updateSchedule = calendarRepository.findByCalendarNoAndEmployee(calendarNo, employee.getEmployeeNo())
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 일정입니다."));
+		
+		CalendarCategory category = categoryRepository.findByCalendarCategoryName(schedule.getCalendarCategory().getCalendarCategoryName());
 
-		updateSchedule.getCalendarCategory()
-				.setCalendarCategoryNo(schedule.getCalendarCategory().getCalendarCategoryNo());
-		updateSchedule.getCalendarCategory()
-				.setCalendarCategoryName(schedule.getCalendarCategory().getCalendarCategoryName());
+		log.info("[sc] schedule : {}", schedule);
+		
+		updateSchedule.setCalendarNo(calendarNo);
+		updateSchedule.setCalendarCategory(category);
 		updateSchedule.setScheduleTitle(schedule.getScheduleTitle());
 		updateSchedule.setStartDate(schedule.getStartDate());
 		updateSchedule.setEndDate(schedule.getEndDate());
