@@ -71,4 +71,22 @@ public class Survey {
 	@JoinColumn(name = "DEP_NO")
 	private Department dep;
 	
+	@Column(name = "SUR_IMAGE_URL")
+	private String surveyImageUrl;
+
+	public void update(String surTitle2, String surContent2, Date surDate2, Date surUpDate2, String surStatus2,
+			Long surNo2, Date surEndDate2, Date surStartDate2, String surveyImageUrl2) {
+		
+		this.surTitle = surTitle2;
+		this.surContent = surContent2;
+		this.surDate = surDate2;
+		this.surStartDate = surStartDate2;
+		this.surEndDate = surEndDate2;
+		this.surNo = surNo2;
+		this.surUpDate = surUpDate2;
+		this.surveyImageUrl = surveyImageUrl2;
+		this.surStatus = surStatus2;
+		
+	}
+	
 }

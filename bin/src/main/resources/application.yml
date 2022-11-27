@@ -12,6 +12,8 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
+# 이메일 인증 코드를 담을 redis 서버 설정      
+
       
 # 정적 리소스 경로 설정
   web:
@@ -32,7 +34,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: newworker9999@gmail.com
-    password: zkrqzwizpivyrygh
+    password: qjxjortzvjhsjjbq
     default-encoding: UTF-8
     properties:
       mail:
@@ -42,13 +44,14 @@ spring:
             enable: true
 
 # 이미지 저장할 위치와 응답 시 이미지 주소 설정
-image:
+file:
 
-  add-resource-locations: classpath:/static/employeeimgs, classpath:/static/surveyimgs
-  add-resource-handler: /employeeimgs/**, /surveyimgs/**
+  add-resource-locations: classpath:/static/uploadFiles
+  add-resource-handler: /uploadFiles/**
+  file-dir: src/main/resources/static/uploadFiles #Service에서 자기 이미지 담을 하위 경로를 가공하세요!
+  file-url: http://localhost:8001/uploadFiles/ #이하 동일입니다!
 
-  image-dir: src/main/resource/static #Service에서 자기 이미지 담을 하위 경로를 가공하세요!
-  image-url: http://localhost:8001 #이하 동일입니다!
+
 
           
           
