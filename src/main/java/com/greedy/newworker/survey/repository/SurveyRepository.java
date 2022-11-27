@@ -19,9 +19,9 @@ public interface SurveyRepository extends JpaRepository<Survey, Long>{
 
 	/* 2. 공지 상세 조회 - notNo로 공지 1개 조회(사원) */
 	
-	@Query("SELECT S " +
+	@Query("SELECT s " +
 	         "FROM Survey s " +
-			"WHERE s.surNo = :surNo ")
+			"WHERE s.surNo =:surNo ")
 	Optional<Survey> findBySurNo(@Param("surNo") Long surNo);
 	
 	/* 3. 공지 등록 4. 공지 수정 => save 메소드가 이미 구현 되어 있음 */
