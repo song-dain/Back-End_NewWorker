@@ -17,11 +17,11 @@ import com.greedy.newworker.common.ResponseDto;
 import com.greedy.newworker.common.paging.Pagenation;
 import com.greedy.newworker.common.paging.PagingButtonInfo;
 import com.greedy.newworker.common.paging.ResponseDtoWithPaging;
-import com.greedy.newworker.employee.dto.DepartmentDto;
 import com.greedy.newworker.employee.dto.EmployeeDto;
 import com.greedy.newworker.message.dto.MessageDto;
 import com.greedy.newworker.message.dto.RecipientManagementDto;
 import com.greedy.newworker.message.dto.SenderManagementDto;
+import com.greedy.newworker.message.service.AlarmService;
 import com.greedy.newworker.message.service.MessageService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +32,11 @@ import lombok.extern.slf4j.Slf4j;
 public class MessageController {
 
 	private final MessageService messageService;
-
-	public MessageController(MessageService messageService) {
+	private final AlarmService alarmService;
+	
+	public MessageController(MessageService messageService, AlarmService alarmService) {
 		this.messageService = messageService;
+		this.alarmService = alarmService;
 	}
 	
 	
@@ -52,9 +54,14 @@ public class MessageController {
 	@PostMapping("/send")
 	public ResponseEntity<ResponseDto> newMessage(@RequestBody MessageDto newMessage,
 			@AuthenticationPrincipal EmployeeDto sender) {
-
+		
+		MessageDto sendMessage = messageService.newMessage(newMessage, sender);
+		
+		/* 수신자 알림 전송 */
+		alarmService.alarmByMessage(sendMessage);
+		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "메시지 전송 성공",
-				messageService.newMessage(newMessage, sender)));
+				sendMessage));
 	}
 
 	
