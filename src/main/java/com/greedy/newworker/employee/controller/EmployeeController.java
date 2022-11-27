@@ -2,6 +2,7 @@ package com.greedy.newworker.employee.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -59,8 +60,15 @@ public class EmployeeController {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 수정 성공", null));
 	
-	
+
 }
+	
+	/* [캘린더] 본인 정보 */
+	@GetMapping("/employee/empInfo")
+	public ResponseEntity<ResponseDto> employeeInfo(@AuthenticationPrincipal EmployeeDto employee){
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 정보 조회 성공", employee));
+	}
 	
 	
 	
