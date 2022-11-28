@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -90,7 +91,12 @@ public class ApprovalController {
 	
 
 	
-	
+	/* 결재 문서 상세 조회 */
+	@GetMapping("/{appNo}")
+	public ResponseEntity<ResponseDto> selectApprovalDetail(@PathVariable Long appNo) {
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 문서 상세 조회 성공", approvalService.selectApprovalDetail(appNo)));
+	}
 	
 	
 
