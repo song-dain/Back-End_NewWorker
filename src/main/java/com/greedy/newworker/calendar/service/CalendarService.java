@@ -119,6 +119,7 @@ public class CalendarService {
 		updateSchedule.setScheduleTitle(schedule.getScheduleTitle());
 		updateSchedule.setStartDate(schedule.getStartDate());
 		updateSchedule.setEndDate(schedule.getEndDate());
+		updateSchedule.setStartTime(schedule.getStartTime());
 		updateSchedule.setScheduleLocation(schedule.getScheduleLocation());
 		updateSchedule.setScheduleContent(schedule.getScheduleContent());
 
