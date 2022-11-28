@@ -1,5 +1,7 @@
 package com.greedy.newworker.approval.entity;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,6 +40,18 @@ public class AppLine {
 
 	@Column(name = "APP_NO")
 	private Long approvalNo;
+	
+	
+	/* 결재 승인과 관련된 부분 */
+	
+	@Column(name = "ACCEPT_STATUS")
+	private String acceptStatus;
+	
+	@Column(name = "ACCEPT_ACTIVATE")
+	private String acceptActivate;
+	
+	@Column(name = "ACCEPT_DATE")
+	private Date acceptDate;
 	
 	
 }
