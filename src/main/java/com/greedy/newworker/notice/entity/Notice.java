@@ -63,7 +63,7 @@ public class Notice {
 	@Column(name = "NOT_IMAGE_URL")
 	private String noticeImageUrl;
 	
-	/* Product 수정 용도의 메소드 정의 */
+	/* Notice 수정 용도의 메소드 정의 */
 
 	public void update(String notTitle2, String notContent2, Date notDate2, Date notUpdate2, String notStatus2,
 			Long notNo2, String noticeImageUrl2) {

@@ -23,33 +23,30 @@ public class CalendarRepositorySupport implements CalendarRepositoryCustom {
 
 		BooleanBuilder builder = new BooleanBuilder();
 
-//		 연차 체크, 연차나 내 일정이 체크되어 있으면 본인 확인 (안 씀)
-//		 if(criteria.getDayOff() != null) {
-//			 builder.and(calendar.calendarCategory.calendarCategoryName.eq(criteria.getDayOff()));
-//		 } 
-//		 if(criteria.getMySchedule() != null || criteria.getDayOff() != null ) {
-//			builder.and(calendar.employee.eq(employee));
-//		 }
-//
-//		if(criteria.getMySchedule() != null) {
-//			builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getMySchedule()));
-//			builder.and(calendar.employee.eq(employee));
-//		}
-//		 if(criteria.getDeptSchedule() != null) {
-//			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getDeptSchedule()));
-//			 builder.and(calendar.dep.eq(employee.getDep()));
-//		 }
-//		 if(criteria.getComSchedule() != null) {
-//			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getComSchedule()));
-//		 }
-//		 List<Calendar> fetch = queryFactory
-//				 .selectFrom(calendar)
-//				 .where(builder)
-//				 
-//				 .fetch();
-//		return fetch;
+
 		
-		return null;
+
+		if(criteria.getMySchedule() != null) {
+			builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getMySchedule()));
+			builder.and(calendar.employee.eq(employee));
+		}
+		 if(criteria.getDeptSchedule() != null) {
+			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getDeptSchedule()));
+			 builder.and(calendar.dep.eq(employee.getDep()));
+		 }
+		 if(criteria.getComSchedule() != null) {
+			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getComSchedule()));
+		 }
+		 
+		 builder.and(calendar.scheduleDelete.eq("N"));
+		 
+		 List<Calendar> fetch = queryFactory
+				 .selectFrom(calendar)
+				 .where(builder)
+				 .fetch();
+		return fetch;
+		
+
 	}
 
 }

@@ -86,7 +86,7 @@ public class NoticeController {
     
     /* 4. 공지 수정 */
 	@PutMapping("/notices/register")
-	public ResponseEntity<ResponseDto> updateProduct(@ModelAttribute NoticeDto noticeDto) {
+	public ResponseEntity<ResponseDto> updateNotice(@ModelAttribute NoticeDto noticeDto) {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "공지 수정 성공", noticeService.updateNotice(noticeDto)));
 		

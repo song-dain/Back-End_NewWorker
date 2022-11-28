@@ -1,5 +1,7 @@
 package com.greedy.newworker.message.dto;
 
+import java.time.LocalDate;
+
 import com.greedy.newworker.employee.dto.EmployeeDto;
 
 import lombok.AllArgsConstructor;
@@ -13,9 +15,14 @@ public class MessageDto {
 	
 	private Long messageNo;
 	private String messageContent;
-	private java.sql.Date sendDate;
+	private String sendDate;
 	private EmployeeDto recipient;
 	private EmployeeDto sender;
 	private String messageStatus;
+	
+	/* 가공데이터 */
+	private Long unreadMessage;
+	private LocalDate today = LocalDate.now();
+	
 
 }
