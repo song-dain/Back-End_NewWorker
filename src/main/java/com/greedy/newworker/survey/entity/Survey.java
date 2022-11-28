@@ -21,13 +21,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
+/*SEQUENCE SEQ_SUR_NO*/
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "SUR_SURVEY")
+@Table(name = "TBL_SURVEY")
 @SequenceGenerator(name = "SUR_SEQ_GENERATOR",
 sequenceName = "SEQ_SUR_NO",
 initialValue = 1, allocationSize = 1)
@@ -57,7 +57,7 @@ public class Survey {
 	@Column(name = "SUR_START_DATE")
 	private Date surStartDate;
 	
-	@Column(name = "SUR_END_UPDATE")
+	@Column(name = "SUR_END_DATE")
 	private Date surEndDate;
 	
 	@Column(name = "SUR_IMG_PATH")
