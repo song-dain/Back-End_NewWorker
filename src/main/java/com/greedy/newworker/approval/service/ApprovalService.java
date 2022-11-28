@@ -1,6 +1,7 @@
 package com.greedy.newworker.approval.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,13 +17,10 @@ import org.springframework.stereotype.Service;
 
 import com.greedy.newworker.approval.dto.AppLineDto;
 import com.greedy.newworker.approval.dto.ApprovalDto;
-import com.greedy.newworker.approval.entity.AppLine;
 import com.greedy.newworker.approval.entity.Approval;
 import com.greedy.newworker.approval.repository.AppLineRepository;
 import com.greedy.newworker.approval.repository.ApprovalRepository;
 import com.greedy.newworker.apttach.entity.Apttach;
-import com.greedy.newworker.employee.dto.EmployeeDto;
-import com.greedy.newworker.employee.entity.Employee;
 import com.greedy.newworker.employee.repository.EmployeeRepository;
 import com.greedy.newworker.util.FileUploadUtils;
 
@@ -73,9 +71,9 @@ public class ApprovalService {
 		log.info("[ApprovalService] approvalDto : {}", approvalDto);
 		
 		
-		
-		log.info("[ApprovalService] Debug 1");
-		
+		// 결재문서 등록 시, 첫 번째 결재자의 결재활성화여부가 Y로 변경하도록 설정
+		approvalDto.getAppLines().get(0).setAcceptActivate("Y");
+	
 		
 		
 		// 첨부파일
@@ -105,6 +103,7 @@ public class ApprovalService {
 				e1.printStackTrace();
 			}
 		}
+		
 
 		log.info("[ApprovalService] 결재 등록 종료 ==========================");
 
@@ -125,20 +124,29 @@ public class ApprovalService {
 		
 		return receiveApprovalList;
 	}
+
+
+
+	public ApprovalDto selectApprovalDetail(Long appNo) {
+
+		log.info("[selectApprovalDetail] 결재 상세 조회 시작 =====================");
+		log.info("[selectApprovalDetail] appNo : {}", appNo);
 		
-//	public Page<ApprovalDto> receiveApproval(int page, Long employeeNo) {
-//		
-//		Pageable pageable = PageRequest.of(page - 1,  10, Sort.by("appNo").descending());
-//		
-//		// find 해야 하는 것들 = 결재문서(approval) -> 결재상태('대기','진행중','승인'), 결재선(appLine) -> 문서번호, 결재순서
-//		Page<Approval> receiveApproval = approvalRepository.findReceiveApproval(pageable, employeeNo);
-//		Page<ApprovalDto> receiveApprovalList = receiveApproval.map(approval -> modelMapper.map(approval, ApprovalDto.class));
-//		
-//		log.info("receiveApprovalList : {}", receiveApprovalList);
-//		
-//		return receiveApprovalList;
-//	}
-//		
+		Approval approval = approvalRepository.findByAppNo(appNo)
+				.orElseThrow(() -> new IllegalArgumentException("해당 결재 페이지가 존재하지 않습니다. appNo=" + appNo));
+		ApprovalDto approvalDto = modelMapper.map(approval, ApprovalDto.class);
+		
+//		approvalDto.setAttaches();
+		
+		return approvalDto;
+	}
+	
+	
+	
+	
+
+		
+
 
 	
 }
