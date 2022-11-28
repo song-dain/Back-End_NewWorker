@@ -2,6 +2,8 @@ package com.greedy.newworker.apttach.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -26,12 +28,9 @@ import lombok.Setter;
 public class Apttach {
 
 	@Id
-	@Column(name = "ATTACH_NO" )
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ATTACH_SEQ_GENERATOR")
+	@Column(name = "ATTACH_NO")
 	private Long attachNo;
-	
-	@ManyToOne
-	@JoinColumn(name = "APP_NO")
-	private Approval appNo;
 	
 	@Column(name = "ATTACH_ROOT")
 	private String attachRoot;
@@ -41,6 +40,9 @@ public class Apttach {
 	
 	@Column(name = "ATTACH_ORIGIN_NAME")
 	private String attachOriginName;
+	
+	@Column(name = "APP_NO")
+	private Long approvalNo;
 
 	
 	

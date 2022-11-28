@@ -1,9 +1,12 @@
 package com.greedy.newworker.approval.dto;
 
 import java.sql.Date;
+import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.greedy.newworker.apttach.dto.ApttachDto;
 import com.greedy.newworker.employee.dto.EmployeeDto;
 
 import lombok.AllArgsConstructor;
@@ -24,17 +27,20 @@ public class ApprovalDto {
 	private String appContent;
 	private String appStatus;
 	
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+
 	private Date appCreatedDate;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+
 	private Date appEndDate;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+
 	private Date appUpdateDate;
-//	
-//	List<결제선>
-//	
-//	List<첨부파일>
-//	
-//	List<MultipartFile>
+	
+	private List<AppLineDto> appLines;
+	
+	private List<ApttachDto> attaches;
+	
+	@JsonIgnore
+	private List<MultipartFile> approvalFiles;
+	
+
 	
 }

@@ -5,13 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.greedy.newworker.approval.dto.AppLineDto;
 import com.greedy.newworker.approval.dto.ApprovalDto;
 import com.greedy.newworker.approval.service.ApprovalService;
 import com.greedy.newworker.common.ResponseDto;
@@ -55,17 +54,34 @@ public class ApprovalController {
 	
 	
 	/* 결재 문서 수신함 */
-	
+	@GetMapping("/approver")
+	public ResponseEntity<ResponseDto> receiveApproval (@RequestParam(name = "page", defaultValue = "1") int page,
+			@AuthenticationPrincipal EmployeeDto approver) {
+		
+		Long employeeNo = approver.getEmployeeNo();
+		Page<ApprovalDto> receiveApprovalList = approvalService.receiveApproval(page, employeeNo);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(receiveApprovalList);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(receiveApprovalList.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"결재 수신함 조회 성공", responseDtoWithPaging));
+	}
 	
 	
 	
 	/* 결재 문서 생성 */
 	@PostMapping("/regist")
-	public ResponseEntity<ResponseDto> appRegist( ApprovalDto appRegist,
+	public ResponseEntity<ResponseDto> appRegist(@ModelAttribute ApprovalDto appRegist,
 			@AuthenticationPrincipal EmployeeDto drafter) {
 		
+		appRegist.setEmployee(drafter);
+		log.info("[APPREGIST] appRegist : {}", appRegist);
+		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 상신 성공",
-				approvalService.appRegist(appRegist, drafter)));
+				approvalService.appRegist(appRegist)));
 	}
 	
 
