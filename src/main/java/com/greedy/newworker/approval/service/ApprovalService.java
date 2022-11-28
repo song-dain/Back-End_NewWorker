@@ -51,6 +51,7 @@ public class ApprovalService {
 
 	
 	
+	// 결재 상신함 조회
 	public Page<ApprovalDto> sendApproval(int page, Long employeeNo) {
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("appNo").descending());
@@ -111,14 +112,33 @@ public class ApprovalService {
 	}
 
 
-
+	// 결재 수신함 조회
 	public Page<ApprovalDto> receiveApproval(int page, Long employeeNo) {
-
-		return null;
+		
+		Pageable pageable = PageRequest.of(page - 1,  10, Sort.by("appNo").descending());
+		
+		// find 해야 하는 것들 = 내 사원 번호, 결재선의 사원번호(나와 일치해야 함)
+		Page<Approval> receiveApproval = approvalRepository.findReceiveApproval(pageable, employeeNo);
+		Page<ApprovalDto> receiveApprovalList = receiveApproval.map(approval -> modelMapper.map(approval, ApprovalDto.class));
+		
+		log.info("receiveApprovalList : {}", receiveApprovalList);
+		
+		return receiveApprovalList;
 	}
 		
+//	public Page<ApprovalDto> receiveApproval(int page, Long employeeNo) {
+//		
+//		Pageable pageable = PageRequest.of(page - 1,  10, Sort.by("appNo").descending());
+//		
+//		// find 해야 하는 것들 = 결재문서(approval) -> 결재상태('대기','진행중','승인'), 결재선(appLine) -> 문서번호, 결재순서
+//		Page<Approval> receiveApproval = approvalRepository.findReceiveApproval(pageable, employeeNo);
+//		Page<ApprovalDto> receiveApprovalList = receiveApproval.map(approval -> modelMapper.map(approval, ApprovalDto.class));
+//		
+//		log.info("receiveApprovalList : {}", receiveApprovalList);
+//		
+//		return receiveApprovalList;
+//	}
+//		
 
-	//상신함 조회
-	
 	
 }

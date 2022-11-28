@@ -59,6 +59,10 @@ public class ApprovalController {
 			@AuthenticationPrincipal EmployeeDto approver) {
 		
 		Long employeeNo = approver.getEmployeeNo();
+		
+//		Long employeeNo = approver.getEmployeeNo();
+//		Page<ApprovalDto> receiveApprovalList = approvalService.receiveApproval(page, employeeNo);
+		
 		Page<ApprovalDto> receiveApprovalList = approvalService.receiveApproval(page, employeeNo);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(receiveApprovalList);
