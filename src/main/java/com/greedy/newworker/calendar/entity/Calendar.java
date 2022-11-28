@@ -56,6 +56,9 @@ public class Calendar {
 	@Column(name = "END_DATE")
 	private java.sql.Date endDate;
 	
+	@Column(name = "START_TIME")
+	private String startTime;
+	
 	@Column(name = "SCHEDULE_LOCATION")
 	private String scheduleLocation;
 	

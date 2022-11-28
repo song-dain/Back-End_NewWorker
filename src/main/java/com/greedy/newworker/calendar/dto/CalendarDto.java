@@ -15,6 +15,7 @@ public class CalendarDto {
 	private String scheduleTitle;
 	private java.sql.Date startDate;
 	private java.sql.Date endDate;
+	private String startTime;
 	private String scheduleLocation;
 	private String scheduleContent;
 	private String scheduleDelete;

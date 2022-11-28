@@ -57,6 +57,8 @@ public class CalendarController {
 	public ResponseEntity<ResponseDto> updateSchedule (@AuthenticationPrincipal EmployeeDto employee, 
 			@PathVariable Long scheduleNo, @RequestBody CalendarDto schedule){
 		
+		log.info("[calendar] schedule : {}", schedule);
+		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"일정 수정 완료", calendarService.updateSchedule(employee, scheduleNo, schedule)));
 	}
 	
