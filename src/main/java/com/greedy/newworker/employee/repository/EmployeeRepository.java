@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-import com.greedy.newworker.employee.dto.EmployeeDto;
 import com.greedy.newworker.employee.entity.Department;
 import com.greedy.newworker.employee.entity.Employee;
 
@@ -29,7 +30,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 
 
 	/* [message] 부서별 직원 리스트 */
-	List<Employee> findByDep(Department dep);
+	@Query("select e from Employee e where e.dep.depNo =:depNo and e.employeeNo !=:empNo")
+	List<Employee> findByDepWithoutEmployee(@Param("depNo")Long depNo, @Param("empNo")Long empNo);
 
 
 

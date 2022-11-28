@@ -42,11 +42,11 @@ public class MessageController {
 	
 	/* 부서별 직원 조회 */
 	@GetMapping("/send/findEmp/{depNo}")
-	public ResponseEntity<ResponseDto> findRecipient(@PathVariable Long depNo){
+	public ResponseEntity<ResponseDto> findRecipient(@PathVariable Long depNo, @AuthenticationPrincipal EmployeeDto employee){
 		
 		log.info("[MessageController] messageNo : {}", depNo);
 		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "부서별 직원 조회 성공", messageService.findRecipient(depNo)));
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "부서별 직원 조회 성공", messageService.findRecipient(depNo, employee)));
 	}
 
 	

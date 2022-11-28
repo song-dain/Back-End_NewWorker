@@ -47,7 +47,7 @@ public class Message {
 	private String messageContent;
 	
 	@Column(name = "SEND_DATE")
-	private java.sql.Date sendDate;
+	private String sendDate;
 	
 	@ManyToOne
 	@JoinColumn(name = "RECIPIENT")
