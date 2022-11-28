@@ -57,12 +57,12 @@ public class MessageService {
 	
 	
 	/* 부서별 직원 조회 */
-	public List<EmployeeDto> findRecipient(Long depNo) {
+	public List<EmployeeDto> findRecipient(Long depNo, EmployeeDto employee) {
 		
 		Department dep = departmentRepository.findById(depNo)
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 부서입니다."));
 		
-		List<Employee> empList = employeeRepository.findByDep(dep);
+		List<Employee> empList = employeeRepository.findByDepWithoutEmployee(dep.getDepNo(), modelMappler.map(employee, Employee.class).getEmployeeNo());
 
 		return empList.stream().map(emp -> modelMappler.map(emp, EmployeeDto.class)).toList();
 	}

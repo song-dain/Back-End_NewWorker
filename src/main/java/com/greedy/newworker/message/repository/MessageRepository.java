@@ -78,7 +78,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 	@Query("select m from Message m where m.recipient =:recipient and m.recipientManagement.receiveMessageCategory = 'impoMessageBox' and m.recipientManagement.receiveMessageDelete = 'N' and m.messageContent like %:keyword%")
 	Page<Message> findByImpoMessageContentContains(Pageable page, @Param("keyword")String keyword, @Param("recipient")Employee recipient);
 
-
+	/* 안 읽은 메시지 개수 */
 	@Query("select count(messageStatus) from Message m where messageStatus = 'send' and recipient =:employee")
 	Long countUnreadMessage(@Param("employee")Employee emp);
 	
