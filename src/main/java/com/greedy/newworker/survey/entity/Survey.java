@@ -1,7 +1,10 @@
 package com.greedy.newworker.survey.entity;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -73,6 +77,10 @@ public class Survey {
 	
 	@Column(name = "SUR_IMAGE_URL")
 	private String surveyImageUrl;
+	
+	@OneToMany(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "SUR_NO")
+    private List<QuestionItem> questionItem;
 
 	public void update(String surTitle2, String surContent2, Date surDate2, Date surUpDate2, String surStatus2,
 			Long surNo2, Date surEndDate2, Date surStartDate2, String surveyImageUrl2) {
