@@ -20,6 +20,7 @@ import com.greedy.newworker.common.ResponseDto;
 import com.greedy.newworker.common.paging.Pagenation;
 import com.greedy.newworker.common.paging.PagingButtonInfo;
 import com.greedy.newworker.common.paging.ResponseDtoWithPaging;
+import com.greedy.newworker.employee.dto.DepartmentDto;
 import com.greedy.newworker.employee.dto.EmployeeDto;
 import com.greedy.newworker.notice.dto.NoticeDto;
 import com.greedy.newworker.notice.entity.Notice;
@@ -81,6 +82,8 @@ public class SurveyController {
     		@AuthenticationPrincipal EmployeeDto employee) {
     	
     	surveyDto.setEmployee(employee);
+    	log.info("[SurveyDto] survetDto : " + surveyDto);
+
     	
     	return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "설문 등록 성공", surveyService.insertSurvey(surveyDto)));
     	

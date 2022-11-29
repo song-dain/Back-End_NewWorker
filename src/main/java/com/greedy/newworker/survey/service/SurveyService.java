@@ -29,9 +29,9 @@ public class SurveyService {
 //	public static final String SORT_BY = "notNo";
 //	public static final String ACTIVE_STATUS = "Y";
 	
-	@Value("${file.file-dir}" + "/noticeimgs")
+	@Value("${file.file-dir}" + "/surveyimgs")
 	private String FILE_DIR;
-	@Value("${file.file-url}" + "/noticeimgs/")
+	@Value("${file.file-url}" + "/surveyimgs/")
 	private String FILE_URL;
 	
 	private final SurveyRepository surveyRepository;
@@ -47,12 +47,12 @@ public class SurveyService {
 	public Page<SurveyDto> selectSurveyListWithPaging(int page) {
 		log.info("[SurveyService] getSurveyList Start ==============================");
 		 
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("notNo").descending());
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("surNo").descending());
 		
 		Page<Survey> surveyList = surveyRepository.findAll(pageable);
 		Page<SurveyDto> surveyDtoList = surveyList.map(survey -> modelMapper.map(survey, SurveyDto.class));
 		
-		 log.info("noticeList : {}", surveyList.getContent());
+		 log.info("surveyList : {}", surveyList.getContent());
 		
 		return surveyDtoList;
 	}
