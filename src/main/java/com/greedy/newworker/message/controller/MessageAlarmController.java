@@ -15,13 +15,19 @@ public class MessageAlarmController {
 	
 	private final SimpMessageSendingOperations messagingTemplate;
 	
+	@MessageMapping("/Template")
+	public void SendTemplateMessage() {
+		messagingTemplate.convertAndSend("/sub/" + "Template");
+	}
+	
+	
 	/* 웹소켓 연결 */
-	@MessageMapping("/{empNo}")
-	public void sendMessage(@DestinationVariable("empNo")Long employeeNo) {
+	@MessageMapping("/{employeeId}")
+	public void sendMessage(@DestinationVariable("employeeId")String employeeId) {
 		
 		log.info("[alarm] 웹소켓 연결");
 		
-		messagingTemplate.convertAndSend("/sub/" + employeeNo, "alarm socket connection completed");
+		messagingTemplate.convertAndSend("/sub/" + employeeId, "alarm socket connection completed");
 	}
 
 }

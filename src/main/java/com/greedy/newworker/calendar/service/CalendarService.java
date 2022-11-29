@@ -59,7 +59,7 @@ public class CalendarService {
 		List<Calendar> scheduleList = calendarRepositoryCustom.scheduleFilter(criteria, modelMapper.map(employee, Employee.class));
 		calendarMap.put("scheduleList", scheduleList.stream().map(schedule -> modelMapper.map(schedule, CalendarDto.class)).toList());
 		
-		if(criteria.getDayOff().equals("dayOff")) {
+		if(criteria.getDayOff().equals("연차")) {
 			List<Rest> dayOffList = restRepository.findByEmployeeNoAndRestOk(modelMapper.map(employee, Employee.class), "Y");
 			
 			if(dayOffList.size() != 0) {
@@ -67,7 +67,7 @@ public class CalendarService {
 			}
 		}
 		
-		log.info("[cs] calendarMap : {}", calendarMap);
+		log.info("[cs] calendarMap : {}", calendarMap.get("dayOffList"));
 		
 		return calendarMap;
 //		return null;
