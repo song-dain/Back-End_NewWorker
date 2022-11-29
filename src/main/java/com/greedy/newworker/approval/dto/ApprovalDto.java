@@ -27,11 +27,11 @@ public class ApprovalDto {
 	private String appContent;
 	private String appStatus;
 	
-
+	
 	private Date appCreatedDate;
-
+	
 	private Date appEndDate;
-
+	
 	private Date appUpdateDate;
 	
 	private List<AppLineDto> appLines;
@@ -41,6 +41,6 @@ public class ApprovalDto {
 	@JsonIgnore
 	private List<MultipartFile> approvalFiles;
 	
-
+	
 	
 }
