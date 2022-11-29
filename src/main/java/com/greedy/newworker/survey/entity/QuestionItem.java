@@ -1,4 +1,4 @@
-package com.greedy.newworker.questionItem.entity;
+package com.greedy.newworker.survey.entity;
 
 import java.sql.Date;
 
@@ -42,8 +42,9 @@ public class QuestionItem {
 	@Column(name = "ANS_CONTENT")
 	private String ansContent;
 	
-	@ManyToOne
-	@JoinColumn(name = "SUR_NO")
-	private Survey survey;
+//	@ManyToOne
+//	@JoinColumn(name = "SUR_NO")
+	@Column(name = "SUR_NO")
+	private Long surNo;
 	
 }

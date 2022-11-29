@@ -1,4 +1,4 @@
-package com.greedy.newworker.answer.entity;
+package com.greedy.newworker.survey.entity;
 
 import java.io.Serializable;
 import java.sql.Date;

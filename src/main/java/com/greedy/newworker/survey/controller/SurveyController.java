@@ -82,8 +82,8 @@ public class SurveyController {
     		@AuthenticationPrincipal EmployeeDto employee) {
     	
     	surveyDto.setEmployee(employee);
-    	log.info("[SurveyDto] survetDto : " + surveyDto);
-
+    	log.info("[SurveyDto] surveyDto : " + surveyDto);
+    	
     	
     	return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "설문 등록 성공", surveyService.insertSurvey(surveyDto)));
     	
