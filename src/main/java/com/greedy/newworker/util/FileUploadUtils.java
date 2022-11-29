@@ -56,17 +56,17 @@ public class FileUploadUtils {
 			}
 			
 														//본래 파일이 가지고 있던 확장자를 뽑아냄
-			String replaceFileName = fileName + "." + FilenameUtils.getExtension(multipartFiles.get(i).getOriginalFilename());
+			String replaceFilesName = fileName + "." + FilenameUtils.getExtension(multipartFiles.get(i).getOriginalFilename());
 			
 			// stream을 이용해서 저장
 			try(InputStream inputStream = multipartFiles.get(i).getInputStream()) {
-				Path filePath = uploadPath.resolve(replaceFileName);
+				Path filePath = uploadPath.resolve(replaceFilesName);
 				Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
 				throw new IOException("파일을 저장하지 못하였습니다. file name : " + fileName);
 			}
 			
-			saveFiles.add(replaceFileName);
+			saveFiles.add(replaceFilesName);
 		}
 		
 		

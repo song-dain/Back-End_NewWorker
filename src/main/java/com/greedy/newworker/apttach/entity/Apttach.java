@@ -5,14 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
-import com.greedy.newworker.approval.entity.Approval;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,21 +23,16 @@ import lombok.Setter;
 @Table(name = "TBL_APTTACH")
 @SequenceGenerator(name = "ATTACH_SEQ_GENERATOR", sequenceName = "SEQ_ATTACH_NO", initialValue = 1, allocationSize = 1)
 @DynamicInsert
+@DynamicUpdate
 public class Apttach {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ATTACH_SEQ_GENERATOR")
 	@Column(name = "ATTACH_NO")
 	private Long attachNo;
-	
-	@Column(name = "ATTACH_ROOT")
-	private String attachRoot;
-	
+
 	@Column(name = "ATTACH_NAME")
 	private String attachName;
-	
-	@Column(name = "ATTACH_ORIGIN_NAME")
-	private String attachOriginName;
 	
 	@Column(name = "APP_NO")
 	private Long approvalNo;

@@ -68,7 +68,7 @@ public class Approval {
 	
 
 	@OneToMany(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "ATTACH_NO")
+	@JoinColumn(name = "APP_NO")
 	private List<Apttach> attaches;
 	
 	

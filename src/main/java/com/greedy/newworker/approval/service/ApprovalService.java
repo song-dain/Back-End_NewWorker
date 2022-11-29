@@ -15,12 +15,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.greedy.newworker.approval.dto.AppLineDto;
 import com.greedy.newworker.approval.dto.ApprovalDto;
 import com.greedy.newworker.approval.entity.Approval;
 import com.greedy.newworker.approval.repository.AppLineRepository;
 import com.greedy.newworker.approval.repository.ApprovalRepository;
-import com.greedy.newworker.apttach.entity.Apttach;
+import com.greedy.newworker.approval.repository.ApttachRepository;
+import com.greedy.newworker.apttach.dto.ApttachDto;
 import com.greedy.newworker.employee.repository.EmployeeRepository;
 import com.greedy.newworker.util.FileUploadUtils;
 
@@ -34,17 +34,21 @@ public class ApprovalService {
 	private final ApprovalRepository approvalRepository;
 	private final AppLineRepository appLineRepository;
 	private final EmployeeRepository employeeRepository;
+	private final ApttachRepository apttachRepository;
 	
 	@Value("${file.file-dir}" + "/approvalfiles")
 	private String FILE_DIR;
 	@Value("${file.file-url}" + "/approvalfiles/")
 	private String FILE_URL;
 	
-	public ApprovalService(ModelMapper modelMapper, ApprovalRepository approvalRepository, EmployeeRepository employeeRepository, AppLineRepository appLineRepository) {
+	public ApprovalService(ModelMapper modelMapper, ApprovalRepository approvalRepository, 
+			EmployeeRepository employeeRepository, AppLineRepository appLineRepository,
+			ApttachRepository apttachRepository) {
 		this.modelMapper = modelMapper;
 		this.approvalRepository = approvalRepository;
 		this.employeeRepository = employeeRepository;
 		this.appLineRepository = appLineRepository;
+		this.apttachRepository = apttachRepository;
 	}
 
 	
@@ -79,20 +83,26 @@ public class ApprovalService {
 		// 첨부파일
 		String fileName = UUID.randomUUID().toString().replace("-", ""); // 랜덤 유효 아이디 생성
 		List<String> replaceFilesName = null;
-
+		List<ApttachDto> apttache = new ArrayList<ApttachDto>();
+	
+		ApttachDto apttachDto = null;
+		
 		try {
 			replaceFilesName = FileUploadUtils.saveFiles(FILE_DIR, fileName, approvalDto.getApprovalFiles());
 		// 배열로 들어가기 때문에 반복문으로 SIZE 만큼 삽입
 		for(int i = 0; i < replaceFilesName.size(); i++) {
 			
-			Apttach apttache = new Apttach();
-			apttache.setAttachName(replaceFilesName.get(i));
+			apttachDto = new ApttachDto(replaceFilesName.get(i));
+			apttache.add(apttachDto);
 			
+			
+			log.info("[ApprovalService] apttachDto : {}", apttachDto);
 		}
-
-			log.info("[ApprovalService] replaceFileName : {}", replaceFilesName);
-
+			//첨부파일 엔터티에 replaceFilesName 등록하여 관리
+			approvalDto.setAttaches(apttache);
+			
 			approvalRepository.save(modelMapper.map(approvalDto, Approval.class));
+			
 			
 		} catch (IOException e) {
 
@@ -124,9 +134,9 @@ public class ApprovalService {
 		
 		return receiveApprovalList;
 	}
-
-
-
+	
+	
+	/* 결재 문서 상세 조회 */
 	public ApprovalDto selectApprovalDetail(Long appNo) {
 
 		log.info("[selectApprovalDetail] 결재 상세 조회 시작 =====================");
@@ -135,9 +145,7 @@ public class ApprovalService {
 		Approval approval = approvalRepository.findByAppNo(appNo)
 				.orElseThrow(() -> new IllegalArgumentException("해당 결재 페이지가 존재하지 않습니다. appNo=" + appNo));
 		ApprovalDto approvalDto = modelMapper.map(approval, ApprovalDto.class);
-		
-//		approvalDto.setAttaches();
-		
+
 		return approvalDto;
 	}
 	

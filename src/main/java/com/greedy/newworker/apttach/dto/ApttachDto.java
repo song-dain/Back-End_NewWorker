@@ -7,12 +7,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class ApttachDto {
 	
 	private Long attachNo;
-	private String attachRoot;
 	private String attachName;
-	private String attachOriginName;
 	private Long approvalNo;
-
+	
+	public ApttachDto(String attachName) {
+		super();
+		this.attachName = attachName;
+	}
+	
+	
 }
