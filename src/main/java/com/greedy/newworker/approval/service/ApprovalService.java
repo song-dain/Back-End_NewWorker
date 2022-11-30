@@ -3,6 +3,7 @@ package com.greedy.newworker.approval.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -20,7 +21,13 @@ import com.greedy.newworker.approval.entity.Approval;
 import com.greedy.newworker.approval.repository.AppLineRepository;
 import com.greedy.newworker.approval.repository.ApprovalRepository;
 import com.greedy.newworker.approval.repository.ApttachRepository;
+import com.greedy.newworker.approval.repository.PositionRepository;
 import com.greedy.newworker.apttach.dto.ApttachDto;
+import com.greedy.newworker.employee.dto.EmployeeDto;
+import com.greedy.newworker.employee.entity.Department;
+import com.greedy.newworker.employee.entity.Employee;
+import com.greedy.newworker.employee.entity.Position;
+import com.greedy.newworker.employee.repository.DepartmentRepository;
 import com.greedy.newworker.employee.repository.EmployeeRepository;
 import com.greedy.newworker.util.FileUploadUtils;
 
@@ -35,6 +42,8 @@ public class ApprovalService {
 	private final AppLineRepository appLineRepository;
 	private final EmployeeRepository employeeRepository;
 	private final ApttachRepository apttachRepository;
+	private final DepartmentRepository departmentRepository;
+	private final ModelMapper modelMappler;
 	
 	@Value("${file.file-dir}" + "/approvalfiles")
 	private String FILE_DIR;
@@ -43,14 +52,28 @@ public class ApprovalService {
 	
 	public ApprovalService(ModelMapper modelMapper, ApprovalRepository approvalRepository, 
 			EmployeeRepository employeeRepository, AppLineRepository appLineRepository,
-			ApttachRepository apttachRepository) {
+			ApttachRepository apttachRepository, DepartmentRepository departmentRepository,
+			PositionRepository positionRepository, ModelMapper modelMappler) {
 		this.modelMapper = modelMapper;
 		this.approvalRepository = approvalRepository;
 		this.employeeRepository = employeeRepository;
 		this.appLineRepository = appLineRepository;
 		this.apttachRepository = apttachRepository;
+		this.departmentRepository = departmentRepository;
+		this.modelMappler = modelMappler;
 	}
 
+	// 부서별 결재자 조회
+	public List<EmployeeDto> findApprover(Long depNo, EmployeeDto employee) {
+		
+		Department dep = departmentRepository.findById(depNo)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 부서입니다."));
+		
+		
+		List<Employee> empList = employeeRepository.findByDepWithoutEmployee(dep.getDepNo(), modelMappler.map(employee, Employee.class).getEmployeeNo());
+		
+		return empList.stream().map(emp -> modelMapper.map(emp, EmployeeDto.class)).toList();
+	}
 	
 	
 	// 결재 상신함 조회
@@ -148,6 +171,10 @@ public class ApprovalService {
 
 		return approvalDto;
 	}
+
+
+
+
 	
 	
 	
