@@ -34,6 +34,17 @@ public class ApprovalController {
 	}
 	
 	
+	/* 부서별 결재자 조회 */
+	@GetMapping("/findApprover/{depNo}")
+	public ResponseEntity<ResponseDto> findApprover(@PathVariable Long depNo, @AuthenticationPrincipal EmployeeDto employee){
+		
+		log.info("[ApprovalController] fineApprover : {}", depNo);
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "부서별 직원 조회 성공", approvalService.findApprover(depNo, employee)));
+	}
+	
+	
+	
 	/* 결재 문서 상신함 조회 */
 	@GetMapping("/draft")
 	public ResponseEntity<ResponseDto> sendApproval(@RequestParam(name = "page", defaultValue = "1") int page,
