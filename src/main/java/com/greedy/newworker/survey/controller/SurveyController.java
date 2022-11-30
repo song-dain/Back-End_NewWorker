@@ -25,6 +25,7 @@ import com.greedy.newworker.employee.dto.EmployeeDto;
 import com.greedy.newworker.notice.dto.NoticeDto;
 import com.greedy.newworker.notice.entity.Notice;
 import com.greedy.newworker.notice.service.NoticeService;
+import com.greedy.newworker.survey.dto.QuestionItemDto;
 import com.greedy.newworker.survey.dto.SurveyDto;
 import com.greedy.newworker.survey.service.SurveyService;
 
@@ -88,6 +89,8 @@ public class SurveyController {
     	return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "설문 등록 성공", surveyService.insertSurvey(surveyDto)));
     	
     }
+    
+    
     
     /* 4. 설문 수정 */
 	@PutMapping("/survey/register")

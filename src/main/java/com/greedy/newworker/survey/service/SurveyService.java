@@ -102,7 +102,7 @@ public class SurveyService {
 			}
 		}
 		
-		log.info("[SurveyService] insertSurvey End ===================================");
+		log.info("[SurveyService] 설문 등록 완료 ===================================");
 		
 		return surveyDto;
 		
