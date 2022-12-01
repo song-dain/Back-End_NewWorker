@@ -78,9 +78,10 @@ public class Survey {
 	@Column(name = "SUR_IMAGE_URL")
 	private String surveyImageUrl;
 	
+	//퀘스천아이템에 담기
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "SUR_NO")
-    private List<QuestionItem> ansContent;
+    private List<QuestionItem> questionItem;
 
 	public void update(String surTitle2, String surContent2, Date surDate2, Date surUpDate2, String surStatus2,
 			Long surNo2, Date surEndDate2, Date surStartDate2, String surveyImageUrl2) {
