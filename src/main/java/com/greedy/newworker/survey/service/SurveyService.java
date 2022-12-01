@@ -108,7 +108,39 @@ public class SurveyService {
 		
 	}
 	
-	/* 4. 설문 수정 */
+	/* 4. 설문 제출 */
+	@Transactional
+	public SurveyDto insertSurvey1(SurveyDto surveyDto) {
+		
+		log.info("[SurveyService] insertSurvey Start ===================================");
+		log.info("[SurveyService] surveyDto : {}", surveyDto);
+//		String imageName = UUID.randomUUID().toString().replace("-", "");
+//		String replaceFileName = null;
+//		
+//		try {
+//			replaceFileName = FileUploadUtils.saveFile(FILE_DIR, imageName, surveyDto.getSurveyImage());
+//			surveyDto.setSurveyImageUrl(replaceFileName);
+//			
+//			log.info("[SurveyService] replaceFileName : {}", replaceFileName);
+//			
+//			surveyRepository.save(modelMapper.map(surveyDto, Survey.class));
+//			
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			try {
+//				FileUploadUtils.deleteFile(FILE_DIR, replaceFileName);
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
+//		}
+		
+		log.info("[SurveyService] 설문 등록 완료 ===================================");
+		
+		return surveyDto;
+		
+	}
+	
+	/* 5. 설문 수정 */
 	@Transactional
 	public SurveyDto updateSurvey(SurveyDto surveyDto) {
 
