@@ -90,6 +90,19 @@ public class SurveyController {
     	
     }
     
+    /* 3. 설문 제출 */
+    @PostMapping("/survey/submit")
+    public ResponseEntity<ResponseDto> insertSurvey1(@ModelAttribute SurveyDto surveyDto,
+    		@AuthenticationPrincipal EmployeeDto employee) {
+    	
+    	surveyDto.setEmployee(employee);
+    	log.info("[SurveyDto] surveyDto : " + surveyDto);
+    	
+    	
+    	return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "설문 제출 성공", surveyService.insertSurvey1(surveyDto)));
+    	
+    }
+    
     
     
     /* 4. 설문 수정 */
