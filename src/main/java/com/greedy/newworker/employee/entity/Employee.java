@@ -81,6 +81,7 @@ public class Employee {
 	@Column(name = "EMPLOYEE_ENT_DATE")
 	private Date employeeEntDate;
 
+	//수정
 	public void update(String employeePwd, String employeeName, String employeeEmail, String employeePhone,
 			String employeeAddress, String employeeStatus, String employeeRole, Position position, Department dep,
 			Long employeeRestDay, String employeeImageUrl, Date employeeHireDate, Date employeeEntDate) {

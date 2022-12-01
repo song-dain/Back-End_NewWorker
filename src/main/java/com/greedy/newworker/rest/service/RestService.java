@@ -1,5 +1,8 @@
 package com.greedy.newworker.rest.service;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,6 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.greedy.newworker.employee.dto.EmployeeDto;
+import com.greedy.newworker.employee.repository.EmployeeRepository;
 import com.greedy.newworker.rest.dto.RestDto;
 import com.greedy.newworker.rest.entity.Rest;
 import com.greedy.newworker.rest.entity.RestCate;
@@ -19,13 +24,17 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class RestService {
 
+
 	private final RestRepository restRepository;
 	private final ModelMapper modelMapper;
+	private final EmployeeRepository employeeRepository;
 	
-	public RestService(RestRepository restRepository, ModelMapper modelMapper) {
+	public RestService(RestRepository restRepository, ModelMapper modelMapper, EmployeeRepository employeeRepository) {
 		this.restRepository = restRepository;
 		this.modelMapper = modelMapper;
+		this.employeeRepository = employeeRepository;
 	}
+	
 	/* 조회 */
 	public Page<RestDto> selectRestList(int page) {
 		
@@ -45,11 +54,22 @@ public class RestService {
 		
 	/* 등록 */
 	@Transactional
-	public RestDto insertRest(RestDto restDto) {
+	public RestDto insertRest(RestDto restDto, EmployeeDto employeeDto) {
 		
-		restRepository.save(modelMapper.map(restDto, Rest.class));
+		// 휴가 등록자 입력 
+		Rest rest = restRepository.save(modelMapper.map(restDto, Rest.class));
+		restDto.setEmployeeNo(employeeDto);
 		
-		return restDto;
+		
+//		Employee employeeRestDay = employeeRepository.findById(restDto.getEmployeeNo().getEmployeeRestDay())
+//				.orElseThrow(() -> new IllegalArgumentException("남은휴가가 없습니다. employeeRestDay=" + restDto.getEmployeeNo().getEmployeeRestDay()));
+//		
+//		
+//		employeeRestDay.setEmployeeRestDay(employeeRestDay.getEmployeeRestDay() - restDto.getRestDay());
+//		
+//		if(employeeRestDay.getEmployeeRestDay() < 0) throw new RuntimeException("남은 휴가가 없습니다.");
+		
+		return modelMapper.map(rest, RestDto.class);
 		
 	}
 	
@@ -58,15 +78,18 @@ public class RestService {
 	@Transactional
 	public RestDto updateRest(RestDto restDto) {
 
+		
+		
 		Rest foundRest = restRepository.findById(restDto.getRestNo())
 				.orElseThrow(() -> new RuntimeException("존재하지 않는 휴가입니다."));
-		
+
 		foundRest.update(
 				restDto.getRestDate(), 
 				restDto.getRestModdate(),
 				restDto.getRestDay(),
-				restDto.getRestReason(),
+				restDto.getRestReason(),				
 				modelMapper.map(restDto.getRestCateTypeNo(), RestCate.class));
+			
 		
 		restRepository.save(foundRest);
 		
@@ -119,13 +142,15 @@ public class RestService {
 		foundRest.updateOk(
 				restDto.getRestOk(), 
 				restDto.getRestOkdate());
-				
+				restDto.getEmployeeNo().getEmployeeRestDay();
 				
 		
 		restRepository.save(foundRest);
 		
 		return restDto;
 	}
+	
+	
 
 	
 

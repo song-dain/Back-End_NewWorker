@@ -76,7 +76,7 @@ public class Rest {
 		this.restDate = restDate;
 		this.restModdate = restModdate;
 		this.restDay = restDay;
-		this.restReason = restReason;
+		this.restReason = restReason;		
 		this.restCateTypeNo = restCateTypeNo;
 	}
 
