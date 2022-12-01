@@ -103,7 +103,7 @@ public class MessageService {
 		return receiveMessageBox;
 	}
 
-	/* 받은 메시지 조회 완 */
+	/* 받은 메시지 조회 */
 	public MessageDto selectReceiveMessage(Long messageNo, EmployeeDto recipientDto) {
 
 		Message message = messageRepository.findReceiveMessageById(messageNo, modelMappler.map(recipientDto, Employee.class))
@@ -128,10 +128,10 @@ public class MessageService {
 	}
 
 
-	/* 보낸 메시지함 완 */
+	/* 보낸 메시지함 */
 	public Page<MessageDto> sendMessages(int page, EmployeeDto senderDto) {
 
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("messageNo").descending());
+		Pageable pageable = PageRequest.of(page - 1, 11, Sort.by("messageNo").descending());
 
 		Page<Message> sendMessages = messageRepository.findSendMessages(pageable, modelMappler.map(senderDto, Employee.class));
 		Page<MessageDto> sendMessageBox = sendMessages.map(message -> modelMappler.map(message, MessageDto.class));
@@ -140,7 +140,7 @@ public class MessageService {
 	}
 
 	
-	/* 보낸 메시지 조회 완 */
+	/* 보낸 메시지 조회 */
 	public MessageDto selectSendMessage(Long messageNo, EmployeeDto senderDto) {
 
 		Message message = messageRepository.findSendMessageById(messageNo, modelMappler.map(senderDto, Employee.class))
@@ -162,6 +162,25 @@ public class MessageService {
 		return findMessageList;
 	}
 
+	/* 보낸 메시지 전송 취소 */
+	public MessageDto sendCancel(Long messageNo, EmployeeDto senderDto) {
+		
+		log.info("[ms] messageNo : {}", messageNo );
+		
+		Message cancelMessage = messageRepository.findSendMessageById(messageNo, modelMappler.map(senderDto, Employee.class))
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메시지입니다."));
+		
+		cancelMessage.setMessageStatus("cancel");
+		
+		messageRepository.save(cancelMessage);
+		
+		RecipientManagement targetMessage = recipientManagementRepository.findById(messageNo)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메시지입니다."));
+		targetMessage.setReceiveMessageDelete("CALCEL");
+		
+		return modelMappler.map(cancelMessage, MessageDto.class);
+	}
+	
 	
 	/* 중요 메시지함 완 */
 	public Page<MessageDto> impoMessages(int page, EmployeeDto recipientDto) {
