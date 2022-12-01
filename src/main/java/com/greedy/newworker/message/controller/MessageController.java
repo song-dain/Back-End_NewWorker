@@ -1,6 +1,7 @@
 package com.greedy.newworker.message.controller;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -141,6 +142,15 @@ public class MessageController {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "보낸 메시지 검색 성공", responseDtoWithPaging));
 	}
+	
+	
+	/* 보낸 메시지 전송 취소 */
+	@PatchMapping("/cancel/{messageNo}")
+	public ResponseEntity<ResponseDto> sendCancel(@PathVariable("messageNo") Long messageNo, @AuthenticationPrincipal EmployeeDto sender) {
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "보낸 메시지 전송 취소 성공", messageService.sendCancel(messageNo, sender)));
+	}
+	
 
 
 	/* 중요 메시지함 */
