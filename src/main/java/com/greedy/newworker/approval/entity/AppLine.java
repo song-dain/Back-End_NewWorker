@@ -7,11 +7,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import com.greedy.newworker.employee.entity.Employee;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,8 +39,9 @@ public class AppLine {
 	@Column(name = "APP_LINE_TURN")
 	private Long appLineTurn;
 	
-	@Column(name = "EMPLOYEE_NO")
-	private Long employeeNo;
+	@ManyToOne
+	@JoinColumn(name = "EMPLOYEE_NO")
+	private Employee employee;
 
 	@Column(name = "APP_NO")
 	private Long approvalNo;

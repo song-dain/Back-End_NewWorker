@@ -3,7 +3,6 @@ package com.greedy.newworker.approval.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -16,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.greedy.newworker.approval.dto.AppLineDto;
 import com.greedy.newworker.approval.dto.ApprovalDto;
 import com.greedy.newworker.approval.entity.Approval;
 import com.greedy.newworker.approval.repository.AppLineRepository;
@@ -26,7 +26,6 @@ import com.greedy.newworker.apttach.dto.ApttachDto;
 import com.greedy.newworker.employee.dto.EmployeeDto;
 import com.greedy.newworker.employee.entity.Department;
 import com.greedy.newworker.employee.entity.Employee;
-import com.greedy.newworker.employee.entity.Position;
 import com.greedy.newworker.employee.repository.DepartmentRepository;
 import com.greedy.newworker.employee.repository.EmployeeRepository;
 import com.greedy.newworker.util.FileUploadUtils;
@@ -160,7 +159,33 @@ public class ApprovalService {
 	
 	
 	/* 결재 문서 상세 조회 */
-	public ApprovalDto selectApprovalDetail(Long appNo) {
+//	public ApprovalDto selectApprovalDetail(Long appNo) {
+//
+//		log.info("[selectApprovalDetail] 결재 상세 조회 시작 =====================");
+//		log.info("[selectApprovalDetail] appNo : {}", appNo);
+//		
+//		Approval approval = approvalRepository.findByAppNo(appNo)
+//				.orElseThrow(() -> new IllegalArgumentException("해당 결재 페이지가 존재하지 않습니다. appNo=" + appNo));
+//		ApprovalDto approvalDto = modelMapper.map(approval, ApprovalDto.class);
+//
+//		return approvalDto;
+//	}
+
+	/* 기안자 결재 문서 상세 조회 */
+	public ApprovalDto selectDrafterDetail(Long appNo) {
+
+		log.info("[selectApprovalDetail] 결재 상세 조회 시작 =====================");
+		log.info("[selectApprovalDetail] appNo : {}", appNo);
+		
+		Approval approval = approvalRepository.findByAppNo(appNo)
+				.orElseThrow(() -> new IllegalArgumentException("해당 결재 페이지가 존재하지 않습니다. appNo=" + appNo));
+		ApprovalDto approvalDto = modelMapper.map(approval, ApprovalDto.class);
+
+		return approvalDto;
+	}
+	
+	/* 결재자 결재 문서 상세 조회 */
+	public ApprovalDto selectApproverDetail(Long appNo) {
 
 		log.info("[selectApprovalDetail] 결재 상세 조회 시작 =====================");
 		log.info("[selectApprovalDetail] appNo : {}", appNo);
@@ -172,7 +197,42 @@ public class ApprovalService {
 		return approvalDto;
 	}
 
+	
+	/* 결재 상태 변경 (회수) */
+	public Object changeAppStatus(String appStatus) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	
+	
+	/* 승인 상태 변경 (승인) */
+	public ApprovalDto changeAccStatus(AppLineDto accChange) {
+		
+		
+		
+		
+//		
+//		int accSize = originAccStatus.getAppLines().size(); // 결재순번의 갯수
+//		int accString = originAccStatus.getAppLines().lastIndexOf("승인"); // 마지막 승인의 순서값
+//		// 어떻게 그때그때 바뀔 AppLine 안의 accStatus의 특정 인덱스 순서를 찾지?
+//		
+//		if(accSize == accString) {
+//			originAccStatus.setAppStatus("완료");
+//		}
+//
+//		// 어떻게 해당순번의 상태값을 변경하지? ㅜ
+//		
+//
+//		originAccStatus.setAppStatus("진행중");
+
+		
+		
+		return null;
+	}
+
+
+	
 
 
 	
