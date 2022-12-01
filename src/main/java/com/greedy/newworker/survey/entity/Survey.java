@@ -78,6 +78,7 @@ public class Survey {
 	@Column(name = "SUR_IMAGE_URL")
 	private String surveyImageUrl;
 	
+	//퀘스천아이템에 담기
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "SUR_NO")
     private List<QuestionItem> questionItem;
