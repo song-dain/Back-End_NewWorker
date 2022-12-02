@@ -30,7 +30,7 @@ import com.greedy.newworker.survey.dto.SurveyDto;
 import com.greedy.newworker.survey.service.SurveyService;
 
 import lombok.extern.slf4j.Slf4j;
-
+/* 설문조사 컨트롤러*/
 @Slf4j
 @Controller
 @RequestMapping("/survey")
