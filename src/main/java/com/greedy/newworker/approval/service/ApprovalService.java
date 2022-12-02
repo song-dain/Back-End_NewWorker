@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.greedy.newworker.approval.dto.AppLineDto;
 import com.greedy.newworker.approval.dto.ApprovalDto;
+import com.greedy.newworker.approval.entity.AppLine;
 import com.greedy.newworker.approval.entity.Approval;
 import com.greedy.newworker.approval.repository.AppLineRepository;
 import com.greedy.newworker.approval.repository.ApprovalRepository;
@@ -99,6 +100,7 @@ public class ApprovalService {
 		
 		// 결재문서 등록 시, 첫 번째 결재자의 결재활성화여부가 Y로 변경하도록 설정
 		approvalDto.getAppLines().get(0).setAcceptActivate("Y");
+		
 	
 		
 		
@@ -198,37 +200,78 @@ public class ApprovalService {
 	}
 
 	
-	/* 결재 상태 변경 (회수) */
-	public Object changeAppStatus(String appStatus) {
-		// TODO Auto-generated method stub
-		return null;
+	/* 기안자 결재 상태 변경 (회수) */
+	public ApprovalDto changeAppStatus(ApprovalDto appStatusChange) {
+		
+		Approval approval = approvalRepository.findById(appStatusChange.getAppNo())
+				.orElseThrow(() -> new IllegalArgumentException("해당 페이지가 존재하지 않습니다. : " + appStatusChange.getAppNo()));
+		
+		approval.setAppStatus("회수");
+		
+		AppLine appLine = appLineRepository.findById(appStatusChange.getAppLines().get(0).getAppLineNo())
+				.orElseThrow(() -> new IllegalArgumentException("해당 결재선이 존재하지 않습니다. appLineNo=" + appStatusChange.getAppLines().get(0).getAppLineNo()));
+		
+		appLine.setAcceptActivate("N");
+		approvalRepository.save(approval);
+		
+		
+		return appStatusChange;
 	}
 
 	
 	
-	/* 승인 상태 변경 (승인) */
-	public ApprovalDto changeAccStatus(AppLineDto accChange) {
+	/* 결재자 승인 상태 변경 (승인) */
+	public AppLineDto changeAccStatus(AppLineDto accChange) {
 		
+		// 승인 로직
+		// appLineNo와, appNo 를 받아온다.
+		// 1. appLineNo 기준으로 조회 -> 상태 변경(accStatus '승인')
+		AppLine appLine = appLineRepository.findById(accChange.getAppLineNo())
+				.orElseThrow(() -> new IllegalArgumentException("해당 결재선이 존재하지 않습니다. appLineNo=" + accChange.getAppLineNo()));
 		
-		
-		
-//		
-//		int accSize = originAccStatus.getAppLines().size(); // 결재순번의 갯수
-//		int accString = originAccStatus.getAppLines().lastIndexOf("승인"); // 마지막 승인의 순서값
-//		// 어떻게 그때그때 바뀔 AppLine 안의 accStatus의 특정 인덱스 순서를 찾지?
-//		
-//		if(accSize == accString) {
-//			originAccStatus.setAppStatus("완료");
-//		}
-//
-//		// 어떻게 해당순번의 상태값을 변경하지? ㅜ
-//		
-//
-//		originAccStatus.setAppStatus("진행중");
+
+		appLine.setAcceptStatus("승인");
 
 		
+		// 2. appLineTurn + 1 하고, approvalNo 로 다시 한 번 appLineNo 조회 (다음 사람을 찾는다.)
+		if(appLineRepository.findByApprovalNoAndAppLineTurn(appLine.getApprovalNo(), (appLine.getAppLineTurn()+1)).isPresent()){
+			AppLine nextAppLine = appLineRepository.findByApprovalNoAndAppLineTurn(appLine.getApprovalNo(), appLine.getAppLineTurn()+1)
+					.orElseThrow(() -> new IllegalArgumentException("해당 결재선이 존재하지 않습니다. appLineNo=" + accChange.getAppLineNo()));
 		
-		return null;
+		// 3. 있을 경우, appLineTurn+1 인 acceptActivate를 업데이트('Y')	
+			nextAppLine.setAcceptActivate("Y");
+			appLineRepository.save(nextAppLine);
+			Approval app = approvalRepository.findById(appLine.getApprovalNo()).orElseThrow(() -> new IllegalArgumentException(""));
+			app.setAppStatus("진행중");
+			
+		} else {
+
+			// 4. 없을 경우, approvalNo 기준으로 문서 조회. appStatus를 완료로 변경.
+			Approval app = approvalRepository.findById(appLine.getApprovalNo()).orElseThrow(() -> new IllegalArgumentException(""));
+			app.setAppStatus("완료");
+			
+		}
+		
+		appLineRepository.save(appLine);
+		
+		
+		return accChange;
+	}
+
+	
+	
+	/* 결재자 승인 상태 변경 (반려) */
+	public AppLineDto changeNotAccStatus(AppLineDto accChange) {
+		AppLine appLine = appLineRepository.findById(accChange.getAppLineNo())
+				.orElseThrow(() -> new IllegalArgumentException("해당 결재선이 존재하지 않습니다. appLineNo=" + accChange.getAppLineNo()));
+		
+		appLine.setAcceptStatus("반려");
+		Approval app = approvalRepository.findById(appLine.getApprovalNo()).orElseThrow(() -> new IllegalArgumentException(""));
+		app.setAppStatus("반려");
+		
+		appLineRepository.save(appLine);
+		
+		return accChange;
 	}
 
 
