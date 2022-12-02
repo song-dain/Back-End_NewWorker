@@ -22,4 +22,11 @@ public class RestDto {
 	private String restYn;
 	private RestCateDto restCateTypeNo;
 	private EmployeeDto employeeNo;
+	
+	
+	
+	public Date update(Date sqlDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

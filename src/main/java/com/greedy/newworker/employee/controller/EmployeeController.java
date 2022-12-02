@@ -48,9 +48,9 @@ public class EmployeeController {
 	}
 	
 	/* 직원수정 */
-	@PutMapping("/employee/{employeeNo}")
-	public ResponseEntity<ResponseDto> updateEmployee(@ModelAttribute EmployeeDto employeeDto, @PathVariable Long employeeNo) {
-		employeeDto.setEmployeeNo(employeeNo);
+	@PutMapping("/employee/register")
+	public ResponseEntity<ResponseDto> updateEmployee(@ModelAttribute EmployeeDto employeeDto/*, @PathVariable Long employeeNo*/) {
+//		employeeDto.setEmployeeNo(employeeNo);
 		
 		employeeDto.setEmployeePwd(passwordEncoder.encode(employeeDto.getEmployeePwd()));
 		

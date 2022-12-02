@@ -84,8 +84,19 @@ public class Rest {
 		this.restOk = restOk;
 		this.restOkdate = restOkdate;		
 	}
+
+
 	
+
 	
+
+//	public void updateNo(String restOk) {
+//		this.restOk = restOk;
+//		
+//	}
+
+	
+
 
 	 
 	

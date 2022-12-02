@@ -24,6 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class RestService {
 
+	
+//	Date date = new Date();
 
 	private final RestRepository restRepository;
 	private final ModelMapper modelMapper;
@@ -83,9 +85,11 @@ public class RestService {
 		Rest foundRest = restRepository.findById(restDto.getRestNo())
 				.orElseThrow(() -> new RuntimeException("존재하지 않는 휴가입니다."));
 
+		LocalDate todaysDate = LocalDate.now();
+		
 		foundRest.update(
 				restDto.getRestDate(), 
-				restDto.getRestModdate(),
+				Date.valueOf(todaysDate),
 				restDto.getRestDay(),
 				restDto.getRestReason(),				
 				modelMapper.map(restDto.getRestCateTypeNo(), RestCate.class));
@@ -135,20 +139,60 @@ public class RestService {
 	/* 연차 승인, 반려 */
 	@Transactional
 	public RestDto updateRestOk(RestDto restDto) {
+		
+//		Date date = new Date();
+//		long timeInMilliSeconds = date.getTime();				
+//		 java.sql.Date sqlDate = new java.sql.Date(timeInMilliSeconds);
 
+		
 		Rest foundRest = restRepository.findById(restDto.getRestNo())
 				.orElseThrow(() -> new RuntimeException("존재하지 않는 휴가입니다."));
-		
+		 LocalDate todaysDate = LocalDate.now();
+
 		foundRest.updateOk(
-				restDto.getRestOk(), 
-				restDto.getRestOkdate());
-				restDto.getEmployeeNo().getEmployeeRestDay();
-				
+						"Y",
+						Date.valueOf(todaysDate));
+//						modelMapper.map(restDto.getEmployeeNo().getEmployeeRestDay(), Employee.class)); 
+
+		
+		
+						
+//		foundRest.update(sqlDate, sqlDate, null, null, null);
+		 
+//		
+//		 Rest oriRest = restRepository.findById(restDto.getRestNo())
+//					.orElseThrow(() -> new RuntimeException("존재하지 않는 휴가입니다."));
+//		 
+//		 oriRest.update(sqlDate);	
+		
+	      
+            
+						
 		
 		restRepository.save(foundRest);
 		
 		return restDto;
 	}
+
+//	/* 연차 반려 */
+//	@Transactional
+//	public RestDto updateRestNo(RestDto restDto) {
+//		
+//		
+//		Rest foundRest = restRepository.findById(restDto.getRestNo())
+//				.orElseThrow(() -> new RuntimeException("존재하지 않는 휴가입니다."));
+//		
+//		foundRest.updateNo(
+//
+//						"F"); 
+//						
+//						
+//		
+//		restRepository.save(foundRest);
+//		
+//		return restDto;
+//	}
+	
 	
 	
 
