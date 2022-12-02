@@ -136,6 +136,21 @@ public class NoticeService {
 		return noticeDto;
 	}
 	
+	/* 5. 공지 삭제 */
+		public void deleteNotice(Long notNo) {
+			
+			log.info("[NoticeService] deletenotice Start =========================");
+			log.info("[NoticeService] noticeDto : {}", notNo);
+			
+			Notice foundNotice = noticeRepository.findById(notNo)
+					.orElseThrow(() -> new RuntimeException("존재하지 않는 공지사항입니다."));
+				 
+			noticeRepository.delete(foundNotice);
+			
+			log.info("[NoticeService] deleteNotice End =========================");
+			
+		}
+	
 }
 		
 		

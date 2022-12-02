@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -111,6 +112,16 @@ public class SurveyController {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "공지 수정 성공", surveyService.updateSurvey(surveyDto)));
 		
+	}
+	
+	/* 5. 설문 삭제 */
+	@DeleteMapping("/surveyDetail/delete/{surNo}")
+	public ResponseEntity<ResponseDto> removeSurvey(@ModelAttribute SurveyDto surveyDto,
+			@PathVariable("surNo") Long surNo) {
+				
+		surveyService.deleteSurvey(surNo);
+				 
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "공지 삭제 완료", null));
 	}
 	
 	
