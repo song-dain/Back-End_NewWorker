@@ -17,23 +17,19 @@ public interface ApprovalRepository extends JpaRepository<Approval, Long> {
 	@Query("select a from Approval a where a.employee.employeeNo =:employeeNo")
 	Page<Approval> findSendApproval(Pageable page, @Param("employeeNo")Long employeeNo);
 	
-//	// 결재 수신함 조회
-//	@Query("select a from Approval a join a.appLines al where al.employeeNo =:employeeNo and al.acceptActivate = 'Y' and a.appStatus != '회수'")
-//	Page<Approval> findReceiveApproval(Pageable page, @Param("employeeNo")Long approver);
 	
 	// 결재 수신함 조회
 	@Query("select a from Approval a join a.appLines al where al.employee.employeeNo =:employeeNo and al.acceptActivate = 'Y' and a.appStatus != '회수'")
 	Page<Approval> findReceiveApproval(Pageable page, @Param("employeeNo")Long approver);
 
-	// 결재문서 상세 조회
-	@Query("select a from Approval a where a.appNo =:appNo")
-	Optional<Approval> findByAppNo(@Param("appNo") Long appNo);
 	
+	// 결재문서 상세 조회
+	@Query("select a from Approval a join fetch a.appLines al where a.appNo =:appNo order by al.appLineNo")
+	Optional<Approval> findByAppNo(@Param("appNo") Long appNo);
 }
 
 
 
-	
 
 
 
