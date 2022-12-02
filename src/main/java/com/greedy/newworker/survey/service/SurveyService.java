@@ -32,7 +32,7 @@ public class SurveyService {
 	
 	@Value("${file.file-dir}" + "/surveyimgs")
 	private String FILE_DIR;
-	@Value("${file.file-url}" + "/surveyimgs/")
+	@Value("${file.file-url}" + "surveyimgs/")
 	private String FILE_URL;
 	
 	private final SurveyRepository surveyRepository;
@@ -54,6 +54,9 @@ public class SurveyService {
 		Page<SurveyDto> surveyDtoList = surveyList.map(survey -> modelMapper.map(survey, SurveyDto.class));
 		
 		 log.info("surveyList : {}", surveyList.getContent());
+		 
+		 /* 클라이언트 측에서 서버에 저장 된 이미지 요청 시 필요한 주소로 가공 */
+		 surveyDtoList.forEach(survey -> survey.setSurveyImageUrl(FILE_URL + survey.getSurveyImageUrl()));
 		
 		return surveyDtoList;
 	}
