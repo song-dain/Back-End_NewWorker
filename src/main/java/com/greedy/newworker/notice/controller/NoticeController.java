@@ -93,6 +93,7 @@ public class NoticeController {
 		
 	}
 	
+	
 	/* 5.공지 삭제 */
 	@DeleteMapping("/noticeDetail/delete/{notNo}")
 	public ResponseEntity<ResponseDto> removeNotice(@ModelAttribute NoticeDto noticeDto,
