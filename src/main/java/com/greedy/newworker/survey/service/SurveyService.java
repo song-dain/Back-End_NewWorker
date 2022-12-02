@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.greedy.newworker.notice.entity.Notice;
 import com.greedy.newworker.survey.dto.SurveyDto;
 import com.greedy.newworker.survey.entity.Survey;
 import com.greedy.newworker.survey.repository.SurveyRepository;
@@ -31,7 +32,7 @@ public class SurveyService {
 	
 	@Value("${file.file-dir}" + "/surveyimgs")
 	private String FILE_DIR;
-	@Value("${file.file-url}" + "/surveyimgs/")
+	@Value("${file.file-url}" + "surveyimgs/")
 	private String FILE_URL;
 	
 	private final SurveyRepository surveyRepository;
@@ -53,6 +54,9 @@ public class SurveyService {
 		Page<SurveyDto> surveyDtoList = surveyList.map(survey -> modelMapper.map(survey, SurveyDto.class));
 		
 		 log.info("surveyList : {}", surveyList.getContent());
+		 
+		 /* 클라이언트 측에서 서버에 저장 된 이미지 요청 시 필요한 주소로 가공 */
+		 surveyDtoList.forEach(survey -> survey.setSurveyImageUrl(FILE_URL + survey.getSurveyImageUrl()));
 		
 		return surveyDtoList;
 	}
@@ -108,7 +112,39 @@ public class SurveyService {
 		
 	}
 	
-	/* 4. 설문 수정 */
+	/* 4. 설문 제출 */
+	@Transactional
+	public SurveyDto insertSurvey1(SurveyDto surveyDto) {
+		
+		log.info("[SurveyService] insertSurvey Start ===================================");
+		log.info("[SurveyService] surveyDto : {}", surveyDto);
+//		String imageName = UUID.randomUUID().toString().replace("-", "");
+//		String replaceFileName = null;
+//		
+//		try {
+//			replaceFileName = FileUploadUtils.saveFile(FILE_DIR, imageName, surveyDto.getSurveyImage());
+//			surveyDto.setSurveyImageUrl(replaceFileName);
+//			
+//			log.info("[SurveyService] replaceFileName : {}", replaceFileName);
+//			
+//			surveyRepository.save(modelMapper.map(surveyDto, Survey.class));
+//			
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			try {
+//				FileUploadUtils.deleteFile(FILE_DIR, replaceFileName);
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
+//		}
+		
+		log.info("[SurveyService] 설문 등록 완료 ===================================");
+		
+		return surveyDto;
+		
+	}
+	
+	/* 5. 설문 수정 */
 	@Transactional
 	public SurveyDto updateSurvey(SurveyDto surveyDto) {
 
@@ -136,6 +172,21 @@ public class SurveyService {
 		log.info("[SurveyService] updateSurvey End ===================================");
 
 		return surveyDto;
+	}
+	
+	/* 6. 공지 삭제 */
+	public void deleteSurvey(Long surNo) {
+		
+		log.info("[SurveyService] deleteSurvey Start =========================");
+		log.info("[SurveyService] noticeDto : {}", surNo);
+		
+		Survey foundSurvey = surveyRepository.findById(surNo)
+				.orElseThrow(() -> new RuntimeException("존재하지 않는 설문입니다."));
+			 
+		surveyRepository.delete(foundSurvey);
+		
+		log.info("[SurveyService] deleteSurvey End =========================");
+		
 	}
 	
 }

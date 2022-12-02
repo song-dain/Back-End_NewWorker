@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +31,7 @@ import com.greedy.newworker.survey.dto.SurveyDto;
 import com.greedy.newworker.survey.service.SurveyService;
 
 import lombok.extern.slf4j.Slf4j;
-
+/* 설문조사 컨트롤러*/
 @Slf4j
 @Controller
 @RequestMapping("/survey")
@@ -90,6 +91,19 @@ public class SurveyController {
     	
     }
     
+    /* 3. 설문 제출 */
+    @PostMapping("/survey/submit")
+    public ResponseEntity<ResponseDto> insertSurvey1(@ModelAttribute SurveyDto surveyDto,
+    		@AuthenticationPrincipal EmployeeDto employee) {
+    	
+    	surveyDto.setEmployee(employee);
+    	log.info("[SurveyDto] surveyDto : " + surveyDto);
+    	
+    	
+    	return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "설문 제출 성공", surveyService.insertSurvey1(surveyDto)));
+    	
+    }
+    
     
     
     /* 4. 설문 수정 */
@@ -98,6 +112,16 @@ public class SurveyController {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "공지 수정 성공", surveyService.updateSurvey(surveyDto)));
 		
+	}
+	
+	/* 5. 설문 삭제 */
+	@DeleteMapping("/surveyDetail/delete/{surNo}")
+	public ResponseEntity<ResponseDto> removeSurvey(@ModelAttribute SurveyDto surveyDto,
+			@PathVariable("surNo") Long surNo) {
+				
+		surveyService.deleteSurvey(surNo);
+				 
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "공지 삭제 완료", null));
 	}
 	
 	

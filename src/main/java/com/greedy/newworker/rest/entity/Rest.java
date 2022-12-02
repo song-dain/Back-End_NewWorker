@@ -76,7 +76,7 @@ public class Rest {
 		this.restDate = restDate;
 		this.restModdate = restModdate;
 		this.restDay = restDay;
-		this.restReason = restReason;
+		this.restReason = restReason;		
 		this.restCateTypeNo = restCateTypeNo;
 	}
 
@@ -84,8 +84,19 @@ public class Rest {
 		this.restOk = restOk;
 		this.restOkdate = restOkdate;		
 	}
+
+
 	
+
 	
+
+//	public void updateNo(String restOk) {
+//		this.restOk = restOk;
+//		
+//	}
+
+	
+
 
 	 
 	

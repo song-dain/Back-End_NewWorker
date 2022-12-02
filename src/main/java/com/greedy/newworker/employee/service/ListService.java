@@ -54,7 +54,7 @@ public class ListService {
         log.info("[ListService] employeeNo : " + employeeNo);
         
         Employee employee = listRepository.findByEmployeeNo(employeeNo)
-        		.orElseThrow(() -> new IllegalArgumentException("해당 상품이 없습니다. employeeNo=" + employeeNo));
+        		.orElseThrow(() -> new IllegalArgumentException("해당 직원이 없습니다. employeeNo=" + employeeNo));
         EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
         
         log.info("[ListService] employeeDto : " + employeeDto);

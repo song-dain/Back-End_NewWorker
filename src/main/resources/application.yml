@@ -18,7 +18,7 @@ spring:
 # 정적 리소스 경로 설정
   web:
     resources:
-      static-locations: classpath:/employeeimgs/, classpath:/noticeimgs/, classpath:/surveyimgs/, classpath:/uploadFiles/ #리소스 경로 더 추가하고 싶을 경우 , 찍어서 추가하세요
+      static-locations: classpath:/uploadFiles/ #리소스 경로 더 추가하고 싶을 경우 , 찍어서 추가하세요
       
 # jpa config
   jpa:
@@ -45,17 +45,12 @@ spring:
 
 # 이미지 저장할 위치와 응답 시 이미지 주소 설정
 file:
-
   add-resource-locations: classpath:/static/uploadFiles/
   add-resource-handler: /uploadFiles/**
   file-dir: src/main/resources/static/uploadFiles #Service에서 자기 이미지 담을 하위 경로를 가공하세요!
   file-url: http://localhost:8001/uploadFiles/ #이하 동일입니다!
 
 
-
-          
-          
-         
 jwt:
   secret: rmNdxF4HeCNvC70Z6JEN8uUMBzCBxgIQ/aOcLN9/qKp5ZxhWzyGcmfY5T09Xgx18ibWU9qW3/sYZwWH+fCNv2w==
  
