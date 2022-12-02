@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -90,6 +91,16 @@ public class NoticeController {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "공지 수정 성공", noticeService.updateNotice(noticeDto)));
 		
+	}
+	
+	/* 5.공지 삭제 */
+	@DeleteMapping("/noticeDetail/delete/{notNo}")
+	public ResponseEntity<ResponseDto> removeNotice(@ModelAttribute NoticeDto noticeDto,
+			@PathVariable("notNo") Long notNo) {
+				
+		noticeService.deleteNotice(notNo);
+				 
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "공지 삭제 완료", null));
 	}
 	
 	

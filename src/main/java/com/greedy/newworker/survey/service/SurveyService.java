@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.greedy.newworker.notice.entity.Notice;
 import com.greedy.newworker.survey.dto.SurveyDto;
 import com.greedy.newworker.survey.entity.Survey;
 import com.greedy.newworker.survey.repository.SurveyRepository;
@@ -168,6 +169,21 @@ public class SurveyService {
 		log.info("[SurveyService] updateSurvey End ===================================");
 
 		return surveyDto;
+	}
+	
+	/* 6. 공지 삭제 */
+	public void deleteSurvey(Long surNo) {
+		
+		log.info("[SurveyService] deleteSurvey Start =========================");
+		log.info("[SurveyService] noticeDto : {}", surNo);
+		
+		Survey foundSurvey = surveyRepository.findById(surNo)
+				.orElseThrow(() -> new RuntimeException("존재하지 않는 설문입니다."));
+			 
+		surveyRepository.delete(foundSurvey);
+		
+		log.info("[SurveyService] deleteSurvey End =========================");
+		
 	}
 	
 }
