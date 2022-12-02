@@ -103,12 +103,22 @@ public class RestsController {
 	
 	
 	
-	/* 연차 승인, 반려 */	
-	@PutMapping("/list/admin/ok")
+	/* 연차 반려 */	
+	@PutMapping("/list/admin/detail/{restNo}")
 	public ResponseEntity<ResponseDto> updateRestOk(@ModelAttribute RestDto restDto) {		
 		
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "완료되었습니다.", restService.updateRestOk(restDto)));
 	}
 	
+	
+//	/* 연차 반려 */	
+//	@PutMapping("/list/admin/detail/{restNo}")
+//	public ResponseEntity<ResponseDto> updateRestNo(@ModelAttribute RestDto restDto) {		
+//		
+//		
+//		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "완료되었습니다.", restService.updateRestNo(restDto)));
+//	}
+//	
+//	
 }

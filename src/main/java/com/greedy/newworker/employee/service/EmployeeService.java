@@ -1,6 +1,8 @@
 package com.greedy.newworker.employee.service;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -121,6 +123,7 @@ public class EmployeeService {
 				/* 이미지를 변경하지 않는 경우 */
 				employeeDto.setEmployeeImageUrl(oriImage);
 			}
+			//LocalDate todaysDate = LocalDate.now();
 			
 			/* 조회 했던 기존 엔티티의 내용을 수정 */
 			oriEmployee.update( 					
@@ -152,6 +155,7 @@ public class EmployeeService {
 		}
 		
 		log.info("[EmployeeService] updateEmployee End ===================================");
+		
 		
 		return employeeDto;
 
