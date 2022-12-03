@@ -106,6 +106,18 @@ public class ApprovalController {
 	}
 	
 	
+	/* 기안자 결재문서 '삭제'처리 */
+	@PostMapping("/removeApproval")
+	public ResponseEntity<ResponseDto> removeApproval(@RequestBody ApprovalDto removeApproval,
+			@AuthenticationPrincipal EmployeeDto drafter) {
+		removeApproval.setEmployee(drafter);
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재 문서 삭제 성공",
+		approvalService.removeApproval(removeApproval)));
+		
+	}
+	
+	
 	/* 기안자 결재문서 상세 조회 */
 	@GetMapping("/drafterDetail/{appNo}")
 	public ResponseEntity<ResponseDto> selectDrafterDetail(@PathVariable Long appNo) {
@@ -156,5 +168,7 @@ public class ApprovalController {
 		
 	}
 	
+	
+
 
 }
