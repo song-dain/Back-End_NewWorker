@@ -3,6 +3,7 @@ package com.greedy.newworker.approval.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -20,6 +21,7 @@ import com.greedy.newworker.approval.dto.ApprovalDto;
 import com.greedy.newworker.approval.entity.AppLine;
 import com.greedy.newworker.approval.entity.Approval;
 import com.greedy.newworker.approval.repository.AppLineRepository;
+import com.greedy.newworker.approval.repository.AppRemoveRepository;
 import com.greedy.newworker.approval.repository.ApprovalRepository;
 import com.greedy.newworker.approval.repository.ApttachRepository;
 import com.greedy.newworker.approval.repository.PositionRepository;
@@ -44,6 +46,7 @@ public class ApprovalService {
 	private final ApttachRepository apttachRepository;
 	private final DepartmentRepository departmentRepository;
 	private final ModelMapper modelMappler;
+	private final AppRemoveRepository appRemoveRepository;
 	
 	@Value("${file.file-dir}" + "/approvalfiles")
 	private String FILE_DIR;
@@ -53,7 +56,8 @@ public class ApprovalService {
 	public ApprovalService(ModelMapper modelMapper, ApprovalRepository approvalRepository, 
 			EmployeeRepository employeeRepository, AppLineRepository appLineRepository,
 			ApttachRepository apttachRepository, DepartmentRepository departmentRepository,
-			PositionRepository positionRepository, ModelMapper modelMappler) {
+			PositionRepository positionRepository, ModelMapper modelMappler,
+			AppRemoveRepository appRemoveRepository) {
 		this.modelMapper = modelMapper;
 		this.approvalRepository = approvalRepository;
 		this.employeeRepository = employeeRepository;
@@ -61,6 +65,7 @@ public class ApprovalService {
 		this.apttachRepository = apttachRepository;
 		this.departmentRepository = departmentRepository;
 		this.modelMappler = modelMappler;
+		this.appRemoveRepository = appRemoveRepository;
 	}
 
 	// 부서별 결재자 조회
@@ -143,6 +148,17 @@ public class ApprovalService {
 
 		return approvalDto;
 	}
+	
+	// 결재 문서 삭제
+	public ApprovalDto removeApproval(ApprovalDto removeApproval) {
+		
+		Approval findApproval = appRemoveRepository.findByAppNo(removeApproval.getAppNo());
+		appRemoveRepository.delete(findApproval);
+		
+		return removeApproval;
+		
+	}
+
 
 
 	// 결재 수신함 조회
@@ -160,18 +176,7 @@ public class ApprovalService {
 	}
 	
 	
-	/* 결재 문서 상세 조회 */
-//	public ApprovalDto selectApprovalDetail(Long appNo) {
-//
-//		log.info("[selectApprovalDetail] 결재 상세 조회 시작 =====================");
-//		log.info("[selectApprovalDetail] appNo : {}", appNo);
-//		
-//		Approval approval = approvalRepository.findByAppNo(appNo)
-//				.orElseThrow(() -> new IllegalArgumentException("해당 결재 페이지가 존재하지 않습니다. appNo=" + appNo));
-//		ApprovalDto approvalDto = modelMapper.map(approval, ApprovalDto.class);
-//
-//		return approvalDto;
-//	}
+
 
 	/* 기안자 결재 문서 상세 조회 */
 	public ApprovalDto selectDrafterDetail(Long appNo) {
@@ -273,6 +278,7 @@ public class ApprovalService {
 		
 		return accChange;
 	}
+
 
 
 	

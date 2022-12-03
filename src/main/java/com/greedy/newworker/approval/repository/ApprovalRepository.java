@@ -12,6 +12,8 @@ import com.greedy.newworker.approval.entity.Approval;
 
 
 public interface ApprovalRepository extends JpaRepository<Approval, Long> {
+	
+
 
 	// 결재 상신함 조회
 	@Query("select a from Approval a where a.employee.employeeNo =:employeeNo")
@@ -26,6 +28,9 @@ public interface ApprovalRepository extends JpaRepository<Approval, Long> {
 	// 결재문서 상세 조회
 	@Query("select a from Approval a join fetch a.appLines al where a.appNo =:appNo order by al.appLineNo")
 	Optional<Approval> findByAppNo(@Param("appNo") Long appNo);
+
+	
+
 }
 
 
