@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.greedy.newworker.approval.entity.AppLine;
-import com.greedy.newworker.employee.entity.Department;
 
 public interface AppLineRepository extends JpaRepository<AppLine, Long> {
 	

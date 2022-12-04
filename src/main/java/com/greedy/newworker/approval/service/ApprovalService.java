@@ -1,15 +1,12 @@
 package com.greedy.newworker.approval.service;
 
-import java.io.IOException;
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
 
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,15 +20,12 @@ import com.greedy.newworker.approval.entity.Approval;
 import com.greedy.newworker.approval.repository.AppLineRepository;
 import com.greedy.newworker.approval.repository.AppRemoveRepository;
 import com.greedy.newworker.approval.repository.ApprovalRepository;
-import com.greedy.newworker.approval.repository.ApttachRepository;
 import com.greedy.newworker.approval.repository.PositionRepository;
-import com.greedy.newworker.apttach.dto.ApttachDto;
 import com.greedy.newworker.employee.dto.EmployeeDto;
 import com.greedy.newworker.employee.entity.Department;
 import com.greedy.newworker.employee.entity.Employee;
 import com.greedy.newworker.employee.repository.DepartmentRepository;
 import com.greedy.newworker.employee.repository.EmployeeRepository;
-import com.greedy.newworker.util.FileUploadUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
