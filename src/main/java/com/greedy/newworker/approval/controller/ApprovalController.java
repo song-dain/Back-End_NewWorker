@@ -71,7 +71,7 @@ public class ApprovalController {
 	
 	
 	
-	/* 결재 문서 수신함 */
+	/* 결재 문서 수신함 조회 */
 	@GetMapping("/approver")
 	public ResponseEntity<ResponseDto> receiveApproval (@RequestParam(name = "page", defaultValue = "1") int page,
 			@AuthenticationPrincipal EmployeeDto approver) {
@@ -106,7 +106,7 @@ public class ApprovalController {
 	}
 	
 	
-	/* 기안자 결재문서 '삭제'처리 */
+	/* 기안자 - 결재문서 '삭제'처리 */
 	@PostMapping("/removeApproval")
 	public ResponseEntity<ResponseDto> removeApproval(@RequestBody ApprovalDto removeApproval,
 			@AuthenticationPrincipal EmployeeDto drafter) {
@@ -118,7 +118,7 @@ public class ApprovalController {
 	}
 	
 	
-	/* 기안자 결재문서 상세 조회 */
+	/* 기안자 - 결재문서 상세 조회 */
 	@GetMapping("/drafterDetail/{appNo}")
 	public ResponseEntity<ResponseDto> selectDrafterDetail(@PathVariable Long appNo) {
 		
@@ -126,7 +126,7 @@ public class ApprovalController {
 	}
 	
 	
-	/* 결재자 결재문서 상세 조회 */
+	/* 결재자 - 결재문서 상세 조회 */
 	@GetMapping("/approverDetail/{appNo}")
 	public ResponseEntity<ResponseDto> selectApproverDetail(@PathVariable Long appNo) {
 		
@@ -135,19 +135,16 @@ public class ApprovalController {
 	
 	
 	
-	/* 기안자 결재상태 변경(회수) => '회수' 일 경우 기안자가 문서 삭제 가능해짐 */
+	/* 기안자 - 결재상태 변경(회수) => '회수' 일 경우 기안자가 문서 삭제 가능해짐 */
 	@PutMapping("/appStatus")
 	public ResponseEntity<ResponseDto> changeAppStatus(@RequestBody ApprovalDto appStatusChange) {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결재상태 변경 성공", approvalService.changeAppStatus(appStatusChange)));
 	}
+
+
 	
-	
-	/* 결재자 승인상태 변경(승인&반려) => 승인일 경우 결재상태가 '진행중' 으로, 반려일 경우 결재상태가 '반려'로. 승인일 경우 다음 결제자에게 결재활성화여부 Y 부여*/
-	/* 결제활성화여부Y 갯수만큼 승인갯수가 결재문서에 존재할 경우 결재상태 '완료'로  */
-	/* ------------------------------------------------------------- */
-	
-	/* 기안자 승인상태 '승인'처리 */
+	/* 결재자 - 승인상태 '승인'처리 */
 	@PutMapping("/acceptStatus")
 	public ResponseEntity<ResponseDto> changeAcceptStatus(@RequestBody AppLineDto accChange) {
 		
@@ -158,7 +155,7 @@ public class ApprovalController {
 	}
 	
 	
-	/* 결재자 승인상태 '반려'처리 */
+	/* 결재자 - 승인상태 '반려'처리 */
 	@PutMapping("/notAcceptStatus")
 	public ResponseEntity<ResponseDto> changeNotAcceptStatus(@RequestBody AppLineDto accChange) {
 			

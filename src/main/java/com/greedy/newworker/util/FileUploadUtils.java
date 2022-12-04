@@ -24,7 +24,7 @@ public class FileUploadUtils {
 			Files.createDirectories(uploadPath);
 		}
 		
-													//본래 파일이 가지고 있던 확장자를 뽑아냄
+													//본래 파일이 가지고 있던 확장자를 뽑아낸다.
 		String replaceFileName = fileName + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
 		
 		// stream을 이용해서 저장
@@ -39,40 +39,7 @@ public class FileUploadUtils {
 		
 	}
 	
-	public static List<String> saveFiles(String uploadDir, String fileName, List<MultipartFile> multipartFiles) throws IOException {
-		
-		List<String> saveFiles = new ArrayList<>();
-		
-		
 
-		for(int i = 0; i < multipartFiles.size(); i++) {
-		
-			// File의 경로를 객체화 한 Path라는 객체로 경로에 대한 가공
-			Path uploadPath = Paths.get(uploadDir);
-			
-			// Path의 경로가 실제로 존재하지 않을 경우, 경로를 만든다.
-			if(!Files.exists(uploadPath)) {
-				Files.createDirectories(uploadPath);
-			}
-			
-														//본래 파일이 가지고 있던 확장자를 뽑아냄
-			String replaceFilesName = fileName + "." + FilenameUtils.getExtension(multipartFiles.get(i).getOriginalFilename());
-			
-			// stream을 이용해서 저장
-			try(InputStream inputStream = multipartFiles.get(i).getInputStream()) {
-				Path filePath = uploadPath.resolve(replaceFilesName);
-				Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-			} catch (IOException e) {
-				throw new IOException("파일을 저장하지 못하였습니다. file name : " + fileName);
-			}
-			
-			saveFiles.add(replaceFilesName);
-		}
-		
-		
-		return saveFiles;
-		
-	}
 
 	public static void deleteFile(String uploadDir, String fileName) throws IOException {
 
@@ -85,70 +52,6 @@ public class FileUploadUtils {
 		}
 		
 	}
-	
-	
-
-	public static void deleteFiles(String fILE_DIR, List<String> fileName) throws IOException {
-		
-		//List<String> deleteFiles = new ArrayList<>();
-		
-		
-		//for (int i = 0; i < deleteFiles.size(); i++) {
-		Path uploadPath = Paths.get(fILE_DIR);
-		
-		for (int i = 0; i < fileName.size(); i++) {
-			
-			//Path uploadPath = Paths.get(fILE_DIR);
-			Path filePath = uploadPath.resolve(fileName.get(i));
-			try {
-				Files.delete(filePath);
-			} catch (IOException e) {
-				throw new IOException("파일을 삭제하지 못하였습니다. file name : " + fileName);
-			}
-			
-
-		
-//		
-//		List<String> saveFiles = new ArrayList<>();
-//		
-//		
-//
-//		for(int i = 0; i < multipartFiles.size(); i++) {
-//		
-//			// File의 경로를 객체화 한 Path라는 객체로 경로에 대한 가공
-//			Path uploadPath = Paths.get(uploadDir);
-//			
-//			// Path의 경로가 실제로 존재하지 않을 경우, 경로를 만든다.
-//			if(!Files.exists(uploadPath)) {
-//				Files.createDirectories(uploadPath);
-//			}
-//			
-//														//본래 파일이 가지고 있던 확장자를 뽑아냄
-//			String replaceFileName = fileName + "." + FilenameUtils.getExtension(multipartFiles.get(i).getOriginalFilename());
-//			
-//			// stream을 이용해서 저장
-//			try(InputStream inputStream = multipartFiles.get(i).getInputStream()) {
-//				Path filePath = uploadPath.resolve(replaceFileName);
-//				Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-//			} catch (IOException e) {
-//				throw new IOException("파일을 저장하지 못하였습니다. file name : " + fileName);
-//			}
-//			
-//			saveFiles.add(replaceFileName);
-//		}
-//		
-//		
-//		return saveFiles;
-//		
-		
-	}
-
-	}
-
-	
-	
-	
-	
 	
 	
 	
