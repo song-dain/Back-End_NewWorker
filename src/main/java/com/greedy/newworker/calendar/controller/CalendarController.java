@@ -71,5 +71,13 @@ public class CalendarController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"일정 삭제 완료", calendarService.deleteSchedule(employee, scheduleNo)));
 	}
 	
+	/* [메인] 오늘 일정 조회 */
+	@GetMapping("/schedule/today")
+	public ResponseEntity<ResponseDto> todaySchedule(@AuthenticationPrincipal EmployeeDto employee){
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"오늘 일정 조회 완료", calendarService.todaySchedule(employee))); 
+	}
+	
+	
 
 }

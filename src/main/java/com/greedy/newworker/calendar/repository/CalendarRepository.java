@@ -1,5 +1,6 @@
 package com.greedy.newworker.calendar.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -18,5 +19,11 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long>, JpaSp
 	Optional<Calendar> findByCalendarNoAndEmployee(@Param("calendarNo")Long calendarNo, @Param("employeeNo")Long employeeNo);
 
 	Optional<Calendar> findByScheduleTitle(String string);
+
+	@Query(value="SELECT * FROM TBL_CALENDAR "
+			+ "WHERE EMPLOYEE_NO =:employeeNo "
+			+ "AND TO_CHAR(SYSDATE, 'yy/MM/dd') >= TO_CHAR(START_DATE, 'yy/MM/dd') "
+			+ "AND TO_CHAR(SYSDATE, 'yy/MM/dd') <= TO_CHAR (END_DATE, 'yy/MM/dd')", nativeQuery=true)
+	List<Calendar> findByEmployeeNoAndStartDate(@Param("employeeNo")Long employeeNo);
 
 }

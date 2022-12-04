@@ -20,6 +20,7 @@ import com.greedy.newworker.calendar.repository.CalendarRepositoryCustom;
 import com.greedy.newworker.employee.dto.EmployeeDto;
 import com.greedy.newworker.employee.entity.Employee;
 import com.greedy.newworker.employee.repository.EmployeeRepository;
+import com.greedy.newworker.rest.dto.RestDto;
 import com.greedy.newworker.rest.entity.Rest;
 import com.greedy.newworker.rest.repository.RestRepository;
 
@@ -49,12 +50,13 @@ public class CalendarService {
 		this.modelMapper = modelMapper;
 	}
 
+	
 	/* 일정 조회 */
-	public Map<String, List<Object>> officeCalendar(EmployeeDto employee, Criteria criteria) {
+	public Map<String, List> officeCalendar(EmployeeDto employee, Criteria criteria) {
 		
 		log.info("[cs]criteria : {}", criteria);
 		
-		Map calendarMap = new HashMap();
+		Map<String, List> calendarMap = new HashMap<>();
 		
 		List<Calendar> scheduleList = calendarRepositoryCustom.scheduleFilter(criteria, modelMapper.map(employee, Employee.class));
 		calendarMap.put("scheduleList", scheduleList.stream().map(schedule -> modelMapper.map(schedule, CalendarDto.class)).toList());
@@ -70,9 +72,9 @@ public class CalendarService {
 		log.info("[cs] calendarMap : {}", calendarMap.get("dayOffList"));
 		
 		return calendarMap;
-//		return null;
 
 	}
+	
 	
 	/* 일정 상세 조회 */
 	public CalendarDto scheduleDetail(Long scheduleNo, EmployeeDto employee) {
@@ -104,6 +106,7 @@ public class CalendarService {
 		return schedule;
 	}
 
+	
 	/* 일정 수정 */
 	public CalendarDto updateSchedule(EmployeeDto employee, Long calendarNo, CalendarDto schedule) {
 
@@ -128,6 +131,7 @@ public class CalendarService {
 		return schedule;
 	}
 
+	
 	/* 일정 삭제 */
 	public CalendarDto deleteSchedule(EmployeeDto employee, Long calendarNo) {
 
@@ -138,5 +142,24 @@ public class CalendarService {
 
 		return modelMapper.map(deleteSchedule, CalendarDto.class);
 	}
+	
+	
+	/* [메인] 오늘 일정 조회 */
+	public Object todaySchedule(EmployeeDto employee) {
+		
+		List<Calendar> scheduleList = calendarRepository.findByEmployeeNoAndStartDate(employee.getEmployeeNo());
+		List<CalendarDto> todaySchedule = scheduleList.stream().map(schedule -> (modelMapper.map(schedule, CalendarDto.class))).toList();
+		
+		List<Rest> dayOffList = restRepository.findByEmployeeNoAndRestOkAndRestFdate(employee.getEmployeeNo());
+		List<RestDto> todayDayOff = dayOffList.stream().map(dayoff -> (modelMapper.map(dayoff, RestDto.class))).toList();
+		
+		Map<String, List> calendarMap = new HashMap<>();
+		
+		calendarMap.put("todaySchedule", todaySchedule);
+		calendarMap.put("todayDayOff", todayDayOff);
+		
+		return calendarMap;
+	}
 
+	
 }
