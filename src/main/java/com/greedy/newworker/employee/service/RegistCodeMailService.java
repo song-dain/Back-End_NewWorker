@@ -31,6 +31,7 @@ public class RegistCodeMailService implements MailRepository {
 	// 인증 번호 담을 필드
 	private String ePwd;
 
+	/* 인증 번호 발송 */
 	@Override
 	public MimeMessage createMessage(String to) throws MessagingException, UnsupportedEncodingException {
 		
@@ -99,12 +100,7 @@ public class RegistCodeMailService implements MailRepository {
 		redisUtil.setDataExpire(ePwd, to, etime); // 유효 시간 설정하여 Redis에 저장
 		
 		MimeMessage message = createMessage(to); 
-//		try {// 예외처리
-			emailsender.send(message);
-//		} catch (MailException es) {
-//			es.printStackTrace();
-//			throw new IllegalArgumentException();
-//		}
+		emailsender.send(message);
 
 
 		return ePwd;

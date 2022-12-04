@@ -43,32 +43,25 @@ public class ApprovalService {
 	private final ApprovalRepository approvalRepository;
 	private final AppLineRepository appLineRepository;
 	private final EmployeeRepository employeeRepository;
-	private final ApttachRepository apttachRepository;
 	private final DepartmentRepository departmentRepository;
 	private final ModelMapper modelMappler;
 	private final AppRemoveRepository appRemoveRepository;
 	
-	@Value("${file.file-dir}" + "/approvalfiles")
-	private String FILE_DIR;
-	@Value("${file.file-url}" + "/approvalfiles/")
-	private String FILE_URL;
 	
 	public ApprovalService(ModelMapper modelMapper, ApprovalRepository approvalRepository, 
 			EmployeeRepository employeeRepository, AppLineRepository appLineRepository,
-			ApttachRepository apttachRepository, DepartmentRepository departmentRepository,
-			PositionRepository positionRepository, ModelMapper modelMappler,
-			AppRemoveRepository appRemoveRepository) {
+			DepartmentRepository departmentRepository,PositionRepository positionRepository, 
+			ModelMapper modelMappler, AppRemoveRepository appRemoveRepository) {
 		this.modelMapper = modelMapper;
 		this.approvalRepository = approvalRepository;
 		this.employeeRepository = employeeRepository;
 		this.appLineRepository = appLineRepository;
-		this.apttachRepository = apttachRepository;
 		this.departmentRepository = departmentRepository;
 		this.modelMappler = modelMappler;
 		this.appRemoveRepository = appRemoveRepository;
 	}
 
-	// 부서별 결재자 조회
+	/* 부서별 결재자 조회 */
 	public List<EmployeeDto> findApprover(Long depNo, EmployeeDto employee) {
 		
 		Department dep = departmentRepository.findById(depNo)
@@ -81,7 +74,7 @@ public class ApprovalService {
 	}
 	
 	
-	// 결재 상신함 조회
+	/* 결재 상신함 조회 */
 	public Page<ApprovalDto> sendApproval(int page, Long employeeNo) {
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("appNo").descending());
@@ -95,7 +88,7 @@ public class ApprovalService {
 
 	
 	
-	// 전자결재 등록 
+	/* 전자결재 등록 */ 
 	@Transactional
 	public ApprovalDto appRegist(ApprovalDto approvalDto) {
 
@@ -105,52 +98,17 @@ public class ApprovalService {
 		
 		// 결재문서 등록 시, 첫 번째 결재자의 결재활성화여부가 Y로 변경하도록 설정
 		approvalDto.getAppLines().get(0).setAcceptActivate("Y");
-		
 	
+		approvalRepository.save(modelMapper.map(approvalDto, Approval.class));
 		
-		
-		// 첨부파일
-		String fileName = UUID.randomUUID().toString().replace("-", ""); // 랜덤 유효 아이디 생성
-		List<String> replaceFilesName = null;
-		List<ApttachDto> apttache = new ArrayList<ApttachDto>();
-	
-		ApttachDto apttachDto = null;
-		
-		try {
-			replaceFilesName = FileUploadUtils.saveFiles(FILE_DIR, fileName, approvalDto.getApprovalFiles());
-		// 배열로 들어가기 때문에 반복문으로 SIZE 만큼 삽입
-		for(int i = 0; i < replaceFilesName.size(); i++) {
-			
-			apttachDto = new ApttachDto(replaceFilesName.get(i));
-			apttache.add(apttachDto);
-			
-			
-			log.info("[ApprovalService] apttachDto : {}", apttachDto);
-		}
-			//첨부파일 엔터티에 replaceFilesName 등록하여 관리
-			approvalDto.setAttaches(apttache);
-			
-			approvalRepository.save(modelMapper.map(approvalDto, Approval.class));
-			
-			
-		} catch (IOException e) {
-
-			e.printStackTrace();
-			try {
-				FileUploadUtils.deleteFiles(FILE_DIR, replaceFilesName);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-		
-
 		log.info("[ApprovalService] 결재 등록 종료 ==========================");
 
 		return approvalDto;
 	}
 	
-	// 결재 문서 삭제
-	public ApprovalDto removeApproval(ApprovalDto removeApproval) {
+	
+	/* 기안자 - 결재 문서 삭제 */
+ 	public ApprovalDto removeApproval(ApprovalDto removeApproval) {
 		
 		Approval findApproval = appRemoveRepository.findByAppNo(removeApproval.getAppNo());
 		appRemoveRepository.delete(findApproval);
@@ -161,7 +119,7 @@ public class ApprovalService {
 
 
 
-	// 결재 수신함 조회
+	/* 결재 수신함 조회 */
 	public Page<ApprovalDto> receiveApproval(int page, Long employeeNo) {
 		
 		Pageable pageable = PageRequest.of(page - 1,  10, Sort.by("appNo").descending());
@@ -178,7 +136,7 @@ public class ApprovalService {
 	
 
 
-	/* 기안자 결재 문서 상세 조회 */
+	/* 기안자 - 결재 문서 상세 조회 */
 	public ApprovalDto selectDrafterDetail(Long appNo) {
 
 		log.info("[selectApprovalDetail] 결재 상세 조회 시작 =====================");
@@ -191,7 +149,9 @@ public class ApprovalService {
 		return approvalDto;
 	}
 	
-	/* 결재자 결재 문서 상세 조회 */
+	
+	
+	/* 결재자 - 결재 문서 상세 조회 */
 	public ApprovalDto selectApproverDetail(Long appNo) {
 
 		log.info("[selectApprovalDetail] 결재 상세 조회 시작 =====================");
@@ -205,7 +165,7 @@ public class ApprovalService {
 	}
 
 	
-	/* 기안자 결재 상태 변경 (회수) */
+	/* 기안자 - 결재 상태 변경 (회수) */
 	public ApprovalDto changeAppStatus(ApprovalDto appStatusChange) {
 		
 		Approval approval = approvalRepository.findById(appStatusChange.getAppNo())
@@ -225,7 +185,7 @@ public class ApprovalService {
 
 	
 	
-	/* 결재자 승인 상태 변경 (승인) */
+	/* 결재자 - 승인 상태 변경 (승인) */
 	public AppLineDto changeAccStatus(AppLineDto accChange) {
 		
 		// 승인 로직
@@ -265,7 +225,7 @@ public class ApprovalService {
 
 	
 	
-	/* 결재자 승인 상태 변경 (반려) */
+	/* 결재자 - 승인 상태 변경 (반려) */
 	public AppLineDto changeNotAccStatus(AppLineDto accChange) {
 		AppLine appLine = appLineRepository.findById(accChange.getAppLineNo())
 				.orElseThrow(() -> new IllegalArgumentException("해당 결재선이 존재하지 않습니다. appLineNo=" + accChange.getAppLineNo()));

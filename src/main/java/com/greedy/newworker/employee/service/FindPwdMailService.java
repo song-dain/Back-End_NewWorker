@@ -24,7 +24,7 @@ public class FindPwdMailService implements MailRepository {
 	// 임시 비밀번호 담을 필드
 	private String tempPwd;
 
-	// 임시 비밀번호 발송
+	/* 임시 비밀번호 발송 */
 	@Override
 	public MimeMessage createMessage(String to) throws MessagingException, UnsupportedEncodingException {
 		
@@ -83,12 +83,7 @@ public class FindPwdMailService implements MailRepository {
 		tempPwd = createKey();
 		
 		MimeMessage message = createMessage(to);
-//		try {
-			emailsender.send(message);
-//		} catch(MailException es) {
-//			es.printStackTrace();
-//			throw new IllegalArgumentException();
-//		}
+		emailsender.send(message);
 		
 		return tempPwd;
 	}

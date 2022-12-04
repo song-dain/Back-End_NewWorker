@@ -66,10 +66,6 @@ public class Approval {
 	@JoinColumn(name = "APP_NO")
 	private List<AppLine> appLines;
 	
-
-	@OneToMany(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "APP_NO")
-	private List<Apttach> attaches;
 	
 	
 }

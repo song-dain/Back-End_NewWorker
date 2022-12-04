@@ -36,10 +36,6 @@ public class ApprovalDto {
 	
 	private List<AppLineDto> appLines;
 	
-	private List<ApttachDto> attaches;
-	
-	@JsonIgnore
-	private List<MultipartFile> approvalFiles;
 	
 	
 	

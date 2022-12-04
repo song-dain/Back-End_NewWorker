@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class RedisUtil {
 	
+	/* 이메일 인증번호를 담아놓기 위한 RedisUtil */
 	
 	private final StringRedisTemplate redisTemplate;
 	
