@@ -17,7 +17,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 
-import com.greedy.newworker.apttach.entity.Apttach;
 import com.greedy.newworker.employee.entity.Employee;
 
 import lombok.Getter;
