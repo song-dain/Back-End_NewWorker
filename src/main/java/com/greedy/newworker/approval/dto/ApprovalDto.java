@@ -3,10 +3,7 @@ package com.greedy.newworker.approval.dto;
 import java.sql.Date;
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.greedy.newworker.apttach.dto.ApttachDto;
 import com.greedy.newworker.employee.dto.EmployeeDto;
 
 import lombok.AllArgsConstructor;
