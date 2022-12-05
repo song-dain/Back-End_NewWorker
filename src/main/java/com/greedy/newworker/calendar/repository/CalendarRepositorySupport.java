@@ -23,14 +23,17 @@ public class CalendarRepositorySupport implements CalendarRepositoryCustom {
 
 		BooleanBuilder builder = new BooleanBuilder();
 
+		/* 내 일정 체크 */
 		if(criteria.getMySchedule() != null) {
 			builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getMySchedule()));
 			builder.and(calendar.employee.eq(employee));
 		}
+		/* 부서 일정 체크 */
 		 if(criteria.getDeptSchedule() != null) {
 			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getDeptSchedule()));
 			 builder.and(calendar.dep.eq(employee.getDep()));
 		 }
+		 /* 전사 일정 체크 */
 		 if(criteria.getComSchedule() != null) {
 			 builder.or(calendar.calendarCategory.calendarCategoryName.eq(criteria.getComSchedule()));
 		 }
@@ -43,7 +46,6 @@ public class CalendarRepositorySupport implements CalendarRepositoryCustom {
 				 .fetch();
 		return fetch;
 		
-
 	}
 
 }

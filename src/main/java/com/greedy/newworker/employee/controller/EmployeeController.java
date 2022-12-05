@@ -63,7 +63,7 @@ public class EmployeeController {
 
 }
 	
-	/* [캘린더] 본인 정보 */
+	/* [main] 본인 정보 */
 	@GetMapping("/employee/empInfo")
 	public ResponseEntity<ResponseDto> employeeInfo(@AuthenticationPrincipal EmployeeDto employee){
 		

@@ -24,9 +24,6 @@ import com.greedy.newworker.rest.dto.RestDto;
 import com.greedy.newworker.rest.entity.Rest;
 import com.greedy.newworker.rest.repository.RestRepository;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 @Transactional
 public class CalendarService {
@@ -54,8 +51,6 @@ public class CalendarService {
 	/* 일정 조회 */
 	public Map<String, List> officeCalendar(EmployeeDto employee, Criteria criteria) {
 		
-		log.info("[cs]criteria : {}", criteria);
-		
 		Map<String, List> calendarMap = new HashMap<>();
 		
 		List<Calendar> scheduleList = calendarRepositoryCustom.scheduleFilter(criteria, modelMapper.map(employee, Employee.class));
@@ -69,10 +64,7 @@ public class CalendarService {
 			}
 		}
 		
-		log.info("[cs] calendarMap : {}", calendarMap.get("dayOffList"));
-		
 		return calendarMap;
-
 	}
 	
 	
@@ -114,8 +106,6 @@ public class CalendarService {
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 일정입니다."));
 		
 		CalendarCategory category = categoryRepository.findByCalendarCategoryName(schedule.getCalendarCategory().getCalendarCategoryName());
-
-		log.info("[sc] schedule : {}", schedule);
 		
 		updateSchedule.setCalendarNo(calendarNo);
 		updateSchedule.setCalendarCategory(category);
@@ -144,7 +134,7 @@ public class CalendarService {
 	}
 	
 	
-	/* [메인] 오늘 일정 조회 */
+	/* [main] 오늘 일정 조회 */
 	public Object todaySchedule(EmployeeDto employee) {
 		
 		List<Calendar> scheduleList = calendarRepository.findByEmployeeNoAndStartDate(employee.getEmployeeNo());

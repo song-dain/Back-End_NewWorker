@@ -1,7 +1,6 @@
 package com.greedy.newworker.message.controller;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,22 +21,16 @@ import com.greedy.newworker.employee.dto.EmployeeDto;
 import com.greedy.newworker.message.dto.MessageDto;
 import com.greedy.newworker.message.dto.RecipientManagementDto;
 import com.greedy.newworker.message.dto.SenderManagementDto;
-import com.greedy.newworker.message.service.AlarmService;
 import com.greedy.newworker.message.service.MessageService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @RestController
 @RequestMapping("/emp/message")
 public class MessageController {
 
 	private final MessageService messageService;
-	private final AlarmService alarmService;
 	
-	public MessageController(MessageService messageService, AlarmService alarmService) {
+	public MessageController(MessageService messageService) {
 		this.messageService = messageService;
-		this.alarmService = alarmService;
 	}
 	
 	
@@ -45,28 +38,20 @@ public class MessageController {
 	@GetMapping("/send/findEmp/{depNo}")
 	public ResponseEntity<ResponseDto> findRecipient(@PathVariable Long depNo, @AuthenticationPrincipal EmployeeDto employee){
 		
-		log.info("[MessageController] messageNo : {}", depNo);
-		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "부서별 직원 조회 성공", messageService.findRecipient(depNo, employee)));
 	}
 
 	
 	/* 메시지 전송 */
 	@PostMapping("/send")
-	public ResponseEntity<ResponseDto> newMessage(@RequestBody MessageDto newMessage,
-			@AuthenticationPrincipal EmployeeDto sender) {
-		
-		MessageDto sendMessage = messageService.newMessage(newMessage, sender);
-		
-		/* 수신자 알림 전송 */
-		alarmService.alarmByMessage(sendMessage);
+	public ResponseEntity<ResponseDto> newMessage(@RequestBody MessageDto newMessage, @AuthenticationPrincipal EmployeeDto sender) {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "메시지 전송 성공",
-				sendMessage));
+				messageService.newMessage(newMessage, sender)));
 	}
 
 	
-	/* 받은 메시지함 완 */
+	/* 받은 메시지함 */
 	@GetMapping("/receive")
 	public ResponseEntity<ResponseDto> receiveMessages(@RequestParam(name = "page", defaultValue = "1") int page,
 			@AuthenticationPrincipal EmployeeDto recipient) {
@@ -80,16 +65,6 @@ public class MessageController {
 		responseDtoWithPaging.setData(receiveMessageList.getContent());
 
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "받은 메시지함 조회 성공", responseDtoWithPaging));
-	}
-
-	
-	/* 받은 메시지 상세 조회 완 */
-	@PatchMapping("/receive/{messageNo}/read")
-	public ResponseEntity<ResponseDto> selectReceiveMessage(@PathVariable Long messageNo,
-			@AuthenticationPrincipal EmployeeDto recipient) {
-
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "받은 메시지 조회 성공",
-				messageService.selectReceiveMessage(messageNo, recipient)));
 	}
 	
 	
@@ -110,7 +85,7 @@ public class MessageController {
 	}
 
 	
-	/* 보낸 메시지함 완 */
+	/* 보낸 메시지함 */
 	@GetMapping("/send")
 	public ResponseEntity<ResponseDto> sendMessages(@RequestParam(name = "page", defaultValue = "1") int page,
 			@AuthenticationPrincipal EmployeeDto sender) {
@@ -150,9 +125,8 @@ public class MessageController {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "보낸 메시지 전송 취소 성공", messageService.sendCancel(messageNo, sender)));
 	}
+
 	
-
-
 	/* 중요 메시지함 */
 	@GetMapping("/impo")
 	public ResponseEntity<ResponseDto> impoMessages(@RequestParam(name = "page", defaultValue = "1") int page,
@@ -220,22 +194,19 @@ public class MessageController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴지통 보낸 메시지함 조회 성공", responseDtoWithPaging));
 	}
 	
-
+	
 	/* 받은 메시지(빋은 메시지함, 중요 메시지, 휴지통 받은 메시지) 관리 */
 	@PatchMapping("/receive")
 	public ResponseEntity<ResponseDto> receiveMessageManagement(@RequestBody RecipientManagementDto messageRequest) {
 
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "받은 메시지 이동 성공",
-				messageService.receiveMessageManagement(messageRequest)));
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "받은 메시지 이동 성공", messageService.receiveMessageManagement(messageRequest)));
 	}
-	
 	
 	/* 보낸 메시지(보낸 메시지함, 휴지통 관리) */
 	@PatchMapping("/send/{messageNo}")
 	public ResponseEntity<ResponseDto> sendMessageManagement(@RequestBody SenderManagementDto messageRequest) {
 		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "보낸 메시지 이동 성공",
-				messageService.sendMessageManagement(messageRequest)));
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "보낸 메시지 이동 성공", messageService.sendMessageManagement(messageRequest)));
 		
 	}
 	
@@ -244,11 +215,8 @@ public class MessageController {
 	@GetMapping("/unread")
 	public ResponseEntity<ResponseDto> unreadMessage(@AuthenticationPrincipal EmployeeDto emp){
 		
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "안 읽은 메시지 건수 조회 성공",
-				messageService.unreadMessage(emp)));
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "안 읽은 메시지 건수 조회 성공", messageService.unreadMessage(emp)));
 	}
 	
 	
-
-
 }
