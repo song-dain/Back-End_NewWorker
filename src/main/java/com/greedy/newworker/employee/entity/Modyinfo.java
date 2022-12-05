@@ -43,7 +43,11 @@ public class Modyinfo {
 	
 	@ManyToOne
 	@JoinColumn(name = "DEP_NO")
-	private Position depNo;
+	private Department depNo;
+	
+	@ManyToOne
+	@JoinColumn(name = "POSITION_NO")
+	private Position positionNo;
 	
 	@Column(name = "MOD_DATE")
 	private Date modDate;

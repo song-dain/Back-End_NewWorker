@@ -3,6 +3,7 @@ package com.greedy.newworker.employee.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,8 +55,9 @@ public class ListController {
 	}
 	
 	/* 직원상세조회(관리자) */
+	
 	@GetMapping("/employeeList/detail-management/{employeeNo}")
-	public ResponseEntity<ResponseDto> selectEmployeeListDetail(@PathVariable Long employeeNo) {
+	public ResponseEntity<ResponseDto> selectEmployeeListDetail(@PathVariable Long employeeNo,@AuthenticationPrincipal EmployeeDto employee) {
 		
 		return ResponseEntity
 				.ok()

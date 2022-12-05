@@ -62,14 +62,7 @@ public class RestService {
 		Rest rest = restRepository.save(modelMapper.map(restDto, Rest.class));
 		restDto.setEmployeeNo(employeeDto);
 		
-		
-//		Employee employeeRestDay = employeeRepository.findById(restDto.getEmployeeNo().getEmployeeRestDay())
-//				.orElseThrow(() -> new IllegalArgumentException("남은휴가가 없습니다. employeeRestDay=" + restDto.getEmployeeNo().getEmployeeRestDay()));
-//		
-//		
-//		employeeRestDay.setEmployeeRestDay(employeeRestDay.getEmployeeRestDay() - restDto.getRestDay());
-//		
-//		if(employeeRestDay.getEmployeeRestDay() < 0) throw new RuntimeException("남은 휴가가 없습니다.");
+
 		
 		return modelMapper.map(rest, RestDto.class);
 		
@@ -136,13 +129,11 @@ public class RestService {
         return restDto;
 	}
 	
-	/* 연차 승인, 반려 */
+	/* 연차 승인 */
 	@Transactional
 	public RestDto updateRestOk(RestDto restDto) {
 		
-//		Date date = new Date();
-//		long timeInMilliSeconds = date.getTime();				
-//		 java.sql.Date sqlDate = new java.sql.Date(timeInMilliSeconds);
+
 
 		
 		Rest foundRest = restRepository.findById(restDto.getRestNo())
@@ -152,46 +143,30 @@ public class RestService {
 		foundRest.updateOk(
 						"Y",
 						Date.valueOf(todaysDate));
-//						modelMapper.map(restDto.getEmployeeNo().getEmployeeRestDay(), Employee.class)); 
-
-		
-		
-						
-//		foundRest.update(sqlDate, sqlDate, null, null, null);
-		 
-//		
-//		 Rest oriRest = restRepository.findById(restDto.getRestNo())
-//					.orElseThrow(() -> new RuntimeException("존재하지 않는 휴가입니다."));
-//		 
-//		 oriRest.update(sqlDate);	
-		
-	      
-            
-						
 		
 		restRepository.save(foundRest);
 		
 		return restDto;
 	}
 
-//	/* 연차 반려 */
-//	@Transactional
-//	public RestDto updateRestNo(RestDto restDto) {
-//		
-//		
-//		Rest foundRest = restRepository.findById(restDto.getRestNo())
-//				.orElseThrow(() -> new RuntimeException("존재하지 않는 휴가입니다."));
-//		
-//		foundRest.updateNo(
-//
-//						"F"); 
-//						
-//						
-//		
-//		restRepository.save(foundRest);
-//		
-//		return restDto;
-//	}
+	/* 연차 반려 */
+	@Transactional
+	public RestDto updateRestNo(RestDto restDto) {
+		
+		
+		Rest foundRest = restRepository.findById(restDto.getRestNo())
+				.orElseThrow(() -> new RuntimeException("존재하지 않는 휴가입니다."));
+		
+		foundRest.updateNo(
+
+						"F"); 
+						
+						
+		
+		restRepository.save(foundRest);
+		
+		return restDto;
+	}
 	
 	
 	
