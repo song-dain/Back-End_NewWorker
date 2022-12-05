@@ -62,17 +62,15 @@ public class EmployeeController {
 	
 
 }
-	
 
-	
-	
-	/* [캘린더] 본인 정보 */
+
+	/* [main] 본인 정보 */
+
 	@GetMapping("/employee/empInfo")
 	public ResponseEntity<ResponseDto> employeeInfo(@AuthenticationPrincipal EmployeeDto employee){
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 정보 조회 성공", employee));
 	}
-	
 	
 	
 }

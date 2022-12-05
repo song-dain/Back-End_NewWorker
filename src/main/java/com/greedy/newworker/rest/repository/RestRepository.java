@@ -29,7 +29,7 @@ public interface RestRepository extends JpaRepository<Rest, Long>{
 	/* [calendar] 사원별 승인 연차 정보 */
 	List<Rest> findByEmployeeNoAndRestOk(Employee employeeNo, String restOk);
 
-	/* [메인] 사원별 오늘 연차 정보 */
+	/* [main] 사원별 오늘 연차 정보 */
 	@Query(value="SELECT * FROM TBL_REST "
 			+ "WHERE EMPLOYEE_NO =:employeeNo AND REST_OK = 'Y' "
 			+ "AND TO_CHAR(SYSDATE, 'yy/MM/dd') >= TO_CHAR(REST_FDATE, 'yy/MM/dd') "

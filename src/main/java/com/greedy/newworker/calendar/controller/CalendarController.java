@@ -18,9 +18,6 @@ import com.greedy.newworker.calendar.service.CalendarService;
 import com.greedy.newworker.common.ResponseDto;
 import com.greedy.newworker.employee.dto.EmployeeDto;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @RestController
 @RequestMapping("/emp/calendar")
 public class CalendarController {
@@ -31,12 +28,14 @@ public class CalendarController {
 		this.calendarService = calendarService;
 	}
 	
+	
 	/* 일정 조회 */
 	@PostMapping("/schedule")
 	public ResponseEntity<ResponseDto> selectOfficeCalendar(@AuthenticationPrincipal EmployeeDto employee, @RequestBody Criteria criteria){
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "일정 조회 완료", calendarService.officeCalendar(employee, criteria)));
 	}
+	
 	
 	/* 일정 상세 조회 */
 	@GetMapping("/schedule/{scheduleNo}")
@@ -45,6 +44,7 @@ public class CalendarController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "일정 상세 조회 완료", calendarService.scheduleDetail(scheduleNo, employee)));
 	}
 	
+	
 	/* 일정 추가 */
 	@PostMapping("/schedule/add")
 	public ResponseEntity<ResponseDto> addSchedule (@AuthenticationPrincipal EmployeeDto employee, @RequestBody CalendarDto schedule){
@@ -52,26 +52,25 @@ public class CalendarController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"일정 추가 완료", calendarService.addSchedule(employee, schedule)));
 	}
 	
+	
 	/* 일정 수정 */
 	@PutMapping("/schedule/update/{scheduleNo}")
 	public ResponseEntity<ResponseDto> updateSchedule (@AuthenticationPrincipal EmployeeDto employee, 
 			@PathVariable Long scheduleNo, @RequestBody CalendarDto schedule){
 		
-		log.info("[calendar] schedule : {}", schedule);
-		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"일정 수정 완료", calendarService.updateSchedule(employee, scheduleNo, schedule)));
 	}
+	
 	
 	/* 일정 삭제 */
 	@PatchMapping("/schedule/delete/{scheduleNo}")
 	public ResponseEntity<ResponseDto> deleteSchedule (@AuthenticationPrincipal EmployeeDto employee, @PathVariable Long scheduleNo){
 		
-		log.info("[cc] scheduleNo : {}", scheduleNo);
-		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK,"일정 삭제 완료", calendarService.deleteSchedule(employee, scheduleNo)));
 	}
 	
-	/* [메인] 오늘 일정 조회 */
+	
+	/* [main] 오늘 일정 조회 */
 	@GetMapping("/schedule/today")
 	public ResponseEntity<ResponseDto> todaySchedule(@AuthenticationPrincipal EmployeeDto employee){
 		
@@ -79,5 +78,4 @@ public class CalendarController {
 	}
 	
 	
-
 }
