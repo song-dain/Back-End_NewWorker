@@ -85,15 +85,15 @@ public class Rest {
 		this.restOkdate = restOkdate;		
 	}
 
+	public void updateNo(String restOk) {
+
+		this.restOk = restOk;
+	}
+
 
 	
 
 	
-
-//	public void updateNo(String restOk) {
-//		this.restOk = restOk;
-//		
-//	}
 
 	
 

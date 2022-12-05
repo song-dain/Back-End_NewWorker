@@ -17,12 +17,7 @@ public interface ListRepository extends JpaRepository<Employee, Long> {
 	@EntityGraph(attributePaths= {"employeeNo"})
 	Page<Employee> findAll(Pageable pageable);
 	
-//	/* 상세조회(관리자)*/
-//	@Query("SELECT e " +
-//			 "FROM Employee e" +
-//			"WHERE e.employeeNo = :employeeNo "
-//			 )
-//	Optional<Employee> findByEmployeeNo(@Param("employeeNo") Long employeeNo);
+
 
 	Optional<Employee> findByEmployeeNo(Long employeeNo);
 }

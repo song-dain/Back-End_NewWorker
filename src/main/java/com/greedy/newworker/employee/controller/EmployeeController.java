@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.greedy.newworker.common.ResponseDto;
 import com.greedy.newworker.employee.dto.EmployeeDto;
+import com.greedy.newworker.employee.dto.ModyinfoDto;
 import com.greedy.newworker.employee.service.EmployeeService;
 
 @RestController
@@ -49,8 +50,7 @@ public class EmployeeController {
 	
 	/* 직원수정 */
 	@PutMapping("/employee/register")
-	public ResponseEntity<ResponseDto> updateEmployee(@ModelAttribute EmployeeDto employeeDto/*, @PathVariable Long employeeNo*/) {
-//		employeeDto.setEmployeeNo(employeeNo);
+	public ResponseEntity<ResponseDto> updateEmployee(@ModelAttribute EmployeeDto employeeDto) {
 		
 		employeeDto.setEmployeePwd(passwordEncoder.encode(employeeDto.getEmployeePwd()));
 		
@@ -62,6 +62,9 @@ public class EmployeeController {
 	
 
 }
+	
+
+	
 	
 	/* [캘린더] 본인 정보 */
 	@GetMapping("/employee/empInfo")
