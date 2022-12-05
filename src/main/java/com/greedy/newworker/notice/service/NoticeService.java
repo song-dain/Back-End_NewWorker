@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.greedy.newworker.notice.dto.NoticeDto;
 import com.greedy.newworker.notice.entity.Notice;
 import com.greedy.newworker.notice.repository.NoticeRepository;
+import com.greedy.newworker.survey.dto.SurveyDto;
 import com.greedy.newworker.util.FileUploadUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,7 @@ public class NoticeService {
 	
 	@Value("${file.file-dir}" + "/noticeimgs")
 	private String FILE_DIR;
-	@Value("${file.file-url}" + "/noticeimgs/")
+	@Value("${file.file-url}" + "noticeimgs/")
 	private String FILE_URL;
 	
 	private final NoticeRepository noticeRepository;
@@ -53,6 +54,9 @@ public class NoticeService {
 		Page<NoticeDto> noticeDtoList = noticeList.map(notice -> modelMapper.map(notice, NoticeDto.class));
 		
 		 log.info("noticeList : {}", noticeList.getContent());
+		 
+		 /* 클라이언트 측에서 서버에 저장 된 이미지 요청 시 필요한 주소로 가공 */
+		 noticeDtoList.forEach(notice -> notice.setNoticeImageUrl(FILE_URL + notice.getNoticeImageUrl()));
 		
 		return noticeDtoList;
 	}
@@ -67,6 +71,7 @@ public class NoticeService {
 		Notice notice = noticeRepository.findByNotNo(notNo)
 				.orElseThrow(() -> new IllegalArgumentException("등록된 공지 사항이 없습니다. notNo=" + notNo));
 		NoticeDto noticeDto = modelMapper.map(notice, NoticeDto.class);
+		
 		
 		
         log.info("[NoticeService] noticeDto : " + noticeDto);
