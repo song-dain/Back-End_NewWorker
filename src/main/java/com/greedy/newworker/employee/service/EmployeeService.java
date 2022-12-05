@@ -12,11 +12,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.greedy.newworker.employee.dto.EmployeeDto;
+import com.greedy.newworker.employee.dto.ModyinfoDto;
 import com.greedy.newworker.employee.entity.Department;
 import com.greedy.newworker.employee.entity.Employee;
+import com.greedy.newworker.employee.entity.Modyinfo;
 import com.greedy.newworker.employee.entity.Position;
 import com.greedy.newworker.employee.repository.EmployeeRepository;
 import com.greedy.newworker.exception.UserNotFoundException;
+import com.greedy.newworker.rest.dto.RestDto;
 import com.greedy.newworker.util.FileUploadUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -123,7 +126,6 @@ public class EmployeeService {
 				/* 이미지를 변경하지 않는 경우 */
 				employeeDto.setEmployeeImageUrl(oriImage);
 			}
-			//LocalDate todaysDate = LocalDate.now();
 			
 			/* 조회 했던 기존 엔티티의 내용을 수정 */
 			oriEmployee.update( 					
@@ -136,14 +138,14 @@ public class EmployeeService {
 					employeeDto.getEmployeeRole(),					
 					modelMapper.map(employeeDto.getPosition().getPositionNo(), Position.class),
 					modelMapper.map(employeeDto.getDep().getDepNo(), Department.class),
-//					employeeDto.getPosition().getPositionNo(), 
-//					employeeDto.getDep().getDepNo(), 
 					employeeDto.getEmployeeRestDay(),
 					employeeDto.getEmployeeImageUrl(),					
 					employeeDto.getEmployeeHireDate(),
 					employeeDto.getEmployeeEntDate());
 			
 			employeeRepository.save(oriEmployee);
+			
+			
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -161,22 +163,6 @@ public class EmployeeService {
 
 				
 	}
-
-//	public Object selectMyInfo(String memberId) {
-//
-//		Employee employee = employeeRepository.findByEmployeeId(memberId)
-//				.orElseThrow(() -> new UserNotFoundException(memberId + "를 찾을 수 없습니다."));
-//		
-//		
-//		
-//		return modelMapper.map(employee, EmployeeDto.class);
-//	}
-
-
-	
-	
-	
-
 
 	
 }

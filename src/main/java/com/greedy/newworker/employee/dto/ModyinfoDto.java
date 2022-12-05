@@ -9,7 +9,8 @@ public class ModyinfoDto {
 
 	private Date modDate;
 	private EmployeeDto employeeNo;
-	private PositionDto depNo;
+	private DepartmentDto depNo;
+	private PositionDto positionNo;
 	private Long modNo;
 	
 }
