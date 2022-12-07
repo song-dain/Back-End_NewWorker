@@ -50,8 +50,8 @@ public class Notice {
 	@Column(name = "NOT_STATUS")
 	private String notStatus;
 	
-	@Column(name = "NOT_COUNT")
-	private Long notCount;
+//	@Column(name = "NOT_COUNT")
+//	private Long notCount;
 	
 	@Column(name = "NOT_UPDATE")
 	private Date notUpdate;

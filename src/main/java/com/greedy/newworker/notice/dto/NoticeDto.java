@@ -18,7 +18,7 @@ public class NoticeDto {
 	private String notContent;
 	private Date notDate;
 	private String notStatus;
-	private Long notCount;
+//	private Long notCount;
 	private Date notUpdate;
 	private EmployeeDto employee;
 	

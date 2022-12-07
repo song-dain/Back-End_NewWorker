@@ -48,7 +48,7 @@ public class SurveyService {
 	public Page<SurveyDto> selectSurveyListWithPaging(int page) {
 		log.info("[SurveyService] getSurveyList Start ==============================");
 		 
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("surNo").descending());
+		Pageable pageable = PageRequest.of(page - 1, 6, Sort.by("surNo").descending());
 		
 		Page<Survey> surveyList = surveyRepository.findAll(pageable);
 		Page<SurveyDto> surveyDtoList = surveyList.map(survey -> modelMapper.map(survey, SurveyDto.class));
