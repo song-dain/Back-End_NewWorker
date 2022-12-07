@@ -47,7 +47,7 @@ public class SurveyController {
 	}
 	
 	/* 1. 설문게시판 목록 조회 (페이징) */
-	@GetMapping("/surveyList")
+	@GetMapping("/surveyList/{surNo}")
 	public ResponseEntity<ResponseDto> selectSurveyListWithPaging(@RequestParam(name="page", defaultValue="1") int page) {
 	
 		log.info("[SurveyController] selectSurveyListWithPaging Start ===================================");
@@ -80,14 +80,18 @@ public class SurveyController {
 	
 	/* 3. 설문 등록 */
     @PostMapping("/survey/register")
-    public ResponseEntity<ResponseDto> insertSurvey(@ModelAttribute SurveyDto surveyDto,
+    public ResponseEntity<ResponseDto> insertSurvey(
+    		@ModelAttribute SurveyDto surveyDto,
     		@AuthenticationPrincipal EmployeeDto employee) {
     	
     	surveyDto.setEmployee(employee);
     	log.info("[SurveyDto] surveyDto : " + surveyDto);
     	
     	
-    	return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "설문 등록 성공", surveyService.insertSurvey(surveyDto)));
+    	return ResponseEntity.ok().body
+    			(new ResponseDto
+    			(HttpStatus.OK, "설문 등록 성공", 
+    					surveyService.insertSurvey(surveyDto)));
     	
     }
     

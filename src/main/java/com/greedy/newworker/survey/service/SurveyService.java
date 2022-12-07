@@ -174,7 +174,7 @@ public class SurveyService {
 		return surveyDto;
 	}
 	
-	/* 6. 공지 삭제 */
+	/* 6. 설문 삭제 */
 	public void deleteSurvey(Long surNo) {
 		
 		log.info("[SurveyService] deleteSurvey Start =========================");
