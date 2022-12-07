@@ -43,7 +43,7 @@ public class NoticeController {
 	}
 	
 	/* 1. 공지사항 목록 조회 (페이징) */
-	@GetMapping("/noticeList")
+	@GetMapping("/noticeList/{notNo}")
 	public ResponseEntity<ResponseDto> selectNoticeListWithPaging(@RequestParam(name="page", defaultValue="1") int page) {
 	
 		log.info("[NoticeController] selectReviewListWithPaging Start ===================================");
