@@ -32,7 +32,7 @@ public class SurveyService {
 	
 	@Value("${file.file-dir}" + "/surveyimgs")
 	private String FILE_DIR;
-	@Value("${file.file-url}" + "surveyimgs/")
+	@Value("${file.file-url}" + "/surveyimgs/")
 	private String FILE_URL;
 	
 	private final SurveyRepository surveyRepository;
