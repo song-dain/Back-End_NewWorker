@@ -108,6 +108,19 @@ public class MessageService {
 	
 		return findMessages.map(message -> modelMappler.map(message, MessageDto.class));
 	}
+	
+	
+	/* 받은 메시지 읽기 */
+	public MessageDto messageRead(Long messageNo) {
+		
+		Message readMessage = messageRepository.findById(messageNo).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메시지입니다."));
+		
+		readMessage.setMessageStatus("read");
+		
+		messageRepository.save(readMessage);
+		
+		return modelMappler.map(readMessage, MessageDto.class);
+	}
 
 	
 	/* 보낸 메시지함 */
@@ -262,6 +275,9 @@ public class MessageService {
 		
 		return count;
 	}
+
+
+
 
 	
 }
