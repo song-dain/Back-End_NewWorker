@@ -67,6 +67,13 @@ public class MessageController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "받은 메시지함 조회 성공", responseDtoWithPaging));
 	}
 	
+	/* 받은 메시지 읽기 */
+	@PatchMapping("/read/{messageNo}")
+	public ResponseEntity<ResponseDto> messageRead(@PathVariable("messageNo") Long messageNo){
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "받은 메시지 읽음 수정 성공", messageService.messageRead(messageNo)));
+	}
+	
 	
 	/* 받은 메시지 검색 */
 	@GetMapping("/receive/search")
