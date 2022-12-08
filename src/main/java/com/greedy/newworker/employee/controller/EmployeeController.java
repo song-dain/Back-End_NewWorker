@@ -68,9 +68,14 @@ public class EmployeeController {
 
 	@GetMapping("/employee/empInfo")
 	public ResponseEntity<ResponseDto> employeeInfo(@AuthenticationPrincipal EmployeeDto employee){
-		
+			
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "직원 정보 조회 성공", employee));
 	}
+	
+	
+	
+	
+	
 	
 	
 }

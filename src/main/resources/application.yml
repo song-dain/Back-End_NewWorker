@@ -48,7 +48,7 @@ file:
   add-resource-locations: classpath:/static/uploadFiles/
   add-resource-handler: /uploadFiles/**
   file-dir: src/main/resources/static/uploadFiles #Service에서 자기 이미지 담을 하위 경로를 가공하세요!
-  file-url: http://localhost:8001/uploadFiles/ #이하 동일입니다!
+  file-url: http://localhost:8001/uploadFiles #이하 동일입니다!
 
 
 jwt:

@@ -64,7 +64,7 @@ public class TokenProvider {
 		
 		// 멤버 권한을 claim에 담기
 		claims.put(AUTHORITIES_KEY, roles);
-
+		
 		
 		
 		long now = (new Date()).getTime();
