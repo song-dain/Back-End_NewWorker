@@ -4,7 +4,7 @@ Rest API 기반의 Spring Boot, React Web Service Project
 
 ✔ **Back-End**
 
- Spring Boot, JPA를 통해 Rest API 서버를 구축하였습니다.
+ Spring Boot, JPA를 사용해 Rest API 서버를 구축하였습니다.
 
 ---
 
