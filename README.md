@@ -22,9 +22,9 @@ Rest API 기반의 Spring Boot, React Web Service Project
 
 ### 💻 개발 환경
 
-**개발도구 :** SpringToolSuite4, VS Code, Oracle SQL Developer
+**개발도구 :** STS4, VS Code, Oracle SQL Developer
 
-**DMMS :** Oracle
+**DBMS :** Oracle, Redis
 
 **Server :** Apache Tomcat
 
@@ -32,7 +32,7 @@ Rest API 기반의 Spring Boot, React Web Service Project
 
 **협업툴 :** GitHub, DA#, Figma, Whimsical, Slack, Notion
 
-**API :** FullCalendar
+**API :** FullCalendar, CKeditor
 
 **프레임워크** : Spring framework, React
 
