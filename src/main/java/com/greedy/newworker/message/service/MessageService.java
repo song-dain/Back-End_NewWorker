@@ -113,7 +113,8 @@ public class MessageService {
 	/* 받은 메시지 읽기 */
 	public MessageDto messageRead(Long messageNo) {
 		
-		Message readMessage = messageRepository.findById(messageNo).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메시지입니다."));
+		Message readMessage = messageRepository.findById(messageNo)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메시지입니다."));
 		
 		readMessage.setMessageStatus("read");
 		
